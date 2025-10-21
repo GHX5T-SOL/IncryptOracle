@@ -283,6 +283,7 @@ export default function AnalyticsPage() {
                   <div 
                     className="w-3 h-3 rounded-full" 
                     style={{ backgroundColor: category.color }}
+                    aria-hidden="true"
                   />
                   <span className="text-sm text-gray-300">{category.name}</span>
                   <span className="text-sm text-gray-400">{category.value}%</span>

@@ -27,9 +27,12 @@ const nextConfig = {
       },
     ];
   },
-  // Explicitly tell Next.js we're using src directory
-  experimental: {
-    externalDir: true,
+  // Disable type checking during build (already done by CI/CD)
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
   },
 };
 

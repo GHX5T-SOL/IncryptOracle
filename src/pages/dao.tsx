@@ -226,19 +226,25 @@ function ProposalCard({ proposal, onViewDetails, onVote }: {
         </div>
         
         {/* Progress Bar */}
-        <div className="progress-bar mb-3">
+                <div className="progress-bar mb-3">
           <div className="h-full flex">
             <div 
-              className="bg-green-500 transition-all duration-500" 
+              className="bg-green-500 transition-all duration-500 h-full" 
               style={{ width: `${forPercentage}%` }}
+              role="progressbar"
+              aria-valuenow={forPercentage}
+              aria-valuemin={0}
+              aria-valuemax={100}
             />
             <div 
-              className="bg-red-500 transition-all duration-500" 
+              className="bg-red-500 transition-all duration-500 h-full" 
               style={{ width: `${againstPercentage}%` }}
+              role="progressbar"
             />
             <div 
-              className="bg-yellow-500 transition-all duration-500" 
+              className="bg-yellow-500 transition-all duration-500 h-full" 
               style={{ width: `${abstainPercentage}%` }}
+              role="progressbar"
             />
           </div>
         </div>
@@ -437,6 +443,10 @@ function ProposalDetailModal({ proposal, onClose, onVote }: {
                   <div 
                     className="progress-fill" 
                     style={{ width: `${Math.min((totalVotes / proposal.quorumVotes) * 100, 100)}%` }}
+                    role="progressbar"
+                    aria-valuenow={Math.min((totalVotes / proposal.quorumVotes) * 100, 100)}
+                    aria-valuemin={0}
+                    aria-valuemax={100}
                   />
                 </div>
                 <div className="text-sm text-gray-400">
@@ -620,12 +630,13 @@ function CreateProposalModal({ onClose, onSubmit }: {
                 <label className="block text-sm font-medium text-gray-300 mb-2">
                   Type *
                 </label>
-                <select
-                  value={formData.type}
-                  onChange={(e) => setFormData({ ...formData, type: e.target.value })}
-                  className="input-holographic w-full"
-                  required
-                >
+              <select
+                value={formData.type}
+                onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                className="input-holographic w-full"
+                aria-label="Select proposal type"
+                required
+              >
                   <option value="General">General</option>
                   <option value="Treasury">Treasury</option>
                   <option value="Parameter">Parameter</option>
