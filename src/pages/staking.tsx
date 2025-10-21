@@ -103,6 +103,11 @@ export default function StakingPage() {
             Stake your $IO tokens to earn a share of platform revenues. 
             50% of all fees are distributed proportionally to stakers.
           </p>
+          <div className="mt-4 inline-block px-4 py-2 bg-yellow-500/20 border border-yellow-500/30 rounded-lg">
+            <p className="text-sm text-yellow-300">
+              📊 Demo data for now - Real live platform launch TBA
+            </p>
+          </div>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

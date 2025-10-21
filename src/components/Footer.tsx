@@ -12,13 +12,13 @@ const navigation = {
     { name: 'Documentation', href: '/docs' },
     { name: 'Testnet Reports', href: '/reports' },
     { name: 'Analytics', href: '/analytics' },
-    { name: 'GitHub', href: 'https://github.com/IncryptOracle' },
+    { name: 'GitHub', href: 'https://github.com/GHX5T-SOL/IncryptOracle' },
   ],
   community: [
-    { name: 'Discord', href: '#' },
-    { name: 'Twitter', href: '#' },
-    { name: 'Telegram', href: '#' },
+    { name: 'Discord', href: 'https://discord.gg/XPSCUYVM65' },
+    { name: 'Twitter', href: 'https://x.com/Incrypt_defi' },
     { name: 'Medium', href: '#' },
+    { name: 'GitHub', href: 'https://github.com/GHX5T-SOL/IncryptOracle' },
   ],
 };
 
@@ -93,9 +93,9 @@ export default function Footer() {
                     </Link>
                   </li>
                   <li>
-                    <Link href="/sdk" className="text-sm leading-6 text-gray-300 hover:text-primary-500 transition-colors duration-200">
+                    <a href="https://github.com/GHX5T-SOL/IncryptOracle/tree/main/sdk" target="_blank" rel="noopener noreferrer" className="text-sm leading-6 text-gray-300 hover:text-primary-500 transition-colors duration-200">
                       JavaScript SDK
-                    </Link>
+                    </a>
                   </li>
                   <li>
                     <Link href="/reports" className="text-sm leading-6 text-gray-300 hover:text-primary-500 transition-colors duration-200">
@@ -103,7 +103,7 @@ export default function Footer() {
                     </Link>
                   </li>
                   <li>
-                    <a href="https://github.com/IncryptOracle" className="text-sm leading-6 text-gray-300 hover:text-primary-500 transition-colors duration-200">
+                    <a href="https://github.com/GHX5T-SOL/IncryptOracle" target="_blank" rel="noopener noreferrer" className="text-sm leading-6 text-gray-300 hover:text-primary-500 transition-colors duration-200">
                       Open Source Code
                     </a>
                   </li>
@@ -115,7 +115,7 @@ export default function Footer() {
         <div className="mt-16 border-t border-white/10 pt-8 sm:mt-20 lg:mt-24">
           <div className="flex flex-col sm:flex-row sm:justify-between items-center">
             <p className="text-xs leading-5 text-gray-400">
-              &copy; 2024 Incrypt Oracle. All rights reserved.
+              © 2024 Incrypt Oracle. All rights reserved.
             </p>
             <div className="mt-4 sm:mt-0 flex space-x-6 text-xs leading-5 text-gray-400">
               <Link href="#" className="hover:text-primary-500 transition-colors duration-200">

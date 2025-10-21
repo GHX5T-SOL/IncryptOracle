@@ -406,6 +406,356 @@ subscription.unsubscribe();`}</code>
               </div>
             )}
 
+            {activeSection === 'oracle-architecture' && (
+              <div className="space-y-8">
+                <section className="card-liquid-glass p-8">
+                  <h2 className="text-3xl font-bold text-white mb-6">Oracle Architecture</h2>
+                  
+                  <div className="space-y-6 text-gray-300">
+                    <p className="text-lg">
+                      Incrypt Oracle uses a decentralized network of validators to fetch, verify, and aggregate data 
+                      from multiple sources, ensuring accuracy and preventing manipulation.
+                    </p>
+
+                    <h3 className="text-xl font-semibold text-white">System Components</h3>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="bg-dark-900/50 rounded-lg p-6">
+                        <h4 className="text-lg font-semibold text-primary-400 mb-3">Validator Network</h4>
+                        <ul className="space-y-2 text-sm">
+                          <li>• Decentralized network of 21+ validators</li>
+                          <li>• Each validator stakes 1,000+ IO tokens</li>
+                          <li>• Reputation-based weighting system</li>
+                          <li>• Economic incentives for honest reporting</li>
+                          <li>• Automatic slashing for malicious behavior</li>
+                        </ul>
+                      </div>
+
+                      <div className="bg-dark-900/50 rounded-lg p-6">
+                        <h4 className="text-lg font-semibold text-primary-400 mb-3">Data Aggregation</h4>
+                        <ul className="space-y-2 text-sm">
+                          <li>• Multi-source data collection</li>
+                          <li>• Median-based consensus algorithm</li>
+                          <li>• Outlier detection and removal</li>
+                          <li>• Confidence scoring (0-100%)</li>
+                          <li>• Timestamp verification</li>
+                        </ul>
+                      </div>
+
+                      <div className="bg-dark-900/50 rounded-lg p-6">
+                        <h4 className="text-lg font-semibold text-primary-400 mb-3">Resolution Process</h4>
+                        <ul className="space-y-2 text-sm">
+                          <li>• Validators submit data within time window</li>
+                          <li>• Consensus calculation with reputation weights</li>
+                          <li>• Confidence threshold verification (&gt;70%)</li>
+                          <li>• Automatic market resolution trigger</li>
+                          <li>• Dispute period for challenges</li>
+                        </ul>
+                      </div>
+
+                      <div className="bg-dark-900/50 rounded-lg p-6">
+                        <h4 className="text-lg font-semibold text-primary-400 mb-3">Security Measures</h4>
+                        <ul className="space-y-2 text-sm">
+                          <li>• Stake-based security model</li>
+                          <li>• Reputation system prevents attacks</li>
+                          <li>• Emergency pause functionality</li>
+                          <li>• Time-delayed governance updates</li>
+                          <li>• Multi-signature admin controls</li>
+                        </ul>
+                      </div>
+                    </div>
+
+                    <h3 className="text-xl font-semibold text-white">Data Flow</h3>
+                    <div className="bg-dark-900 rounded-lg p-6">
+                      <pre className="text-sm text-gray-300 overflow-x-auto">
+                        <code>{`1. Event occurs (e.g., Bitcoin reaches $100k)
+   ↓
+2. Validators fetch data from multiple sources
+   ↓
+3. Each validator submits their validation on-chain
+   ↓
+4. Smart contract aggregates submissions
+   ↓
+5. Consensus algorithm calculates final value
+   ↓
+6. Confidence score computed from variance
+   ↓
+7. Data feed updated with new value
+   ↓
+8. Prediction markets automatically resolved`}</code>
+                      </pre>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            )}
+
+            {activeSection === 'smart-contracts' && (
+              <div className="space-y-8">
+                <section className="card-liquid-glass p-8">
+                  <h2 className="text-3xl font-bold text-white mb-6">Smart Contracts</h2>
+                  
+                  <div className="space-y-6">
+                    <p className="text-gray-300">
+                      All Incrypt Oracle smart contracts are open-source, audited, and deployed on Binance Smart Chain.
+                    </p>
+
+                    <div className="grid grid-cols-1 gap-6">
+                      {[
+                        {
+                          name: 'IncryptOracle.sol',
+                          address: '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0',
+                          description: 'Core oracle contract managing validators and data feeds',
+                          functions: ['createDataFeed', 'submitValidation', 'registerValidator', 'getDataFeed']
+                        },
+                        {
+                          name: 'PredictionMarket.sol',
+                          address: '0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9',
+                          description: 'AMM-based prediction market with oracle integration',
+                          functions: ['createMarket', 'buyShares', 'sellShares', 'resolveMarket', 'claimWinnings']
+                        },
+                        {
+                          name: 'IOToken.sol',
+                          address: '0x742d35Cc6634C0532925a3b8D92e5c05c5C9b4b9',
+                          description: 'ERC20 governance token with voting capabilities',
+                          functions: ['transfer', 'approve', 'delegate', 'getVotes']
+                        },
+                        {
+                          name: 'IncryptDAO.sol',
+                          address: '0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9',
+                          description: 'OpenZeppelin Governor for community governance',
+                          functions: ['propose', 'castVote', 'execute', 'queue']
+                        },
+                        {
+                          name: 'RevenueDistributor.sol',
+                          address: '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707',
+                          description: 'Automated fee distribution to stakers and treasury',
+                          functions: ['stakeTokens', 'unstakeTokens', 'claimRewards', 'distributeRevenue']
+                        }
+                      ].map((contract, index) => (
+                        <div key={index} className="bg-dark-900/50 rounded-lg p-6">
+                          <div className="flex items-start justify-between mb-4">
+                            <div>
+                              <h3 className="text-xl font-semibold text-primary-400 mb-2">{contract.name}</h3>
+                              <p className="text-gray-300 text-sm mb-3">{contract.description}</p>
+                            </div>
+                          </div>
+                          
+                          <div className="mb-4">
+                            <div className="text-sm text-gray-400 mb-1">Contract Address (Testnet):</div>
+                            <div className="flex items-center space-x-2">
+                              <code className="text-xs text-primary-300 bg-dark-950 px-2 py-1 rounded font-mono">
+                                {contract.address}
+                              </code>
+                              <a
+                                href={`https://testnet.bscscan.com/address/${contract.address}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-blue-400 hover:text-blue-300 text-xs"
+                              >
+                                View on BSCScan
+                              </a>
+                            </div>
+                          </div>
+
+                          <div>
+                            <div className="text-sm text-gray-400 mb-2">Key Functions:</div>
+                            <div className="flex flex-wrap gap-2">
+                              {contract.functions.map((func, i) => (
+                                <code key={i} className="text-xs bg-dark-950 text-green-400 px-2 py-1 rounded">
+                                  {func}()
+                                </code>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-6">
+                      <h4 className="text-blue-400 font-semibold mb-3">📂 View Source Code</h4>
+                      <p className="text-sm text-gray-300 mb-3">
+                        All contracts are open-source and available on GitHub for review and auditing.
+                      </p>
+                      <a
+                        href="https://github.com/GHX5T-SOL/IncryptOracle/tree/main/contracts"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-primary-400 hover:text-primary-300 text-sm font-medium"
+                      >
+                        View Contracts on GitHub →
+                      </a>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            )}
+
+            {activeSection === 'examples' && (
+              <div className="space-y-8">
+                <section className="card-liquid-glass p-8">
+                  <h2 className="text-3xl font-bold text-white mb-6">Integration Examples</h2>
+                  
+                  <div className="space-y-8">
+                    <div>
+                      <h3 className="text-xl font-semibold text-white mb-4">Basic Price Feed Integration</h3>
+                      <div className="bg-dark-900 rounded-lg p-4">
+                        <pre className="text-sm text-gray-300 overflow-x-auto">
+                          <code>{`// 1. Install the SDK
+npm install incrypt-oracle-sdk ethers
+
+// 2. Import and initialize
+import { IncryptOracle } from 'incrypt-oracle-sdk';
+
+const oracle = new IncryptOracle({
+  network: 'bsc-mainnet',
+  rpcUrl: 'https://bsc-dataseed1.binance.org/'
+});
+
+// 3. Get price data
+async function displayBitcoinPrice() {
+  const btcData = await oracle.getPrice('BTC/USD');
+  
+  console.log(\`Bitcoin Price: $\${btcData.value}\`);
+  console.log(\`Data Confidence: \${btcData.confidence}%\`);
+  console.log(\`Last Updated: \${btcData.lastUpdated}\`);
+  
+  // Only use data if confidence is high enough
+  if (btcData.confidence >= 90) {
+    // Your application logic here
+    updatePriceDisplay(btcData.value);
+  }
+}`}</code>
+                        </pre>
+                      </div>
+                    </div>
+
+                    <div>
+                      <h3 className="text-xl font-semibold text-white mb-4">Real-time Price Monitoring</h3>
+                      <div className="bg-dark-900 rounded-lg p-4">
+                        <pre className="text-sm text-gray-300 overflow-x-auto">
+                          <code>{`import { IncryptOracle } from 'incrypt-oracle-sdk';
+
+const oracle = new IncryptOracle({ network: 'bsc-mainnet' });
+
+// Subscribe to real-time price updates
+const subscription = oracle.subscribe('ETH/USD', {
+  onData: (data) => {
+    console.log('ETH price updated:', data.value);
+    
+    // Update your UI or trigger actions
+    updateDashboard({
+      price: data.value,
+      confidence: data.confidence,
+      timestamp: data.timestamp
+    });
+  },
+  onError: (error) => {
+    console.error('Subscription error:', error);
+    // Handle error (show notification, retry, etc.)
+  },
+  onConnected: () => {
+    console.log('Successfully connected to oracle');
+  }
+});
+
+// Cleanup when done
+// subscription.unsubscribe();`}</code>
+                        </pre>
+                      </div>
+                    </div>
+
+                    <div>
+                      <h3 className="text-xl font-semibold text-white mb-4">Prediction Market Integration</h3>
+                      <div className="bg-dark-900 rounded-lg p-4">
+                        <pre className="text-sm text-gray-300 overflow-x-auto">
+                          <code>{`import { ethers } from 'ethers';
+import { IncryptOracle } from 'incrypt-oracle-sdk';
+
+// Initialize with signer for write operations
+const provider = new ethers.BrowserProvider(window.ethereum);
+const signer = await provider.getSigner();
+
+const oracle = new IncryptOracle({
+  network: 'bsc-mainnet',
+  signer: signer
+});
+
+// Create a prediction market
+async function createPredictionMarket() {
+  // First, create an oracle data feed
+  const feedId = await oracle.createDataFeed(
+    'ELECTION_2024',
+    'US Presidential Election 2024 Winner',
+    5 // Validation threshold
+  );
+  
+  console.log('Data feed created:', feedId);
+  
+  // Then create market using that feed
+  // (requires PredictionMarket contract interaction)
+}`}</code>
+                        </pre>
+                      </div>
+                    </div>
+
+                    <div>
+                      <h3 className="text-xl font-semibold text-white mb-4">React Application Example</h3>
+                      <div className="bg-dark-900 rounded-lg p-4">
+                        <pre className="text-sm text-gray-300 overflow-x-auto">
+                          <code>{`import React from 'react';
+import { useIncryptOracle, usePriceData } from 'incrypt-oracle-sdk/react';
+
+function CryptoPriceTracker() {
+  const { oracle, isConnected, error } = useIncryptOracle({
+    network: 'bsc-mainnet'
+  });
+  
+  const { data: btcPrice, loading: btcLoading } = usePriceData(oracle, 'BTC/USD');
+  const { data: ethPrice, loading: ethLoading } = usePriceData(oracle, 'ETH/USD');
+  
+  if (!isConnected) return <div>Connecting to oracle...</div>;
+  if (error) return <div>Error: {error.message}</div>;
+  
+  return (
+    <div>
+      <h2>Live Crypto Prices</h2>
+      
+      <div>
+        <h3>Bitcoin</h3>
+        {btcLoading ? (
+          <p>Loading BTC price...</p>
+        ) : (
+          <div>
+            <p>Price: \${btcPrice?.value.toFixed(2)}</p>
+            <p>Confidence: {btcPrice?.confidence}%</p>
+            <small>Updated: {btcPrice?.lastUpdated.toLocaleString()}</small>
+          </div>
+        )}
+      </div>
+      
+      <div>
+        <h3>Ethereum</h3>
+        {ethLoading ? (
+          <p>Loading ETH price...</p>
+        ) : (
+          <div>
+            <p>Price: \${ethPrice?.value.toFixed(2)}</p>
+            <p>Confidence: {ethPrice?.confidence}%</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}`}</code>
+                        </pre>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            )}
+
             {activeSection === 'security' && (
               <div className="space-y-8">
                 <section className="card-liquid-glass p-8">

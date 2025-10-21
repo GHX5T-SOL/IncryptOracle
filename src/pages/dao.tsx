@@ -342,13 +342,7 @@ function ProposalDetailModal({ proposal, onClose, onVote }: {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/80 backdrop-blur-sm"
-      onClick={onClose}
-    >
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/80 backdrop-blur-sm" onClick={onClose}>
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -540,7 +534,7 @@ function ProposalDetailModal({ proposal, onClose, onVote }: {
           </div>
         </div>
       </motion.div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -573,13 +567,7 @@ function CreateProposalModal({ onClose, onSubmit }: {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/80 backdrop-blur-sm"
-      onClick={onClose}
-    >
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/80 backdrop-blur-sm" onClick={onClose}>
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -707,7 +695,7 @@ function CreateProposalModal({ onClose, onSubmit }: {
           </form>
         </div>
       </motion.div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -760,6 +748,11 @@ export default function DAOPage() {
             Shape the future of Incrypt Oracle through community governance. 
             Submit proposals, vote on decisions, and manage the treasury together.
           </p>
+          <div className="mt-4 inline-block px-4 py-2 bg-yellow-500/20 border border-yellow-500/30 rounded-lg">
+            <p className="text-sm text-yellow-300">
+              📊 Demo data for now - Real live platform launch TBA
+            </p>
+          </div>
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">

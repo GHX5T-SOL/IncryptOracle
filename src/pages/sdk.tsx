@@ -201,7 +201,7 @@ export default function SDKPage() {
             </motion.a>
             
             <motion.a
-              href="https://github.com/IncryptOracle/sdk"
+              href="https://github.com/GHX5T-SOL/IncryptOracle/tree/main/sdk"
               target="_blank"
               rel="noopener noreferrer"
               className="px-6 py-3 border border-primary-500 text-primary-400 hover:bg-primary-500 hover:text-white transition-all duration-300 rounded-lg font-semibold"
@@ -542,7 +542,7 @@ declare class IncryptOracle {
                 <p className="text-gray-400 text-sm group-hover:text-gray-300">Community support and discussions</p>
               </a>
               
-              <a href="https://github.com/IncryptOracle/sdk/issues" className="group bg-dark-900/50 rounded-lg p-6 hover:bg-dark-900/70 transition-all duration-300">
+              <a href="https://github.com/GHX5T-SOL/IncryptOracle/issues" target="_blank" rel="noopener noreferrer" className="group bg-dark-900/50 rounded-lg p-6 hover:bg-dark-900/70 transition-all duration-300">
                 <div className="text-3xl mb-4">🐛</div>
                 <h3 className="text-lg font-semibold text-white mb-2">GitHub Issues</h3>
                 <p className="text-gray-400 text-sm group-hover:text-gray-300">Report bugs and request features</p>
