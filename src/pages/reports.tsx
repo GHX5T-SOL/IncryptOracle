@@ -97,7 +97,7 @@ const testResults = {
 };
 
 const deployedAddresses = {
-  IOToken: '0x742d35Cc6634C0532925a3b8D92e5c05c5C9b4b9',
+  IOToken: '0x00placeholder00',
   IncryptOracle: '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0',
   PredictionMarket: '0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9',
   IncryptDAO: '0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9',
@@ -233,18 +233,28 @@ export default function ReportsPage() {
                     <h3 className="text-xl font-semibold text-white mb-4">Deployed Contracts</h3>
                     <div className="space-y-3">
                       {Object.entries(deployedAddresses).map(([contract, address]) => (
-                        <div key={contract} className="flex justify-between items-center bg-dark-900/50 rounded-lg p-4">
+                        <div key={contract} className="flex flex-col sm:flex-row sm:justify-between sm:items-center bg-dark-900/50 rounded-lg p-4 gap-2">
                           <span className="text-white font-medium">{contract}</span>
-                          <a
-                            href={`https://testnet.bscscan.com/address/${address}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-primary-400 hover:text-primary-300 font-mono text-sm transition-colors"
-                          >
-                            {address}
-                          </a>
+                          {address.startsWith('0x') ? (
+                            <a
+                              href={`https://testnet.bscscan.com/address/${address}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-primary-400 hover:text-primary-300 font-mono text-sm transition-colors"
+                            >
+                              {address}
+                            </a>
+                          ) : (
+                            <span className="text-yellow-400 text-sm italic">{address}</span>
+                          )}
                         </div>
                       ))}
+                    </div>
+                    
+                    <div className="mt-4 bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-4">
+                      <p className="text-sm text-yellow-300">
+                        ℹ️ Contracts will be deployed to BSC Testnet shortly. Addresses will be updated after deployment.
+                      </p>
                     </div>
                   </div>
 
