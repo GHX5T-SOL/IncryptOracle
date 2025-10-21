@@ -1,0 +1,11 @@
+node_modules
+.env
+.env.local
+.git
+*.log
+coverage
+test
+artifacts
+cache
+deployments
+.DS_Store
