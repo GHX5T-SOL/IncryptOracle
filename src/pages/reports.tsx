@@ -116,6 +116,11 @@ export default function ReportsPage() {
     { id: 'performance', title: 'Performance', icon: ClockIcon }
   ];
 
+  const getActiveContent = () => {
+    // This ensures all sections are accessible via button clicks
+    return activeSection;
+  };
+
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'passed':
@@ -166,12 +171,14 @@ export default function ReportsPage() {
                   return (
                     <button
                       key={section.id}
+                      type="button"
                       onClick={() => setActiveSection(section.id)}
-                      className={`w-full text-left px-4 py-3 rounded-lg transition-all duration-300 flex items-center space-x-3 ${
+                      className={`w-full text-left px-4 py-3 rounded-lg transition-all duration-300 flex items-center space-x-3 cursor-pointer ${
                         activeSection === section.id
                           ? 'bg-primary-500/20 text-primary-400 border-l-4 border-primary-500'
                           : 'text-gray-300 hover:text-primary-400 hover:bg-white/5'
                       }`}
+                      aria-label={`View ${section.title} section`}
                     >
                       <IconComponent className="w-5 h-5" />
                       <span>{section.title}</span>

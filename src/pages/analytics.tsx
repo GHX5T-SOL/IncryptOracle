@@ -19,7 +19,7 @@ const mockData = {
     totalVolume: 2500000,
     activeMarkets: 23,
     oracleUptime: 99.97,
-    validators: 21,
+    validators: 3,
     totalStaked: 850000
   },
   volumeData: [
@@ -135,6 +135,11 @@ export default function AnalyticsPage() {
             Real-time insights into the Incrypt Oracle ecosystem. Monitor oracle uptime, 
             market performance, user growth, and platform metrics.
           </p>
+          <div className="mt-4 inline-block px-4 py-2 bg-yellow-500/20 border border-yellow-500/30 rounded-lg">
+            <p className="text-sm text-yellow-300">
+              📊 Demo data for now - Real live platform launch TBA
+            </p>
+          </div>
         </motion.div>
 
         {/* Time Range Selector */}

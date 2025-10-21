@@ -16,19 +16,9 @@ const partners = [
     icon: ChartBarIcon,
     description: 'Leading DeFi protocols using our oracle for price feeds',
     partners: [
-      { name: 'PancakeSwap', logo: '[placeholder_pancakeswap_logo.png]', description: 'DEX integration for trading pairs' },
-      { name: 'Venus Protocol', logo: '[placeholder_venus_logo.png]', description: 'Lending protocol price feeds' },
-      { name: 'Alpaca Finance', logo: '[placeholder_alpaca_logo.png]', description: 'Leveraged yield farming oracle' }
-    ]
-  },
-  {
-    category: 'Prediction Platforms',
-    icon: GlobeAltIcon,
-    description: 'Prediction market platforms powered by our oracle',
-    partners: [
-      { name: 'BetDEX', logo: '[placeholder_betdex_logo.png]', description: 'Sports betting with oracle resolution' },
-      { name: 'CryptoPredict', logo: '[placeholder_cryptopredict_logo.png]', description: 'Crypto price prediction markets' },
-      { name: 'ElectionBets', logo: '[placeholder_electionbets_logo.png]', description: 'Political prediction markets' }
+      { name: 'PancakeSwap', logo: '/pancakeswap.png', description: 'DEX integration for trading pairs' },
+      { name: 'Venus Protocol', logo: '/venusprotocol.png', description: 'Lending protocol price feeds' },
+      { name: 'Alpaca Finance', logo: '/alpaccafinance.png', description: 'Leveraged yield farming oracle' }
     ]
   },
   {
@@ -36,9 +26,9 @@ const partners = [
     icon: CpuChipIcon,
     description: 'Blockchain infrastructure and development tools',
     partners: [
-      { name: 'Binance Smart Chain', logo: '[placeholder_bsc_logo.png]', description: 'Native blockchain platform' },
-      { name: 'Chainlink Labs', logo: '[placeholder_chainlink_logo.png]', description: 'Oracle technology collaboration' },
-      { name: 'The Graph', logo: '[placeholder_thegraph_logo.png]', description: 'Subgraph indexing partnership' }
+      { name: 'Binance Smart Chain', logo: '/binancesmartchain.png', description: 'Native blockchain platform' },
+      { name: 'Chainlink Labs', logo: '/chainlinklabs.png', description: 'Oracle technology collaboration' },
+      { name: 'The Graph', logo: '/thegraph.png', description: 'Subgraph indexing partnership' }
     ]
   },
   {
@@ -46,9 +36,9 @@ const partners = [
     icon: ShieldCheckIcon,
     description: 'Security firms ensuring platform safety',
     partners: [
-      { name: 'CertiK', logo: '[placeholder_certik_logo.png]', description: 'Smart contract security audits' },
-      { name: 'Halborn', logo: '[placeholder_halborn_logo.png]', description: 'Penetration testing services' },
-      { name: 'OpenZeppelin', logo: '[placeholder_openzeppelin_logo.png]', description: 'Security framework provider' }
+      { name: 'CertiK', logo: '/certik.png', description: 'Smart contract security audits' },
+      { name: 'Halborn', logo: '/halborn.png', description: 'Penetration testing services' },
+      { name: 'OpenZeppelin', logo: '/openzepplin.png', description: 'Security framework provider' }
     ]
   }
 ];
@@ -74,9 +64,14 @@ export default function PartnersPage() {
             <span className="text-gradient">Our Partners</span>
           </h1>
           <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-            Trusted by leading DeFi protocols, prediction markets, and blockchain infrastructure providers. 
+            Trusted by leading DeFi protocols and blockchain infrastructure providers. 
             Join our growing ecosystem of oracle-powered applications.
           </p>
+          <div className="mt-4 inline-block px-4 py-2 bg-yellow-500/20 border border-yellow-500/30 rounded-lg">
+            <p className="text-sm text-yellow-300">
+              📊 Demo data for now - Real live platform launch TBA
+            </p>
+          </div>
         </motion.div>
 
         {/* Integration Stats */}
@@ -124,8 +119,12 @@ export default function PartnersPage() {
                       transition={{ duration: 0.6, delay: index * 0.1 }}
                       className="card-liquid-glass p-6 text-center hover:scale-105 transition-all duration-300"
                     >
-                      <div className="w-16 h-16 bg-gray-700/50 rounded-lg mx-auto mb-4 flex items-center justify-center">
-                        <span className="text-xs text-gray-400">{partner.logo}</span>
+                      <div className="w-20 h-20 bg-white/5 rounded-lg mx-auto mb-4 flex items-center justify-center p-3">
+                        <img 
+                          src={partner.logo} 
+                          alt={`${partner.name} logo`}
+                          className="w-full h-full object-contain"
+                        />
                       </div>
                       <h3 className="text-xl font-semibold text-white mb-2">{partner.name}</h3>
                       <p className="text-gray-300 text-sm">{partner.description}</p>
