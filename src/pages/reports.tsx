@@ -97,12 +97,12 @@ const testResults = {
 };
 
 const deployedAddresses = {
-  IOToken: '0x00placeholder00',
-  IncryptOracle: '0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0',
-  PredictionMarket: '0xCf7Ed3AccA5a467e9e704C703E8D87F634fB0Fc9',
-  IncryptDAO: '0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9',
-  RevenueDistributor: '0x5FC8d32690cc91D4c39d9d3abcBD16989F875707',
-  TimelockController: '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512'
+  IOToken: '0xdc6a5752d457aAdF3f1C65E3a158f44277717183',
+  IncryptOracle: '0x823C0Ead984707A4B73173274E0e075492866593',
+  PredictionMarket: '0x101B0f8d4B87669fdDd9d61386288Cc16003D0e5',
+  IncryptDAO: '0xb7ed1FDA4DAb1e0000D2e64bB9dD2D6b492bc1b0',
+  RevenueDistributor: '0xe68b3647c436B0De90D59600093F0DF13Af21596',
+  TimelockController: '0xF5B20c8fcC3e57e334ed417Ba3cd865C086A95DE'
 };
 
 export default function ReportsPage() {
@@ -251,9 +251,9 @@ export default function ReportsPage() {
                       ))}
                     </div>
                     
-                    <div className="mt-4 bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-4">
-                      <p className="text-sm text-yellow-300">
-                        ℹ️ Contracts will be deployed to BSC Testnet shortly. Addresses will be updated after deployment.
+                    <div className="mt-4 bg-green-500/10 border border-green-500/20 rounded-lg p-4">
+                      <p className="text-sm text-green-300">
+                        ✅ All contracts successfully deployed to BSC Testnet! Click addresses to view on BSCScan.
                       </p>
                     </div>
                   </div>

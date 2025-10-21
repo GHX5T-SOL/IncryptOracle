@@ -5,12 +5,22 @@ const path = require("path");
 async function main() {
   console.log("🚀 Starting Incrypt Oracle Testnet Deployment...\n");
   
-  const [deployer] = await hre.ethers.getSigners();
-  const network = hre.network.name;
-  
-  console.log(`Deploying contracts with account: ${deployer.address}`);
-  console.log(`Account balance: ${hre.ethers.formatEther(await hre.ethers.provider.getBalance(deployer.address))} BNB`);
-  console.log(`Network: ${network}\n`);
+  try {
+    const [deployer] = await hre.ethers.getSigners();
+    const network = hre.network.name;
+    
+    if (!deployer) {
+      throw new Error("No deployer account found. Make sure PRIVATE_KEY is set in .env");
+    }
+    
+    const balance = await hre.ethers.provider.getBalance(deployer.address);
+    console.log(`Deploying contracts with account: ${deployer.address}`);
+    console.log(`Account balance: ${hre.ethers.formatEther(balance)} BNB`);
+    console.log(`Network: ${network}\n`);
+    
+    if (balance === 0n) {
+      throw new Error("Deployer account has no BNB for gas fees");
+    }
 
   const deploymentLog = [];
   
@@ -42,7 +52,7 @@ async function main() {
   // Deploy IncryptDAO
   console.log("\n🏛️ Deploying Incrypt DAO...");
   const IncryptDAO = await hre.ethers.getContractFactory("IncryptDAO");
-  const dao = await IncryptDAO.deploy(ioTokenAddress, timelockAddress);
+  const dao = await IncryptDAO.deploy(ioTokenAddress);
   await dao.waitForDeployment();
   const daoAddress = await dao.getAddress();
   
@@ -193,10 +203,16 @@ async function main() {
   console.log("\n🔍 Verification Commands:");
   console.log(`npx hardhat verify --network ${network} ${ioTokenAddress} "${deployer.address}"`);
   console.log(`npx hardhat verify --network ${network} ${timelockAddress} "${minDelay}" "[]" "[]" "${admin}"`);
-  console.log(`npx hardhat verify --network ${network} ${daoAddress} "${ioTokenAddress}" "${timelockAddress}"`);
+  console.log(`npx hardhat verify --network ${network} ${daoAddress} "${ioTokenAddress}"`);
   console.log(`npx hardhat verify --network ${network} ${revenueDistributorAddress} "${ioTokenAddress}" "${timelockAddress}" "${deployer.address}"`);
   console.log(`npx hardhat verify --network ${network} ${oracleAddress} "${deployer.address}"`);
   console.log(`npx hardhat verify --network ${network} ${predictionMarketAddress} "${ioTokenAddress}" "${oracleAddress}" "${revenueDistributorAddress}" "${deployer.address}"`);
+  
+  } catch (error) {
+    console.error("\n❌ Error during deployment:");
+    console.error(error);
+    throw error;
+  }
 }
 
 main()

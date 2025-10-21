@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.24;
+pragma solidity ^0.8.19;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Permit.sol";
+import "@openzeppelin/contracts/token/ERC20/extensions/draft-ERC20Permit.sol";
 import "@openzeppelin/contracts/token/ERC20/extensions/ERC20Votes.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
@@ -29,30 +29,32 @@ contract IOToken is ERC20, ERC20Permit, ERC20Votes, Ownable {
     ) 
         ERC20("Incrypt Oracle Token", "IO") 
         ERC20Permit("Incrypt Oracle Token")
-        Ownable(initialOwner)
     {
         // Mint total supply to initial owner (will be distributed via Four Meme fair launch)
         _mint(initialOwner, TOTAL_SUPPLY);
         
         // Exempt owner from restrictions initially
         exemptFromRestrictions[initialOwner] = true;
+        
+        // Transfer ownership
+        _transferOwnership(initialOwner);
     }
     
     /**
-     * @dev Override transfer to implement initial restrictions
+     * @dev Override _beforeTokenTransfer to implement initial restrictions
      */
-    function _update(address from, address to, uint256 value) internal override(ERC20, ERC20Votes) {
+    function _beforeTokenTransfer(address from, address to, uint256 amount) internal override {
+        super._beforeTokenTransfer(from, to, amount);
+        
         // Apply transfer restrictions if enabled
         if (transferRestrictionsEnabled && from != address(0) && to != address(0)) {
             require(
                 exemptFromRestrictions[from] || 
                 exemptFromRestrictions[to] || 
-                value <= MAX_TRANSFER_AMOUNT,
+                amount <= MAX_TRANSFER_AMOUNT,
                 "IOToken: Transfer amount exceeds maximum allowed"
             );
         }
-        
-        super._update(from, to, value);
     }
     
     /**
@@ -81,10 +83,20 @@ contract IOToken is ERC20, ERC20Permit, ERC20Votes, Ownable {
         }
     }
     
-    /**
-     * @dev Required override for ERC20Votes
-     */
-    function nonces(address owner) public view override(ERC20Permit, Nonces) returns (uint256) {
+    // Required overrides for multiple inheritance
+    function _afterTokenTransfer(address from, address to, uint256 amount) internal override(ERC20, ERC20Votes) {
+        super._afterTokenTransfer(from, to, amount);
+    }
+    
+    function _mint(address account, uint256 amount) internal override(ERC20, ERC20Votes) {
+        super._mint(account, amount);
+    }
+    
+    function _burn(address account, uint256 amount) internal override(ERC20, ERC20Votes) {
+        super._burn(account, amount);
+    }
+    
+    function nonces(address owner) public view override(ERC20Permit) returns (uint256) {
         return super.nonces(owner);
     }
 }
