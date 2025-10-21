@@ -670,7 +670,7 @@ function CreateProposalModal({ onClose, onSubmit }: {
                 <li>• You need at least 1,000 IO tokens to create a proposal</li>
                 <li>• Proposal will be active for 7 days after creation</li>
                 <li>• Requires {(100000).toLocaleString()} votes to reach quorum</li>
-                <li>• Simple majority (>50%) needed to pass</li>
+                <li>• Simple majority (&gt;50%) needed to pass</li>
               </ul>
             </div>
 

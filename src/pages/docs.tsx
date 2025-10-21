@@ -103,9 +103,9 @@ async def main():
     
     for feed in feeds:
         price_data = await oracle.get_price(feed)
-        print(f"{feed}: ${price_data['value']:.2f}")
-        print(f"Confidence: {price_data['confidence']/100:.1f}%")
-        print(f"Last updated: {price_data['timestamp']}\\n")
+        print(f"Feed: $" + str(price_data['value']))
+        print(f"Confidence: " + str(price_data['confidence']) + "%")
+        print(f"Last updated: " + str(price_data['timestamp']))
 
 if __name__ == "__main__":
     asyncio.run(main())`
