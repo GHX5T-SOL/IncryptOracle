@@ -380,6 +380,7 @@ function ProposalDetailModal({ proposal, onClose, onVote }: {
             <button
               onClick={onClose}
               className="text-gray-400 hover:text-white transition-colors"
+              aria-label="Close proposal details"
             >
               <XCircleIcon className="w-6 h-6" />
             </button>
@@ -592,6 +593,7 @@ function CreateProposalModal({ onClose, onSubmit }: {
             <button
               onClick={onClose}
               className="text-gray-400 hover:text-white transition-colors"
+              aria-label="Close create proposal form"
             >
               <XCircleIcon className="w-6 h-6" />
             </button>
