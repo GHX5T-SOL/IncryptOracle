@@ -456,7 +456,7 @@ export default function AnalyticsPage() {
                 <CpuChipIcon className="w-6 h-6 text-purple-400" />
               </div>
               <div className="text-sm text-gray-400">Validators</div>
-              <div className="text-lg font-semibold text-purple-400">21 Online</div>
+              <div className="text-lg font-semibold text-purple-400">3 Online</div>
             </div>
           </div>
         </motion.div>
