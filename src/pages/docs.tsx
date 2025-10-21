@@ -146,12 +146,14 @@ export default function DocsPage() {
                 {sections.map((section) => (
                   <button
                     key={section.id}
+                    type="button"
                     onClick={() => setActiveSection(section.id)}
-                    className={`w-full text-left px-3 py-2 rounded-lg transition-all duration-300 flex items-center space-x-2 ${
+                    className={`w-full text-left px-3 py-2 rounded-lg transition-all duration-300 flex items-center space-x-2 cursor-pointer ${
                       activeSection === section.id
                         ? 'bg-primary-500/20 text-primary-400 border-l-2 border-primary-500'
                         : 'text-gray-300 hover:text-primary-400 hover:bg-white/5'
                     }`}
+                    aria-label={`View ${section.title} section`}
                   >
                     <span>{section.icon}</span>
                     <span>{section.title}</span>
