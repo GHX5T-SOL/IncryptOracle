@@ -64,9 +64,9 @@ export default function Navbar() {
           
           {/* Dropdown for additional pages */}
           <div className="relative group">
-            <button className="nav-link flex items-center">
+            <button className="nav-link flex items-center" aria-label="More navigation options" type="button">
               More
-              <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
             </button>
