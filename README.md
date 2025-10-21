@@ -278,12 +278,27 @@ contract MyPredictionMarket {
 
 ### BSC Testnet
 
-```bash
-# Deploy all contracts
-npm run deploy:testnet
+✅ **All contracts deployed and verified on BSC Testnet**
 
-# Deployed addresses available at:
-# https://testnet.bscscan.com/address/0x742d35Cc6634C0532925a3b8D92e5c05c5C9b4b9
+| Contract | Address | BSCScan |
+|----------|---------|---------|
+| **IO Token** | `0xdc6a5752d457aAdF3f1C65E3a158f44277717183` | [View](https://testnet.bscscan.com/address/0xdc6a5752d457aAdF3f1C65E3a158f44277717183) |
+| **Incrypt Oracle** | `0x823C0Ead984707A4B73173274E0e075492866593` | [View](https://testnet.bscscan.com/address/0x823C0Ead984707A4B73173274E0e075492866593) |
+| **Prediction Market** | `0x101B0f8d4B87669fdDd9d61386288Cc16003D0e5` | [View](https://testnet.bscscan.com/address/0x101B0f8d4B87669fdDd9d61386288Cc16003D0e5) |
+| **Incrypt DAO** | `0xb7ed1FDA4DAb1e0000D2e64bB9dD2D6b492bc1b0` | [View](https://testnet.bscscan.com/address/0xb7ed1FDA4DAb1e0000D2e64bB9dD2D6b492bc1b0) |
+| **Revenue Distributor** | `0xe68b3647c436B0De90D59600093F0DF13Af21596` | [View](https://testnet.bscscan.com/address/0xe68b3647c436B0De90D59600093F0DF13Af21596) |
+| **Timelock Controller** | `0xF5B20c8fcC3e57e334ed417Ba3cd865C086A95DE` | [View](https://testnet.bscscan.com/address/0xF5B20c8fcC3e57e334ed417Ba3cd865C086A95DE) |
+
+**Deploy from source:**
+```bash
+# Clone and install
+git clone https://github.com/GHX5T-SOL/IncryptOracle.git
+cd IncryptOracle
+npm install
+
+# Configure .env with your private key
+# Then deploy
+npm run deploy:testnet
 ```
 
 ### BSC Mainnet

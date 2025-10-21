@@ -233,16 +233,30 @@ export default function ReportsPage() {
                     <h3 className="text-xl font-semibold text-white mb-4">Deployed Contracts</h3>
                     <div className="space-y-3">
                       {Object.entries(deployedAddresses).map(([contract, address]) => (
-                        <div key={contract} className="flex flex-col sm:flex-row sm:justify-between sm:items-center bg-dark-900/50 rounded-lg p-4 gap-2">
+                        <div key={contract} className="flex flex-col sm:flex-row sm:justify-between sm:items-center bg-dark-900/50 hover:bg-dark-900/70 rounded-lg p-4 gap-2 transition-all duration-200">
                           <span className="text-white font-medium">{contract}</span>
                           {address.startsWith('0x') ? (
                             <a
                               href={`https://testnet.bscscan.com/address/${address}`}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-primary-400 hover:text-primary-300 font-mono text-sm transition-colors"
+                              className="group flex items-center gap-2 text-primary-400 hover:text-primary-300 font-mono text-sm transition-all duration-200 hover:underline"
+                              title="View on BSCScan Testnet"
                             >
-                              {address}
+                              <span className="break-all">{address}</span>
+                              <svg 
+                                className="w-4 h-4 flex-shrink-0 opacity-70 group-hover:opacity-100 transition-opacity" 
+                                fill="none" 
+                                stroke="currentColor" 
+                                viewBox="0 0 24 24"
+                              >
+                                <path 
+                                  strokeLinecap="round" 
+                                  strokeLinejoin="round" 
+                                  strokeWidth={2} 
+                                  d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" 
+                                />
+                              </svg>
                             </a>
                           ) : (
                             <span className="text-yellow-400 text-sm italic">{address}</span>
