@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useAccount } from 'wagmi';
-import { 
+import {
   MagnifyingGlassIcon, 
   FunnelIcon, 
   ChartBarIcon,
   FireIcon,
-  TrendingUpIcon,
-  TrendingDownIcon,
+  ArrowTrendingUpIcon,
+  ArrowTrendingDownIcon,
   ClockIcon,
   CheckBadgeIcon,
   XCircleIcon
@@ -170,7 +170,7 @@ function MarketCard({ market, onViewDetails }: { market: Market; onViewDetails: 
         <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-3">
           <div className="flex items-center justify-between">
             <span className="text-green-400 font-medium">Yes</span>
-            <TrendingUpIcon className="w-4 h-4 text-green-400" />
+            <ArrowTrendingUpIcon className="w-4 h-4 text-green-400" />
           </div>
           <div className="text-xl font-bold text-green-400">
             ${(market.yesOdds).toFixed(2)}
@@ -183,7 +183,7 @@ function MarketCard({ market, onViewDetails }: { market: Market; onViewDetails: 
         <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-3">
           <div className="flex items-center justify-between">
             <span className="text-red-400 font-medium">No</span>
-            <TrendingDownIcon className="w-4 h-4 text-red-400" />
+            <ArrowTrendingDownIcon className="w-4 h-4 text-red-400" />
           </div>
           <div className="text-xl font-bold text-red-400">
             ${(market.noOdds).toFixed(2)}
@@ -316,7 +316,7 @@ function MarketDetailModal({ market, onClose }: { market: Market; onClose: () =>
               <div className="space-y-3">
                 <div className="flex items-center justify-between bg-green-500/10 border border-green-500/20 rounded-lg p-4">
                   <div className="flex items-center space-x-3">
-                    <TrendingUpIcon className="w-5 h-5 text-green-400" />
+                    <ArrowTrendingUpIcon className="w-5 h-5 text-green-400" />
                     <span className="text-green-400 font-medium">Yes</span>
                   </div>
                   <div className="text-right">
@@ -331,7 +331,7 @@ function MarketDetailModal({ market, onClose }: { market: Market; onClose: () =>
                 
                 <div className="flex items-center justify-between bg-red-500/10 border border-red-500/20 rounded-lg p-4">
                   <div className="flex items-center space-x-3">
-                    <TrendingDownIcon className="w-5 h-5 text-red-400" />
+                    <ArrowTrendingDownIcon className="w-5 h-5 text-red-400" />
                     <span className="text-red-400 font-medium">No</span>
                   </div>
                   <div className="text-right">
@@ -412,7 +412,7 @@ function MarketDetailModal({ market, onClose }: { market: Market; onClose: () =>
                     }`}
                   >
                     <div className="flex items-center justify-center space-x-2">
-                      <TrendingUpIcon className="w-5 h-5" />
+                      <ArrowTrendingUpIcon className="w-5 h-5" />
                       <span className="font-medium">Yes - ${market.yesOdds.toFixed(2)}</span>
                     </div>
                   </button>
@@ -426,7 +426,7 @@ function MarketDetailModal({ market, onClose }: { market: Market; onClose: () =>
                     }`}
                   >
                     <div className="flex items-center justify-center space-x-2">
-                      <TrendingDownIcon className="w-5 h-5" />
+                      <ArrowTrendingDownIcon className="w-5 h-5" />
                       <span className="font-medium">No - ${market.noOdds.toFixed(2)}</span>
                     </div>
                   </button>
