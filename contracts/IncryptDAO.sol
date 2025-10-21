@@ -9,6 +9,7 @@ import "@openzeppelin/contracts/governance/extensions/GovernorVotesQuorumFractio
 import "@openzeppelin/contracts/governance/extensions/GovernorTimelockControl.sol";
 import "@openzeppelin/contracts/governance/TimelockController.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 /**
  * @title IncryptDAO
@@ -48,8 +49,8 @@ contract IncryptDAO is
     mapping(ProposalType => uint256) public proposalThresholds;
     
     // Voting parameters
-    uint256 private constant VOTING_DELAY = 1 days; // 1 day
-    uint256 private constant VOTING_PERIOD = 7 days; // 7 days
+    uint48 private constant VOTING_DELAY = 1 days; // 1 day
+    uint32 private constant VOTING_PERIOD = 7 days; // 7 days
     uint256 private constant PROPOSAL_THRESHOLD = 100; // 1% of total supply
     uint256 private constant QUORUM_FRACTION = 400; // 4% of total supply
     
@@ -105,7 +106,7 @@ contract IncryptDAO is
         string memory externalUrl
     ) public returns (uint256) {
         // Check if proposer meets threshold for proposal type
-        uint256 requiredThreshold = (token().totalSupply() * proposalThresholds[proposalType]) / 10000;
+        uint256 requiredThreshold = (IERC20(address(token())).totalSupply() * proposalThresholds[proposalType]) / 10000;
         require(
             token().getVotes(msg.sender) >= requiredThreshold,
             "Insufficient voting power for proposal type"
@@ -277,43 +278,48 @@ contract IncryptDAO is
     
     // The following functions are overrides required by Solidity.
     
-    function votingDelay() public view override(IGovernor, GovernorSettings) returns (uint256) {
+    function votingDelay() public view override(GovernorSettings) returns (uint256) {
         return super.votingDelay();
     }
     
-    function votingPeriod() public view override(IGovernor, GovernorSettings) returns (uint256) {
+    function votingPeriod() public view override(GovernorSettings) returns (uint256) {
         return super.votingPeriod();
     }
     
-    function quorum(uint256 blockNumber) public view override(IGovernor, GovernorVotesQuorumFraction) returns (uint256) {
+    function quorum(uint256 blockNumber) public view override(GovernorVotesQuorumFraction) returns (uint256) {
         return super.quorum(blockNumber);
     }
     
-    function proposalThreshold() public view override(Governor, GovernorSettings) returns (uint256) {
+    function proposalThreshold() public view override(GovernorSettings) returns (uint256) {
         return super.proposalThreshold();
     }
     
-    function state(uint256 proposalId) public view override(Governor, GovernorTimelockControl) returns (ProposalState) {
+    function state(uint256 proposalId) public view override(GovernorTimelockControl) returns (ProposalState) {
         return super.state(proposalId);
     }
     
-    function propose(
-        address[] memory targets,
-        uint256[] memory values,
-        bytes[] memory calldatas,
-        string memory description
-    ) public override(Governor, IGovernor) returns (uint256) {
-        return super.propose(targets, values, calldatas, description);
+    function proposalNeedsQueuing(uint256 proposalId) public view override(GovernorTimelockControl) returns (bool) {
+        return super.proposalNeedsQueuing(proposalId);
     }
     
-    function _execute(
+    function _queueOperations(
         uint256 proposalId,
         address[] memory targets,
         uint256[] memory values,
         bytes[] memory calldatas,
         bytes32 descriptionHash
-    ) internal override(Governor, GovernorTimelockControl) {
-        super._execute(proposalId, targets, values, calldatas, descriptionHash);
+    ) internal override(GovernorTimelockControl) returns (uint48) {
+        return super._queueOperations(proposalId, targets, values, calldatas, descriptionHash);
+    }
+    
+    function _executeOperations(
+        uint256 proposalId,
+        address[] memory targets,
+        uint256[] memory values,
+        bytes[] memory calldatas,
+        bytes32 descriptionHash
+    ) internal override(GovernorTimelockControl) {
+        super._executeOperations(proposalId, targets, values, calldatas, descriptionHash);
     }
     
     function _cancel(
@@ -321,15 +327,15 @@ contract IncryptDAO is
         uint256[] memory values,
         bytes[] memory calldatas,
         bytes32 descriptionHash
-    ) internal override(Governor, GovernorTimelockControl) returns (uint256) {
+    ) internal override(GovernorTimelockControl) returns (uint256) {
         return super._cancel(targets, values, calldatas, descriptionHash);
     }
     
-    function _executor() internal view override(Governor, GovernorTimelockControl) returns (address) {
+    function _executor() internal view override(GovernorTimelockControl) returns (address) {
         return super._executor();
     }
     
-    function supportsInterface(bytes4 interfaceId) public view override(Governor, GovernorTimelockControl) returns (bool) {
+    function supportsInterface(bytes4 interfaceId) public view override(GovernorTimelockControl) returns (bool) {
         return super.supportsInterface(interfaceId);
     }
 }
