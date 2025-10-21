@@ -14,7 +14,7 @@ const partners = [
   {
     category: 'DeFi Protocols',
     icon: ChartBarIcon,
-    description: 'Leading DeFi protocols using our oracle for price feeds',
+    description: 'Leading DeFi protocols we utilize',
     partners: [
       { name: 'PancakeSwap', logo: '/pancakeswap.png', description: 'DEX integration for trading pairs' },
       { name: 'Venus Protocol', logo: '/venusprotocol.png', description: 'Lending protocol price feeds' },
@@ -175,7 +175,7 @@ export default function PartnersPage() {
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href="mailto:partnerships@incryptoracle.com"
+                href="mailto:incryptinvestments@protonmail.com"
                 className="btn-holographic"
               >
                 Contact Partnerships Team
