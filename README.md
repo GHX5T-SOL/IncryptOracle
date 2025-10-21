@@ -7,7 +7,7 @@
 [![BSC Testnet](https://img.shields.io/badge/BSC-Testnet-yellow.svg)](https://testnet.bscscan.com/)
 
 <div align="center">
-  <img src="https://i.ibb.co/TBDNZrw/favicon.png" alt="Incrypt Oracle Logo" width="120" height="120" />
+  <img src="https://i.ibb.co/TBDNZrwv/favicon.png" alt="Incrypt Oracle Logo" width="120" height="120" />
 </div>
 
 **Incrypt Oracle** is a decentralized prediction market oracle platform built on Binance Smart Chain. It provides reliable, tamper-proof data feeds specifically designed for prediction markets, powered by a community-governed network of validators and the native $IO token.
@@ -270,9 +270,9 @@ contract MyPredictionMarket {
 
 - **Oracle Uptime**: 99.97% 
 - **Average Latency**: 1.1s
-- **Active Validators**: 21
+- **Active Validators**: 3
 - **Data Feeds**: 47 active
-- **Total Volume**: $2.5M+
+- **Total Volume**: $5.8k+ (Testnet)
 
 ## 🌐 Deployment
 
@@ -353,11 +353,11 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🔗 Links
 
-- **🌐 Website**: [https://incryptoracle.com](https://incryptoracle.com)
-- **📖 Documentation**: [https://docs.incryptoracle.com](https://docs.incryptoracle.com)
+- **🌐 Website**: [https://incrypt.fun](https://incrypt.fun)
+- **📖 Documentation**: [https://incrypt.fun/docs](https://incrypt.fun/docs)
 - **💬 Discord**: [https://discord.gg/incrypt](https://discord.gg/incrypt)
-- **🐦 Twitter**: [https://twitter.com/incryptoracle](https://twitter.com/incryptoracle)
-- **📧 Email**: [support@incryptoracle.com](mailto:support@incryptoracle.com)
+- **🐦 Twitter**: [https://x.com/incryppt_defi](https://x.com/incrypt_defi/)
+- **📧 Email**: [support@incryptoracle.com](mailto:incryptinvestments@protonmail.com)
 
 ## 💰 Tokenomics
 
@@ -411,6 +411,6 @@ This software is provided "as is" without warranty of any kind. Users should con
 
 **Built with ❤️ by the Incrypt Oracle Team**
 
-[Website](https://incryptoracle.xyz) • [Documentation](https://docs.incryptoracle.xyz) • [Discord](https://discord.gg/XPSCUYVM65) • [Twitter](https://x.com/Incrypt_defi)
+[Website](https://incrypt.fun) • [Documentation](https://incrypt.fun/docs) • [Discord](https://discord.gg/XPSCUYVM65) • [Twitter](https://x.com/Incrypt_defi)
 
 </div>
