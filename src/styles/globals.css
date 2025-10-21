@@ -1,0 +1,178 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #1f1f1f;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #ffb500;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #e6a200;
+  }
+}
+
+@layer components {
+  /* Holographic Button */
+  .btn-holographic {
+    @apply relative px-6 py-3 font-semibold text-white border border-primary-500 rounded-lg;
+    @apply bg-gradient-to-r from-primary-500/20 via-primary-400/10 to-primary-500/20;
+    @apply backdrop-blur-sm shadow-glow transition-all duration-300;
+    @apply hover:shadow-holographic hover:scale-105 hover:border-primary-400;
+    @apply active:scale-95;
+  }
+
+  .btn-holographic::before {
+    content: '';
+    @apply absolute inset-0 rounded-lg opacity-0 transition-opacity duration-300;
+    background: linear-gradient(45deg, transparent 30%, rgba(255, 181, 0, 0.2) 50%, transparent 70%);
+    transform: translateX(-100%);
+    animation: shimmer 2s infinite;
+  }
+
+  .btn-holographic:hover::before {
+    @apply opacity-100;
+  }
+
+  /* Liquid Glass Card */
+  .card-liquid-glass {
+    @apply relative backdrop-blur-md bg-white/5 border border-white/10 rounded-xl;
+    @apply shadow-liquid transition-all duration-300;
+    @apply hover:bg-white/10 hover:border-white/20 hover:shadow-xl;
+  }
+
+  .card-liquid-glass::before {
+    content: '';
+    @apply absolute inset-0 rounded-xl opacity-50;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+  }
+
+  /* Glowing Border */
+  .border-glow {
+    @apply relative;
+  }
+
+  .border-glow::before {
+    content: '';
+    @apply absolute inset-0 rounded-lg;
+    background: linear-gradient(90deg, transparent, #ffb500, transparent);
+    padding: 2px;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: subtract;
+  }
+
+  /* Floating Animation */
+  .float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  /* Particle Effect */
+  .particles {
+    @apply absolute inset-0 pointer-events-none overflow-hidden;
+  }
+
+  .particle {
+    @apply absolute w-1 h-1 bg-primary-500 rounded-full opacity-50;
+    animation: particle-float 4s ease-in-out infinite;
+  }
+
+  /* Text Gradient */
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary-400 via-primary-500 to-primary-600 bg-clip-text text-transparent;
+  }
+
+  /* Navigation */
+  .nav-link {
+    @apply relative px-4 py-2 text-gray-300 transition-all duration-300;
+    @apply hover:text-primary-500;
+  }
+
+  .nav-link::after {
+    content: '';
+    @apply absolute bottom-0 left-0 w-0 h-0.5 bg-primary-500 transition-all duration-300;
+  }
+
+  .nav-link:hover::after,
+  .nav-link.active::after {
+    @apply w-full;
+  }
+
+  /* Input Styles */
+  .input-holographic {
+    @apply w-full px-4 py-3 bg-transparent border border-gray-700 rounded-lg;
+    @apply text-white placeholder-gray-400 focus:outline-none focus:border-primary-500;
+    @apply focus:shadow-glow transition-all duration-300;
+  }
+
+  /* Market Card */
+  .market-card {
+    @apply card-liquid-glass p-6 hover:scale-105 transition-all duration-300;
+    @apply hover:shadow-holographic hover:border-primary-500/30;
+  }
+
+  /* Progress Bar */
+  .progress-bar {
+    @apply w-full h-2 bg-gray-800 rounded-full overflow-hidden;
+  }
+
+  .progress-fill {
+    @apply h-full bg-gradient-to-r from-primary-500 to-primary-400 transition-all duration-500;
+  }
+
+  /* Loading Spinner */
+  .spinner {
+    @apply w-8 h-8 border-2 border-gray-700 border-t-primary-500 rounded-full animate-spin;
+  }
+
+  /* Tooltip */
+  .tooltip {
+    @apply absolute z-50 px-2 py-1 text-xs bg-gray-800 text-white rounded shadow-lg;
+    @apply opacity-0 pointer-events-none transition-opacity duration-200;
+  }
+
+  .tooltip-trigger:hover .tooltip {
+    @apply opacity-100;
+  }
+}
+
+@layer utilities {
+  .text-shadow {
+    text-shadow: 0 0 10px rgba(255, 181, 0, 0.5);
+  }
+
+  .glow {
+    filter: drop-shadow(0 0 10px rgba(255, 181, 0, 0.5));
+  }
+
+  .backdrop-blur-strong {
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: blur(20px) saturate(180%);
+  }
+}

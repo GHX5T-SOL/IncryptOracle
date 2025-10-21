@@ -1,0 +1,63 @@
+{
+  "name": "incrypt-oracle",
+  "version": "1.0.0",
+  "description": "Decentralized prediction market oracle platform on Binance Smart Chain",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "test:coverage": "hardhat coverage",
+    "deploy:testnet": "hardhat run scripts/deploy-testnet.js --network bscTestnet",
+    "deploy:mainnet": "hardhat run scripts/deploy-mainnet.js --network bscMainnet",
+    "verify": "hardhat verify",
+    "node": "hardhat node"
+  },
+  "dependencies": {
+    "@next/font": "^14.0.3",
+    "@openzeppelin/contracts": "^5.0.0",
+    "@rainbow-me/rainbowkit": "^1.3.0",
+    "@tanstack/react-query": "^5.8.4",
+    "framer-motion": "^10.16.4",
+    "ethers": "^6.8.1",
+    "next": "^14.0.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "recharts": "^2.8.0",
+    "wagmi": "^1.4.7",
+    "viem": "^1.19.9",
+    "@headlessui/react": "^1.7.17",
+    "@heroicons/react": "^2.0.18",
+    "clsx": "^2.0.0",
+    "tailwind-merge": "^2.0.0"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "@types/node": "^20.8.10",
+    "@types/react": "^18.2.33",
+    "@types/react-dom": "^18.2.14",
+    "autoprefixer": "^10.4.16",
+    "eslint": "^8.52.0",
+    "eslint-config-next": "^14.0.3",
+    "hardhat": "^2.19.0",
+    "hardhat-gas-reporter": "^1.0.9",
+    "postcss": "^8.4.31",
+    "solidity-coverage": "^0.8.5",
+    "tailwindcss": "^3.3.5",
+    "typescript": "^5.2.2"
+  },
+  "keywords": [
+    "oracle",
+    "prediction-market",
+    "defi",
+    "binance-smart-chain",
+    "dao",
+    "governance",
+    "blockchain"
+  ],
+  "author": "Incrypt Oracle Team",
+  "license": "MIT"
+}
