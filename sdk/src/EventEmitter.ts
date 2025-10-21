@@ -1,4 +1,4 @@
-import { EventEmitter3 } from 'eventemitter3';
+import EventEmitter3 from 'eventemitter3';
 import type { OracleEvent } from './types';
 
 export class EventEmitter extends EventEmitter3<{

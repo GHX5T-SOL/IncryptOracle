@@ -9,3 +9,7 @@ artifacts
 cache
 deployments
 .DS_Store
+sdk/
+contracts/
+scripts/
+hardhat.config.js
