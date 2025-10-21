@@ -115,16 +115,16 @@ export default function Footer() {
         <div className="mt-16 border-t border-white/10 pt-8 sm:mt-20 lg:mt-24">
           <div className="flex flex-col sm:flex-row sm:justify-between items-center">
             <p className="text-xs leading-5 text-gray-400">
-              © 2024 Incrypt Oracle. All rights reserved.
+              © 2025 Incrypt Network. All rights reserved.
             </p>
             <div className="mt-4 sm:mt-0 flex space-x-6 text-xs leading-5 text-gray-400">
-              <Link href="#" className="hover:text-primary-500 transition-colors duration-200">
+              <Link href="/privacy" className="hover:text-primary-500 transition-colors duration-200">
                 Privacy Policy
               </Link>
-              <Link href="#" className="hover:text-primary-500 transition-colors duration-200">
+              <Link href="/terms" className="hover:text-primary-500 transition-colors duration-200">
                 Terms of Service
               </Link>
-              <Link href="#" className="hover:text-primary-500 transition-colors duration-200">
+              <Link href="/cookies" className="hover:text-primary-500 transition-colors duration-200">
                 Cookie Policy
               </Link>
             </div>

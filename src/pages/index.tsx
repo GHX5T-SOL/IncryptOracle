@@ -280,10 +280,10 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
             {[
-              { label: "Active Validators", value: "21+", icon: "👥" },
+              { label: "Active Validators", value: "2+", icon: "👥" },
               { label: "Data Feeds", value: "50+", icon: "📊" },
-              { label: "Markets Resolved", value: "1,234", icon: "✅" },
-              { label: "Total Volume", value: "$2.5M", icon: "💰" }
+              { label: "Markets Resolved", value: "7+", icon: "✅" },
+              { label: "Total Volume", value: "$5,300", icon: "💰", subtitle: "(testnet BSC)" }
             ].map((stat, index) => (
               <motion.div
                 key={index}
@@ -295,6 +295,7 @@ export default function HomePage() {
                 <div className="text-3xl mb-2">{stat.icon}</div>
                 <div className="text-3xl font-bold text-gradient mb-2">{stat.value}</div>
                 <div className="text-gray-300">{stat.label}</div>
+                {stat.subtitle && <div className="text-xs text-gray-500 mt-1">{stat.subtitle}</div>}
               </motion.div>
             ))}
           </div>
