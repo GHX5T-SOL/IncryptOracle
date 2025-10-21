@@ -272,11 +272,10 @@ function MarketDetailModal({ market, onClose }: { market: Market; onClose: () =>
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
-        className="relative"
+        className="card-liquid-glass max-w-2xl w-full max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="card-liquid-glass max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-          <div className="p-6">
+        <div className="p-6">
           {/* Header */}
           <div className="flex items-start justify-between mb-6">
             <div>
@@ -474,6 +473,7 @@ function MarketDetailModal({ market, onClose }: { market: Market; onClose: () =>
                 </Button>
               </div>
             )}
+          </div>
         </div>
       </motion.div>
     </div>
