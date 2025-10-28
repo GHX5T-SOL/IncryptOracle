@@ -12,6 +12,7 @@ const navigation = [
   { name: 'IncryptPredict', href: '/predict' },
   { name: 'DAO', href: '/dao' },
   { name: 'Staking', href: '/staking' },
+  { name: 'Tokenomics', href: '/tokenomics' },
   { name: 'Analytics', href: '/analytics' },
   { name: 'Partners', href: '/partners' },
 ];
