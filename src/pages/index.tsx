@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -69,19 +69,6 @@ const features = [
 ];
 
 export default function HomePage() {
-  const [copied, setCopied] = useState(false);
-  const contractAddress = '0x8e4Ede02883ccEC28A333697713A35A756154444';
-
-  const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(contractAddress);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      console.error('Failed to copy:', err);
-    }
-  };
-
   return (
     <div className="relative">
       {/* Hero Section */}
@@ -117,46 +104,6 @@ export default function HomePage() {
                   Try IncryptPredict
                 </Link>
               </div>
-
-              {/* $IO Token Contract Address */}
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.4 }}
-                className="mt-8 max-w-2xl"
-              >
-                <div className="card-liquid-glass p-6">
-                  <div className="flex items-center justify-center gap-2 mb-3">
-                    <span className="text-primary-400 font-semibold">$IO Token Contract Address</span>
-                    <span className="text-green-400 text-sm">● Live</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <div className="flex-1 bg-dark-950/50 border border-white/10 rounded-lg px-4 py-3 font-mono text-sm text-gray-300 break-all">
-                      {contractAddress}
-                    </div>
-                    <button
-                      onClick={handleCopy}
-                      className={`px-6 py-3 font-semibold rounded-lg transition-all duration-200 whitespace-nowrap ${
-                        copied
-                          ? 'bg-green-500 text-white'
-                          : 'bg-primary-500 hover:bg-primary-600 text-white'
-                      }`}
-                    >
-                      {copied ? 'Copied!' : 'Copy'}
-                    </button>
-                  </div>
-                  <div className="mt-3 text-center">
-                    <a
-                      href={`https://bscscan.com/address/${contractAddress}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-primary-400 hover:text-primary-300 text-sm underline"
-                    >
-                      View on BSCScan →
-                    </a>
-                  </div>
-                </div>
-              </motion.div>
             </motion.div>
             
             <motion.div
