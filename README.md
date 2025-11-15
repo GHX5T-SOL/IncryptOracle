@@ -1274,7 +1274,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **📖 Documentation**: [https://incrypt.fun/docs](https://incrypt.fun/docs)
 - **💬 Discord**: [https://discord.gg/incrypt](https://discord.gg/incrypt)
 - **🐦 Twitter**: [https://x.com/incryppt_defi](https://x.com/incrypt_defi/)
-- **📧 Email**: [support@incryptoracle.com](mailto:incryptinvestments@protonmail.com)
+- **📧 Email**: [incryptinvestments@protonmail.com](mailto:incryptinvestments@protonmail.com)
 
 ## 💰 Tokenomics & Revenue Architecture
 
