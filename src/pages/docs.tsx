@@ -121,7 +121,6 @@ const mockData = {
 const sections = [
   { id: 'introduction', title: 'Introduction', icon: '📖' },
   { id: 'features', title: 'Features', icon: '✨' },
-  { id: 'getting-started', title: 'Quick Start', icon: '🚀' },
   { id: 'architecture', title: 'Architecture', icon: '🏗️' },
   { id: 'smart-contracts', title: 'Smart Contracts', icon: '📜' },
   { id: 'security', title: 'Security & Audits', icon: '🛡️' },
@@ -218,12 +217,14 @@ export default function DocsPage() {
                     key={section.id}
                     type="button"
                     onClick={() => scrollToSection(section.id)}
-                    className={`w-full text-left px-3 py-2 rounded-lg transition-all duration-300 flex items-center space-x-2 cursor-pointer ${
+                    onMouseDown={(e) => e.preventDefault()}
+                    className={`w-full text-left px-3 py-2 rounded-lg transition-all duration-300 flex items-center space-x-2 cursor-pointer relative z-10 pointer-events-auto ${
                       activeSection === section.id
                         ? 'bg-primary-500/20 text-primary-400 border-l-2 border-primary-500'
                         : 'text-gray-300 hover:text-primary-400 hover:bg-white/5'
                     }`}
                     aria-label={`View ${section.title} section`}
+                    style={{ touchAction: 'manipulation' }}
                   >
                     <span>{section.icon}</span>
                     <span className="text-sm">{section.title}</span>
@@ -293,23 +294,23 @@ export default function DocsPage() {
                     { name: 'Sports Events', icon: '⚽' },
                     { name: 'Elections', icon: '🗳️' },
                     { name: 'Weather Data', icon: '🌤️' }
-                  ].map((category, index) => (
+                      ].map((category, index) => (
                     <div key={index} className="bg-dark-900/50 rounded-lg p-4 text-center">
                       <div className="text-3xl mb-2">{category.icon}</div>
                       <div className="text-sm text-gray-300">{category.name}</div>
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
-              </div>
-            </section>
+                  </div>
+                </section>
 
             {/* Features Section */}
             <section id="features" ref={setSectionRef('features')} className="scroll-mt-24">
               <div className="card-liquid-glass p-8">
                 <h2 className="text-3xl font-bold text-white mb-6">✨ Features</h2>
-                
-                <div className="space-y-6">
-                  <div>
+                  
+                  <div className="space-y-6">
+                    <div>
                     <h3 className="text-xl font-semibold text-white mb-4">🎯 Oracle Infrastructure</h3>
                     <ul className="space-y-2 text-gray-300">
                       <li className="flex items-start space-x-2">
@@ -329,9 +330,9 @@ export default function DocsPage() {
                         <span><strong>Prediction Market Optimized</strong> - Purpose-built for outcome resolution</span>
                       </li>
                     </ul>
-                  </div>
+                    </div>
 
-                  <div>
+                    <div>
                     <h3 className="text-xl font-semibold text-white mb-4">🎲 IncryptPredict Demo</h3>
                     <ul className="space-y-2 text-gray-300">
                       <li className="flex items-start space-x-2">
@@ -351,8 +352,8 @@ export default function DocsPage() {
                         <span><strong>Instant Settlement</strong> - Oracle-powered automatic resolution</span>
                       </li>
                     </ul>
-                  </div>
-
+                        </div>
+                        
                   <div>
                     <h3 className="text-xl font-semibold text-white mb-4">🏛️ DAO Governance</h3>
                     <ul className="space-y-2 text-gray-300">
@@ -373,9 +374,9 @@ export default function DocsPage() {
                         <span><strong>Validator Governance</strong> - Stake-weighted voting on oracle parameters</span>
                       </li>
                     </ul>
-                  </div>
+                    </div>
 
-                  <div>
+                    <div>
                     <h3 className="text-xl font-semibold text-white mb-4">🛠️ Developer Tools</h3>
                     <ul className="space-y-2 text-gray-300">
                       <li className="flex items-start space-x-2">
@@ -395,52 +396,10 @@ export default function DocsPage() {
                         <span><strong>Multi-chain Ready</strong> - BSC Mainnet, Testnet, and local development</span>
                       </li>
                     </ul>
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            {/* Getting Started Section */}
-            <section id="getting-started" ref={setSectionRef('getting-started')} className="scroll-mt-24">
-              <div className="card-liquid-glass p-8">
-                <h2 className="text-3xl font-bold text-white mb-6">🚀 Quick Start</h2>
-                
-                <div className="space-y-6">
-                  <div>
-                    <h3 className="text-xl font-semibold text-white mb-4">System Requirements</h3>
-                    <div className="bg-dark-900/50 rounded-lg p-6">
-                      <h4 className="text-lg font-semibold text-primary-400 mb-3">Development Environment:</h4>
-                      <ul className="space-y-2 text-sm text-gray-300">
-                        <li>• Node.js 18.0.0 or higher (LTS recommended)</li>
-                        <li>• npm 9.0.0+ or yarn 1.22.0+ or pnpm 8.0.0+</li>
-                        <li>• Git 2.30.0+</li>
-                        <li>• MetaMask or compatible BSC wallet extension</li>
-                      </ul>
+                      </div>
                     </div>
                   </div>
-
-                  <div>
-                    <h3 className="text-xl font-semibold text-white mb-4">Installation</h3>
-                    <div className="bg-dark-900 rounded-lg p-4">
-                      <pre className="text-sm text-gray-300 overflow-x-auto">
-                        <code>{`# Clone the repository
-git clone https://github.com/GHX5T-SOL/IncryptOracle.git
-cd IncryptOracle
-
-# Install dependencies
-npm install
-
-# Copy environment variables
-cp .env.example .env
-
-# Start development server
-npm run dev`}</code>
-                      </pre>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </section>
+                </section>
 
             {/* Architecture Section */}
             <section id="architecture" ref={setSectionRef('architecture')} className="scroll-mt-24">
@@ -464,14 +423,14 @@ npm run dev`}</code>
                         <div key={i} className="bg-dark-900/50 rounded-lg p-4">
                           <h4 className="text-primary-400 font-semibold mb-2">{component.name}</h4>
                           <p className="text-sm text-gray-300">{component.desc}</p>
-                        </div>
+                      </div>
                       ))}
-                    </div>
-                  </div>
+                      </div>
+                      </div>
 
                   <div>
                     <h3 className="text-xl font-semibold text-white mb-4">Consensus Mechanism</h3>
-                    <div className="bg-dark-900/50 rounded-lg p-6">
+                      <div className="bg-dark-900/50 rounded-lg p-6">
                       <p className="text-gray-300 mb-4">
                         Incrypt Oracle uses a reputation-weighted consensus algorithm where validators submit 
                         data values and the final consensus is calculated as:
@@ -483,8 +442,8 @@ npm run dev`}</code>
                         This ensures that more accurate validators (with higher reputation) have greater influence 
                         on the final consensus value.
                       </p>
+                      </div>
                     </div>
-                  </div>
 
                   <div>
                     <h3 className="text-xl font-semibold text-white mb-4">Data Flow</h3>
@@ -508,7 +467,7 @@ npm run dev`}</code>
                       </pre>
                     </div>
                   </div>
-                </div>
+              </div>
               </div>
             </section>
 
@@ -524,9 +483,9 @@ npm run dev`}</code>
                 <div className="space-y-8 mb-12">
                   <h3 className="text-2xl font-bold text-white">Core Contracts</h3>
                   
-                  {[
-                    {
-                      name: 'IncryptOracle.sol',
+                      {[
+                        {
+                          name: 'IncryptOracle.sol',
                       address: '0x823C0Ead984707A4B73173274E0e075492866593',
                       description: 'Core oracle contract managing validators and data feeds with reputation-weighted consensus',
                       keyFeatures: [
@@ -547,9 +506,9 @@ npm run dev`}</code>
                       ],
                       events: ['DataFeedCreated', 'ValidationSubmitted', 'FeedResolved', 'ValidatorRegistered', 'ValidatorSlashed', 'OptimisticResolution', 'DisputeRaised'],
                       security: 'ReentrancyGuard, Pausable, Ownable, division-by-zero protection, input validation'
-                    },
-                    {
-                      name: 'PredictionMarket.sol',
+                        },
+                        {
+                          name: 'PredictionMarket.sol',
                       address: '0x101B0f8d4B87669fdDd9d61386288Cc16003D0e5',
                       description: 'AMM-based prediction market with oracle integration and private market support',
                       keyFeatures: [
@@ -570,9 +529,9 @@ npm run dev`}</code>
                       ],
                       events: ['MarketCreated', 'SharesPurchased', 'SharesSold', 'MarketResolved', 'WinningsClaimed'],
                       security: 'ReentrancyGuard, input validation, division-by-zero protection, oracle staleness checks'
-                    },
-                    {
-                      name: 'IOToken.sol',
+                        },
+                        {
+                          name: 'IOToken.sol',
                       address: '0xdc6a5752d457aAdF3f1C65E3a158f44277717183',
                       description: 'ERC20 governance token with ERC20Votes extension for DAO voting',
                       keyFeatures: [
@@ -607,9 +566,9 @@ npm run dev`}</code>
                       ],
                       events: ['TokensStaked', 'TokensUnstaked', 'RewardsClaimed', 'RevenueDistributed'],
                       security: 'ReentrancyGuard, Pausable, SafeERC20, round limit checks'
-                    },
-                    {
-                      name: 'IncryptDAO.sol',
+                        },
+                        {
+                          name: 'IncryptDAO.sol',
                       address: '0xb7ed1FDA4DAb1e0000D2e64bB9dD2D6b492bc1b0',
                       description: 'OpenZeppelin Governor for community governance with timelock integration',
                       keyFeatures: [
@@ -641,13 +600,13 @@ npm run dev`}</code>
                       ],
                       events: ['SubscriptionCreated', 'SubscriptionRenewed', 'RequestRecorded'],
                       security: 'Access control, rate limiting, input validation'
-                    }
-                  ].map((contract, index) => (
-                    <div key={index} className="bg-dark-900/50 rounded-lg p-6">
-                      <div className="flex items-start justify-between mb-4">
+                        }
+                      ].map((contract, index) => (
+                        <div key={index} className="bg-dark-900/50 rounded-lg p-6">
+                          <div className="flex items-start justify-between mb-4">
                         <div className="flex-1">
                           <h4 className="text-xl font-bold text-primary-400 mb-2">{contract.name}</h4>
-                          <p className="text-gray-300 text-sm mb-3">{contract.description}</p>
+                              <p className="text-gray-300 text-sm mb-3">{contract.description}</p>
                           
                           <div className="mb-3">
                             <div className="text-xs text-gray-400 mb-1">Contract Address (BSC Testnet):</div>
@@ -656,19 +615,19 @@ npm run dev`}</code>
                                 {contract.address}
                               </code>
                               {contract.address !== 'TBD' && (
-                                <a
-                                  href={`https://testnet.bscscan.com/address/${contract.address}`}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="text-blue-400 hover:text-blue-300 text-xs"
-                                >
+                              <a
+                                href={`https://testnet.bscscan.com/address/${contract.address}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-blue-400 hover:text-blue-300 text-xs"
+                              >
                                   View on BSCScan →
-                                </a>
+                              </a>
                               )}
                             </div>
                           </div>
-                        </div>
-                      </div>
+                            </div>
+                          </div>
 
                       <div className="mb-4">
                         <h5 className="text-sm font-semibold text-white mb-2">Key Features</h5>
@@ -689,37 +648,37 @@ npm run dev`}</code>
                             <div key={i} className="bg-dark-950 rounded p-2">
                               <code className="text-xs text-primary-400 font-mono">
                                 {func.name}({func.params})
-                              </code>
+                                </code>
                               <p className="text-xs text-gray-400 mt-1">{func.description}</p>
                             </div>
-                          ))}
-                        </div>
-                      </div>
+                              ))}
+                            </div>
+                          </div>
 
                       <div className="bg-blue-500/10 border border-blue-500/20 rounded p-2">
                         <h5 className="text-xs text-blue-400 font-semibold mb-1">🛡️ Security</h5>
                         <p className="text-xs text-gray-300">{contract.security}</p>
                       </div>
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
 
                 <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-6 text-center mt-8">
                   <h3 className="text-lg font-semibold text-blue-400 mb-2">📂 View Source Code</h3>
-                  <p className="text-sm text-gray-300 mb-3">
-                    All contracts are open-source and available on GitHub for review and auditing.
-                  </p>
-                  <a
-                    href="https://github.com/GHX5T-SOL/IncryptOracle/tree/main/contracts"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                      <p className="text-sm text-gray-300 mb-3">
+                        All contracts are open-source and available on GitHub for review and auditing.
+                      </p>
+                      <a
+                        href="https://github.com/GHX5T-SOL/IncryptOracle/tree/main/contracts"
+                        target="_blank"
+                        rel="noopener noreferrer"
                     className="btn-holographic inline-block text-sm"
-                  >
-                    View Contracts on GitHub →
-                  </a>
-                </div>
-              </div>
-            </section>
+                      >
+                        View Contracts on GitHub →
+                      </a>
+                    </div>
+                  </div>
+                </section>
 
             {/* Security Section */}
             <section id="security" ref={setSectionRef('security')} className="scroll-mt-24">
@@ -806,7 +765,7 @@ npm run dev`}</code>
                             </li>
                           ))}
                         </ul>
-                      </div>
+              </div>
                     ))}
                   </div>
                 </div>
@@ -1004,8 +963,8 @@ npm run dev`}</code>
                             </span>
                           </div>
                           <p className="text-gray-300">{phase.description}</p>
-                        </div>
                       </div>
+                    </div>
 
                       <div className="bg-dark-900/50 rounded-lg p-6">
                         <div className="space-y-3">
@@ -1074,7 +1033,7 @@ npm run dev`}</code>
                 
                 <div className="space-y-8">
                   {/* Token Utility */}
-                  <div>
+                    <div>
                     <h3 className="text-2xl font-bold text-white mb-6">$IO Token Utility</h3>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1686,7 +1645,7 @@ npm run dev`}</code>
                                   alt={`${partner.name} logo`}
                                   className="w-full h-full object-contain"
                                 />
-                              </div>
+                      </div>
                               <h4 className="text-xl font-semibold text-white mb-2">{partner.name}</h4>
                               <p className="text-gray-300 text-sm">{partner.description}</p>
                             </div>
@@ -1695,7 +1654,7 @@ npm run dev`}</code>
                       </div>
                     );
                   })}
-                </div>
+                    </div>
 
                 {/* Become a Partner CTA */}
                 <div className="mt-16 card-liquid-glass p-12 text-center">
@@ -1773,8 +1732,8 @@ npm run dev`}</code>
                       <div className="text-3xl font-bold text-blue-400 mb-2">96</div>
                       <div className="text-gray-300">Security Score</div>
                       <div className="text-sm text-blue-400 mt-1">CertiK Audited</div>
+                      </div>
                     </div>
-                  </div>
 
                   {/* Deployed Contracts */}
                   <div className="mb-8">
@@ -2148,10 +2107,10 @@ async function createPredictionMarket() {
                         </pre>
                       </div>
                     </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-            </section>
+                </section>
 
             {/* Technical Specifications Section */}
             <section id="technical-specs" ref={setSectionRef('technical-specs')} className="scroll-mt-24">
@@ -2185,7 +2144,7 @@ async function createPredictionMarket() {
                         <div className="ml-4">else:</div>
                         <div className="ml-8">confidence = variance == 0 ? MAX_CONFIDENCE : MAX_CONFIDENCE - (variance × MAX_CONFIDENCE / consensusValue)</div>
                         <div className="ml-8">confidence = min(confidence, MAX_CONFIDENCE)</div>
-                      </div>
+              </div>
                     </div>
 
                     <div className="bg-dark-900/50 rounded-lg p-6">
@@ -2301,7 +2260,7 @@ async function createPredictionMarket() {
               <div className="card-liquid-glass p-8">
                 <h2 className="text-3xl font-bold text-white mb-6">✅ Testing & Coverage</h2>
                 
-                <div className="space-y-8">
+              <div className="space-y-8">
                   {/* Test Suite Architecture */}
                   <div>
                     <h3 className="text-2xl font-bold text-white mb-4">Comprehensive Test Suite Architecture</h3>
@@ -2407,7 +2366,7 @@ async function createPredictionMarket() {
                           <div className="flex justify-between">
                             <span className="text-gray-400">Average Resolution Latency:</span>
                             <span className="text-gray-300">1.1s</span>
-                          </div>
+                        </div>
                           <div className="flex justify-between">
                             <span className="text-gray-400">Optimistic Resolution:</span>
                             <span className="text-gray-300">4-hour dispute window</span>
@@ -2417,15 +2376,15 @@ async function createPredictionMarket() {
                             <span className="text-green-400">20-30% reduction vs initial</span>
                           </div>
                         </div>
-                      </div>
+                    </div>
 
-                      <div className="bg-dark-900/50 rounded-lg p-6">
+                    <div className="bg-dark-900/50 rounded-lg p-6">
                         <h4 className="text-lg font-semibold text-primary-400 mb-4">Network Status</h4>
                         <div className="space-y-3 text-sm">
                           <div className="flex justify-between">
                             <span className="text-gray-400">Active Validators:</span>
                             <span className="text-gray-300">3+ (expandable to 21)</span>
-                          </div>
+                      </div>
                           <div className="flex justify-between">
                             <span className="text-gray-400">Data Feeds:</span>
                             <span className="text-gray-300">47+ active</span>
@@ -2453,11 +2412,11 @@ async function createPredictionMarket() {
                 
                 <div className="space-y-8">
                   {/* BSC Testnet */}
-                  <div>
+                        <div>
                     <h3 className="text-2xl font-bold text-white mb-4">BSC Testnet</h3>
                     <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-4 mb-6">
                       <p className="text-green-300 font-semibold">✅ All contracts deployed and verified on BSC Testnet</p>
-                    </div>
+                          </div>
 
                     <div className="bg-dark-900/50 rounded-lg p-6 mb-6">
                       <h4 className="text-lg font-semibold text-white mb-4">Contract Addresses</h4>
@@ -2480,10 +2439,10 @@ async function createPredictionMarket() {
                             >
                               {item.address}
                             </a>
-                          </div>
+                        </div>
                         ))}
-                      </div>
-                    </div>
+                          </div>
+                        </div>
 
                     <div className="bg-dark-900 rounded-lg p-4">
                       <h4 className="text-lg font-semibold text-white mb-3">Deploy from source:</h4>
@@ -2498,8 +2457,8 @@ npm install
 npm run deploy:testnet`}</code>
                       </pre>
                     </div>
-                  </div>
-
+                      </div>
+                      
                   {/* BSC Mainnet */}
                   <div>
                     <h3 className="text-2xl font-bold text-white mb-4">BSC Mainnet</h3>
@@ -2514,8 +2473,8 @@ npm run deploy:mainnet
 # 3. Initialize with proper parameters
 # 4. Transfer ownership to DAO timelock`}</code>
                       </pre>
+                      </div>
                     </div>
-                  </div>
 
                   {/* Vercel Deployment */}
                   <div>
@@ -2531,9 +2490,9 @@ npm run deploy:mainnet
                       </pre>
                     </div>
                   </div>
-                </div>
-              </div>
-            </section>
+                    </div>
+                  </div>
+                </section>
 
             {/* Contributing Section */}
             <section id="contributing" ref={setSectionRef('contributing')} className="scroll-mt-24">
@@ -2559,8 +2518,8 @@ npm run deploy:mainnet
                         <li>Push to the branch (<code className="text-primary-300">git push origin feature/amazing-feature</code>)</li>
                         <li>Open a Pull Request</li>
                       </ol>
-                    </div>
-                  </div>
+              </div>
+        </div>
 
                   {/* Code Style */}
                   <div>

@@ -100,9 +100,6 @@ export default function HomePage() {
                 <Link href="/docs" className="btn-holographic text-center">
                   Learn More
                 </Link>
-                <Link href="/predict" className="btn-holographic text-center">
-                  Try IncryptPredict
-                </Link>
               </div>
             </motion.div>
             
