@@ -31,7 +31,7 @@ const phases = [
       { task: 'Frontend blockchain integration (real-time updates)', completed: true },
       { task: 'Final security audit (CertiK/Halborn)', completed: false },
       { task: 'BSC mainnet deployment', completed: false },
-      { task: '$IO token launch on Four Meme', completed: false },
+      { task: '$IO token launch', completed: false },
       { task: 'IncryptPredict production launch', completed: false },
       { task: 'Validator onboarding program', completed: false }
     ]

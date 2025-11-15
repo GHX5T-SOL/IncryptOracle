@@ -58,7 +58,6 @@ const contracts = [
     address: '0xdc6a5752d457aAdF3f1C65E3a158f44277717183',
     description: 'ERC20 governance token with ERC20Votes extension for DAO voting',
     keyFeatures: [
-      'Fixed supply: 1,000,000,000 IO tokens',
       'ERC20Votes extension for delegation',
       'Governance voting capabilities',
       'Validator staking requirement',

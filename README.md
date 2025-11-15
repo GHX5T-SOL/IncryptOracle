@@ -1278,9 +1278,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 💰 Tokenomics & Revenue Architecture
 
-### $IO Token Distribution & Utility
-
-**Total Supply**: 1,000,000,000 IO (Fixed supply, no minting capability)
+### $IO Token Utility
 
 **Token Utility:**
 1. **Governance**: ERC20Votes extension enables delegation and voting on DAO proposals
@@ -1288,8 +1286,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 3. **Prediction Market Currency**: Primary medium of exchange for market participation
 4. **Subscription Payments**: Required for API access tiers (Basic: 100 IO/month, Premium: 1,000 IO/month)
 5. **Market Creation Fees**: 50 IO for public markets, 100 IO for private markets
-
-**Fair Launch Model**: Four Meme platform launch ensures no team allocation, fair distribution to community
 
 ### Revenue Model & Distribution Mechanism
 
@@ -1351,12 +1347,6 @@ The `RevenueDistributor` contract implements an automated 50/50 revenue split:
 - Minimum liquidity: 1,000 IO tokens per market (ensures viability)
 - Fee structure: 2% default (200 basis points), market creator sets fee
 - AMM slippage: Automatic based on pool ratios (no slippage protection needed for small trades)
-
-**Token Distribution Strategy:**
-- No pre-mine or team allocation
-- Community-driven distribution via Four Meme platform
-- Governance by token holders via DAO
-- Validator incentives aligned with network health
 
 ## 🚀 Advanced Features & Recent Implementations
 
@@ -1539,7 +1529,7 @@ if (validators[validator].stake - slashAmount < MIN_STAKE) {
 - [x] Frontend blockchain integration (real-time updates)
 - [ ] Final security audit (CertiK/Halborn)
 - [ ] BSC mainnet deployment
-- [ ] $IO token launch on Four Meme
+- [ ] $IO token launch
 - [ ] IncryptPredict production launch
 - [ ] Validator onboarding program
 

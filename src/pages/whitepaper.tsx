@@ -30,16 +30,8 @@ export default function WhitepaperPage() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
             <div>
-              <h3 className="text-xl font-semibold text-white mb-4">$IO Token Distribution</h3>
+              <h3 className="text-xl font-semibold text-white mb-4">$IO Token Utility</h3>
               <div className="space-y-4 text-sm">
-                <div>
-                  <div className="flex justify-between mb-1">
-                    <span className="text-gray-400">Total Supply:</span>
-                    <span className="text-white font-semibold">1,000,000,000 IO</span>
-                  </div>
-                  <div className="text-xs text-gray-500">Fixed supply, no minting capability</div>
-                </div>
-                
                 <div>
                   <h4 className="text-lg font-semibold text-primary-400 mb-3">Token Utility</h4>
                   <ul className="space-y-2 text-gray-300">
@@ -69,20 +61,7 @@ export default function WhitepaperPage() {
             </div>
 
             <div>
-              <h3 className="text-xl font-semibold text-white mb-4">Fair Launch Model</h3>
-              <div className="bg-dark-900/50 rounded-lg p-4 mb-4">
-                <p className="text-gray-300 text-sm mb-3">
-                  Four Meme platform launch ensures no team allocation, fair distribution to community.
-                </p>
-                <div className="space-y-2 text-xs text-gray-400">
-                  <div>• No pre-mine or team allocation</div>
-                  <div>• Community-driven distribution</div>
-                  <div>• Governance by token holders via DAO</div>
-                  <div>• Validator incentives aligned with network health</div>
-                </div>
-              </div>
-
-              <h3 className="text-xl font-semibold text-white mb-4 mt-6">Economic Security Model</h3>
+              <h3 className="text-xl font-semibold text-white mb-4">Economic Security Model</h3>
               <div className="space-y-3 text-sm text-gray-300">
                 <div>
                   <span className="text-gray-400">Minimum Validator Stake:</span>
