@@ -1,0 +1,16 @@
+{
+  "network": "bscTestnet",
+  "chainId": "97",
+  "deployer": "0xA0f2dB97f562EF33C98F3cb2876FB064E7C75c87",
+  "timestamp": "2025-11-15T20:38:58.269Z",
+  "contracts": {
+    "IOToken": "0x9f2E2E0786E637cc0a11Acb9A3C4203b76089185",
+    "TimelockController": "0x03CB8deD255371Fd9971b7D9f3AB9f9208b2Fac9",
+    "IncryptDAO": "0xa254D432E9B1e4907980f52b42Ba2Dd754Ca78dd",
+    "RevenueDistributor": "0x0b34455cD2e3A80322d0bb6bA27e68211B86e4b1",
+    "IncryptOracle": "0x5550966c0ECfe8764E2f29EB2C9F87D9CE112cBC",
+    "PredictionMarket": "0x4B72566EedF3c4b25b6669B33a2F8D3E2F4D2530",
+    "OracleSubscription": "0x43299C4C889442d50914f4D133522565feC8e51f"
+  },
+  "gasUsed": {}
+}

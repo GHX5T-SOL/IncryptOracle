@@ -83,6 +83,14 @@ contract IOToken is ERC20, ERC20Permit, ERC20Votes, Ownable {
         }
     }
     
+    /**
+     * @dev Mint tokens - owner only (for testing and development)
+     * Note: In production, this should be removed or restricted further
+     */
+    function mint(address to, uint256 amount) external onlyOwner {
+        _mint(to, amount);
+    }
+    
     // Required overrides for multiple inheritance
     function _afterTokenTransfer(address from, address to, uint256 amount) internal override(ERC20, ERC20Votes) {
         super._afterTokenTransfer(from, to, amount);

@@ -23,6 +23,14 @@ describe("IncryptOracle", function () {
   });
 
   describe("Data Feed Management", function () {
+    beforeEach(async function () {
+      // Register 3 validators first to allow creating feeds with threshold 3
+      const stakeAmount = ethers.parseEther("1000");
+      await oracle.connect(validator1).registerValidator(stakeAmount);
+      await oracle.connect(validator2).registerValidator(stakeAmount);
+      await oracle.connect(validator3).registerValidator(stakeAmount);
+    });
+
     it("Should create a data feed", async function () {
       const tx = await oracle.createDataFeed("BTC/USD", "Bitcoin price in USD", 3);
       const receipt = await tx.wait();
@@ -72,15 +80,16 @@ describe("IncryptOracle", function () {
     let feedId;
 
     beforeEach(async function () {
-      // Create a data feed
-      const tx = await oracle.createDataFeed("TEST/USD", "Test price", 2);
+      // Register validators first
+      await oracle.connect(validator1).registerValidator(ethers.parseEther("1000"));
+      await oracle.connect(validator2).registerValidator(ethers.parseEther("1000"));
+      await oracle.connect(validator3).registerValidator(ethers.parseEther("1000"));
+
+      // Create a data feed (threshold must be >= MIN_VALIDATORS (3) and <= number of validators)
+      const tx = await oracle.createDataFeed("TEST/USD", "Test price", 3);
       const receipt = await tx.wait();
       const event = receipt.logs.find(log => log.fragment && log.fragment.name === 'DataFeedCreated');
       feedId = event.args.feedId;
-
-      // Register validators
-      await oracle.connect(validator1).registerValidator(ethers.parseEther("1000"));
-      await oracle.connect(validator2).registerValidator(ethers.parseEther("1000"));
     });
 
     it("Should submit validations", async function () {
@@ -108,6 +117,12 @@ describe("IncryptOracle", function () {
     });
 
     it("Should deactivate data feed", async function () {
+      // Register validators first
+      const stakeAmount = ethers.parseEther("1000");
+      await oracle.connect(validator1).registerValidator(stakeAmount);
+      await oracle.connect(validator2).registerValidator(stakeAmount);
+      await oracle.connect(validator3).registerValidator(stakeAmount);
+
       const tx = await oracle.createDataFeed("TEST/USD", "Test price", 3);
       const receipt = await tx.wait();
       const event = receipt.logs.find(log => log.fragment && log.fragment.name === 'DataFeedCreated');

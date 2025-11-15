@@ -98,6 +98,20 @@ async function main() {
   console.log(`✅ Prediction Market deployed to: ${predictionMarketAddress}`);
   deploymentLog.push(`PREDICTION_MARKET_ADDRESS=${predictionMarketAddress}`);
   
+  // Deploy Oracle Subscription
+  console.log("\n📡 Deploying Oracle Subscription...");
+  const OracleSubscription = await hre.ethers.getContractFactory("OracleSubscription");
+  const oracleSubscription = await OracleSubscription.deploy(
+    ioTokenAddress,
+    revenueDistributorAddress, // Fee collector
+    deployer.address
+  );
+  await oracleSubscription.waitForDeployment();
+  const oracleSubscriptionAddress = await oracleSubscription.getAddress();
+  
+  console.log(`✅ Oracle Subscription deployed to: ${oracleSubscriptionAddress}`);
+  deploymentLog.push(`ORACLE_SUBSCRIPTION_ADDRESS=${oracleSubscriptionAddress}`);
+  
   // Post-deployment configuration
   console.log("\n⚙️ Configuring contracts...");
   
@@ -118,32 +132,11 @@ async function main() {
   await ioToken.transferOwnership(timelockAddress);
   console.log("✅ IO Token ownership transferred to timelock");
   
-  // Create sample oracle data feeds for testing
-  console.log("\n📊 Creating sample oracle data feeds...");
-  
-  const sampleFeeds = [
-    {
-      name: "BTC/USD",
-      description: "Bitcoin price in USD",
-      threshold: 3
-    },
-    {
-      name: "ETH/USD", 
-      description: "Ethereum price in USD",
-      threshold: 3
-    },
-    {
-      name: "Election2024",
-      description: "2024 US Presidential Election Winner",
-      threshold: 5
-    }
-  ];
-  
-  for (const feed of sampleFeeds) {
-    const tx = await oracle.createDataFeed(feed.name, feed.description, feed.threshold);
-    const receipt = await tx.wait();
-    console.log(`✅ Created data feed: ${feed.name}`);
-  }
+  // Note: Data feeds cannot be created until validators are registered
+  // Validators must register first before creating data feeds (threshold must be <= number of validators)
+  console.log("\n📊 Note: Data feeds will be created after validators are registered");
+  console.log("   To create data feeds, first register at least 3 validators using:");
+  console.log("   oracle.registerValidator(ethers.parseEther('1000'))");
   
   // Save deployment addresses
   const deploymentInfo = {
@@ -157,7 +150,8 @@ async function main() {
       IncryptDAO: daoAddress,
       RevenueDistributor: revenueDistributorAddress,
       IncryptOracle: oracleAddress,
-      PredictionMarket: predictionMarketAddress
+      PredictionMarket: predictionMarketAddress,
+      OracleSubscription: oracleSubscriptionAddress
     },
     gasUsed: {
       // Will be filled by actual deployment
@@ -191,6 +185,7 @@ async function main() {
   console.log(`Revenue Distributor: ${revenueDistributorAddress}`);
   console.log(`Oracle: ${oracleAddress}`);
   console.log(`Prediction Market: ${predictionMarketAddress}`);
+  console.log(`Oracle Subscription: ${oracleSubscriptionAddress}`);
   
   console.log("\n📋 Next Steps:");
   console.log("1. Update .env file with deployed addresses");

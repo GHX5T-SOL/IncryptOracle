@@ -63,6 +63,8 @@ contract PredictionMarket is Ownable, ReentrancyGuard, Pausable {
     uint256 public constant MAX_FEE = 1000; // 10%
     uint256 public constant MIN_LIQUIDITY = 1000 * 10**18; // 1000 IO tokens
     uint256 public constant RESOLUTION_BUFFER = 1 hours;
+    uint256 public constant MARKET_CREATION_FEE = 50 * 10**18; // 50 IO tokens for public markets
+    uint256 public constant PRIVATE_MARKET_FEE = 100 * 10**18; // 100 IO tokens for private markets
     
     IERC20 public immutable ioToken;
     IncryptOracle public immutable oracle;

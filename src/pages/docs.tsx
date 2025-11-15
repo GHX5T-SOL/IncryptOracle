@@ -40,7 +40,7 @@ const sections = [
   }
 ];
 
-const codeExamples = {
+const codeExamples: Record<string, string> = {
   javascript: `import { IncryptOracle } from 'incrypt-oracle-sdk';
 
 // Initialize the oracle
