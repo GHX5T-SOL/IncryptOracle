@@ -13,6 +13,10 @@ const navigation = [
   { name: 'DAO', href: '/dao' },
   { name: 'Staking', href: '/staking' },
   { name: 'Analytics', href: '/analytics' },
+  { name: 'Smart Contracts', href: '/smart-contracts' },
+  { name: 'Security', href: '/security' },
+  { name: 'Roadmap', href: '/roadmap' },
+  { name: 'Whitepaper', href: '/whitepaper' },
   { name: 'Partners', href: '/partners' },
 ];
 
@@ -71,12 +75,12 @@ export default function Navbar() {
               </svg>
             </button>
             
-            <div className="absolute top-full left-0 mt-1 w-48 bg-dark-900 border border-white/10 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+            <div className="absolute top-full left-0 mt-1 w-56 bg-dark-900 border border-white/10 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 grid grid-cols-2 gap-1 p-2">
               {navigation.slice(6).concat([{ name: 'Reports', href: '/reports' }]).map((item) => (
                 <Link
                   key={item.name}
                   href={item.href}
-                  className="block px-4 py-2 text-gray-300 hover:text-primary-400 hover:bg-white/5 transition-colors first:rounded-t-lg last:rounded-b-lg"
+                  className="block px-4 py-2 text-gray-300 hover:text-primary-400 hover:bg-white/5 transition-colors rounded"
                 >
                   {item.name}
                 </Link>

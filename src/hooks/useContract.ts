@@ -28,7 +28,8 @@ const OracleABI = [
 ];
 
 const PredictionMarketABI = [
-  'function markets(uint256) view returns (string, string, string, uint256, uint8, uint8, uint256, uint256[2], uint256[2], address, uint256, uint256, bool)',
+  'function marketCounter() view returns (uint256)',
+  'function markets(uint256) view returns (string, string, string, uint256, uint256, bytes32, uint8, uint8, uint256, uint256[2], uint256[2], address, uint256, uint256, bool)',
   'function getMarket(uint256) view returns (string, string, string, uint256, uint8, uint256[2], address, uint256)',
   'function getUserPosition(uint256, address) view returns (uint256, uint256, uint256, bool)',
   'function getOdds(uint256) view returns (uint256, uint256)',
@@ -36,10 +37,13 @@ const PredictionMarketABI = [
   'function createMarket(string, string, string, uint256, bytes32, uint256) returns (uint256)',
   'function buyShares(uint256, uint8, uint256) returns (uint256)',
   'function sellShares(uint256, uint8, uint256) returns (uint256)',
+  'function resolveMarket(uint256)',
   'function claimWinnings(uint256) returns (uint256)',
   'function calculateCost(uint256, uint8, uint256) view returns (uint256)',
   'event MarketCreated(uint256 indexed, address indexed, string, uint256, bytes32)',
   'event SharesPurchased(uint256 indexed, address indexed, uint8, uint256, uint256)',
+  'event SharesSold(uint256 indexed, address indexed, uint8, uint256, uint256)',
+  'event MarketResolved(uint256 indexed, uint8, uint256)',
 ];
 
 const DAOABI = [
@@ -181,16 +185,64 @@ export function useMarketOdds(marketId?: number) {
   });
 }
 
-export function useBuyShares() {
+export function useBuyShares(marketId?: number, outcome?: number, amount?: bigint) {
   const { address, abi } = usePredictionMarket();
   
   const { config } = usePrepareContractWrite({
     address: address as `0x${string}`,
     abi,
     functionName: 'buyShares',
+    args: (marketId !== undefined && outcome !== undefined && amount) 
+      ? [BigInt(marketId), outcome as 0 | 1, amount] 
+      : undefined,
+    enabled: Boolean(marketId !== undefined && outcome !== undefined && amount && address),
   });
   
   return useContractWrite(config);
+}
+
+export function useSellShares(marketId?: number, outcome?: number, shares?: bigint) {
+  const { address, abi } = usePredictionMarket();
+  
+  const { config } = usePrepareContractWrite({
+    address: address as `0x${string}`,
+    abi,
+    functionName: 'sellShares',
+    args: (marketId !== undefined && outcome !== undefined && shares)
+      ? [BigInt(marketId), outcome as 0 | 1, shares]
+      : undefined,
+    enabled: Boolean(marketId !== undefined && outcome !== undefined && shares && address),
+  });
+  
+  return useContractWrite(config);
+}
+
+export function useClaimWinnings(marketId?: number) {
+  const { address, abi } = usePredictionMarket();
+  
+  const { config } = usePrepareContractWrite({
+    address: address as `0x${string}`,
+    abi,
+    functionName: 'claimWinnings',
+    args: marketId !== undefined ? [BigInt(marketId)] : undefined,
+    enabled: Boolean(marketId !== undefined && address),
+  });
+  
+  return useContractWrite(config);
+}
+
+export function useCalculateCost(marketId?: number, outcome?: number, amount?: bigint) {
+  const { address, abi } = usePredictionMarket();
+  
+  return useContractRead({
+    address: address as `0x${string}`,
+    abi,
+    functionName: 'calculateCost',
+    args: (marketId !== undefined && outcome !== undefined && amount)
+      ? [BigInt(marketId), outcome as 0 | 1, amount]
+      : undefined,
+    enabled: Boolean(marketId !== undefined && outcome !== undefined && amount && address),
+  });
 }
 
 export function useStakingInfo(userAddress?: string) {

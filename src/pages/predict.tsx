@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import { useAccount } from 'wagmi';
+import { formatEther, parseEther } from 'viem';
 import {
   MagnifyingGlassIcon, 
   FunnelIcon, 
@@ -10,98 +11,26 @@ import {
   ArrowTrendingDownIcon,
   ClockIcon,
   CheckBadgeIcon,
-  XCircleIcon
+  XCircleIcon,
+  ExclamationTriangleIcon
 } from '@heroicons/react/24/outline';
 import Button from '../components/Button';
 import LoadingSpinner, { LoadingCard } from '../components/LoadingSpinner';
 import ConnectWallet from '../components/ConnectWallet';
-
-// Mock data - in real app this would come from blockchain
-const mockMarkets = [
-  {
-    id: 1,
-    question: "Will Bitcoin reach $100,000 before January 1, 2025?",
-    description: "Prediction market for Bitcoin price reaching $100,000 USD on any major exchange (Binance, Coinbase, Kraken) before January 1, 2025.",
-    category: "Crypto",
-    endTime: new Date('2024-12-31T23:59:59Z').getTime(),
-    resolutionTime: new Date('2025-01-01T12:00:00Z').getTime(),
-    creator: "0x1234...5678",
-    totalLiquidity: 125000,
-    volume24h: 15000,
-    yesOdds: 0.68,
-    noOdds: 0.32,
-    resolved: false,
-    trending: true,
-    participants: 1247
-  },
-  {
-    id: 2,
-    question: "Will the next US Federal Reserve rate decision be a cut?",
-    description: "Will the Federal Reserve announce an interest rate cut at their next meeting?",
-    category: "Economics", 
-    endTime: new Date('2024-12-18T20:00:00Z').getTime(),
-    resolutionTime: new Date('2024-12-19T08:00:00Z').getTime(),
-    creator: "0xabcd...ef90",
-    totalLiquidity: 89000,
-    volume24h: 8500,
-    yesOdds: 0.45,
-    noOdds: 0.55,
-    resolved: false,
-    trending: false,
-    participants: 892
-  },
-  {
-    id: 3,
-    question: "Will SpaceX successfully launch Starship to Mars in 2025?",
-    description: "Will SpaceX achieve a successful uncrewed Starship mission to Mars orbit in 2025?",
-    category: "Technology",
-    endTime: new Date('2025-12-31T23:59:59Z').getTime(),
-    resolutionTime: new Date('2026-01-05T12:00:00Z').getTime(),
-    creator: "0x9876...5432",
-    totalLiquidity: 203000,
-    volume24h: 32000,
-    yesOdds: 0.28,
-    noOdds: 0.72,
-    resolved: false,
-    trending: true,
-    participants: 2156
-  },
-  {
-    id: 4,
-    question: "Will Ethereum's price exceed $5,000 in 2024?",
-    description: "Prediction on whether ETH will reach above $5,000 USD on any major exchange before December 31, 2024.",
-    category: "Crypto",
-    endTime: new Date('2024-12-31T23:59:59Z').getTime(),
-    resolutionTime: new Date('2025-01-01T12:00:00Z').getTime(),
-    creator: "0x5555...1111",
-    totalLiquidity: 156000,
-    volume24h: 19500,
-    yesOdds: 0.52,
-    noOdds: 0.48,
-    resolved: false,
-    trending: false,
-    participants: 1834
-  }
-];
-
-const mockUserPositions = [
-  {
-    marketId: 1,
-    yesShares: 150,
-    noShares: 0,
-    totalInvested: 420,
-    currentValue: 567,
-    pnl: 147
-  },
-  {
-    marketId: 3,
-    yesShares: 0,
-    noShares: 280,
-    totalInvested: 320,
-    currentValue: 380,
-    pnl: 60
-  }
-];
+import { useMarkets, useUserMarkets, MarketData } from '../hooks/useMarkets';
+import { 
+  useUserPosition, 
+  useBuyShares, 
+  useSellShares, 
+  useClaimWinnings, 
+  useCalculateCost,
+  useTokenBalance,
+  useApproveToken 
+} from '../hooks/useContract';
+import { CONTRACT_ADDRESSES } from '../utils/wagmi';
+import { waitForTransaction } from 'wagmi/actions';
+import { usePublicClient } from 'wagmi';
+import { getUserFriendlyError, getActionableError } from '../utils/errorHandler';
 
 interface Market {
   id: number;
@@ -111,20 +40,118 @@ interface Market {
   endTime: number;
   resolutionTime: number;
   creator: string;
-  totalLiquidity: number;
-  volume24h: number;
+  totalLiquidity: bigint | number;
+  volume24h?: number;
   yesOdds: number;
   noOdds: number;
   resolved: boolean;
-  trending: boolean;
-  participants: number;
+  trending?: boolean;
+  participants?: number;
+  state: number;
+}
+
+function UserPositionsCount({ userAddress, markets }: { userAddress?: string; markets: Market[] }) {
+  const { userMarketIds, loading } = useUserMarkets(userAddress);
+  
+  if (loading) return <span>-</span>;
+  if (!userMarketIds || userMarketIds.length === 0) return <span>0</span>;
+  
+  // Filter to only active positions
+  const activeCount = userMarketIds.filter(id => {
+    const market = markets.find(m => m.id === id);
+    return market && !market.resolved && market.state === 0;
+  }).length;
+  
+  return <span>{activeCount}</span>;
+}
+
+function UserPositions({ userAddress, markets }: { userAddress: string; markets: Market[] }) {
+  const { userMarketIds, loading } = useUserMarkets(userAddress);
+  
+  if (loading) {
+    return <LoadingSpinner />;
+  }
+  
+  if (!userMarketIds || userMarketIds.length === 0) {
+    return (
+      <div className="text-center py-4">
+        <p className="text-gray-400 text-sm">No active positions</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-4">
+      {userMarketIds.map((marketId) => {
+        const market = markets.find(m => m.id === marketId);
+        if (!market) return null;
+
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        const { data: positionData } = useUserPosition(marketId, userAddress);
+        
+        if (!positionData || (Number(positionData[0]) === 0 && Number(positionData[1]) === 0)) {
+          return null;
+        }
+
+        const noShares = Number(positionData[0]);
+        const yesShares = Number(positionData[1]);
+        const totalInvested = Number(formatEther(positionData[2] as bigint));
+        const claimed = positionData[3] as boolean;
+
+        // Calculate current value (simplified - would need real-time pool calculations)
+        const hasPosition = yesShares > 0 || noShares > 0;
+        if (!hasPosition) return null;
+
+        return (
+          <motion.div
+            key={marketId}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="card-liquid-glass p-4"
+          >
+            <div className="flex justify-between items-start mb-2">
+              <h3 className="font-semibold text-white text-sm line-clamp-1">
+                {market.question}
+              </h3>
+              {claimed && (
+                <span className="px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded">
+                  Claimed
+                </span>
+              )}
+            </div>
+            
+            <div className="grid grid-cols-3 gap-3 text-xs">
+              <div>
+                <div className="text-gray-400">Position</div>
+                <div className="text-white font-medium">
+                  {yesShares > 0 ? `${Number(formatEther(BigInt(yesShares)))} YES` : `${Number(formatEther(BigInt(noShares)))} NO`}
+                </div>
+              </div>
+              <div>
+                <div className="text-gray-400">Invested</div>
+                <div className="text-white font-medium">{totalInvested.toFixed(2)} IO</div>
+              </div>
+              <div>
+                <div className="text-gray-400">Status</div>
+                <div className={`font-medium ${
+                  market.resolved ? 'text-green-400' : 'text-blue-400'
+                }`}>
+                  {market.resolved ? 'Resolved' : 'Active'}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        );
+      })}
+    </div>
+  );
 }
 
 function MarketCard({ market, onViewDetails }: { market: Market; onViewDetails: (market: Market) => void }) {
   const timeUntilEnd = market.endTime - Date.now();
   const timeUntilResolution = market.resolutionTime - Date.now();
   const isEnded = timeUntilEnd <= 0;
-  const isResolved = market.resolved;
+  const isResolved = market.resolved || market.state !== 0;
 
   const formatTimeRemaining = (ms: number) => {
     if (ms <= 0) return 'Ended';
@@ -173,7 +200,7 @@ function MarketCard({ market, onViewDetails }: { market: Market; onViewDetails: 
             <ArrowTrendingUpIcon className="w-4 h-4 text-green-400" />
           </div>
           <div className="text-xl font-bold text-green-400">
-            ${(market.yesOdds).toFixed(2)}
+            ${market.yesOdds.toFixed(2)}
           </div>
           <div className="text-xs text-green-300">
             {(market.yesOdds * 100).toFixed(0)}% chance
@@ -186,7 +213,7 @@ function MarketCard({ market, onViewDetails }: { market: Market; onViewDetails: 
             <ArrowTrendingDownIcon className="w-4 h-4 text-red-400" />
           </div>
           <div className="text-xl font-bold text-red-400">
-            ${(market.noOdds).toFixed(2)}
+            ${market.noOdds.toFixed(2)}
           </div>
           <div className="text-xs text-red-300">
             {(market.noOdds * 100).toFixed(0)}% chance
@@ -197,21 +224,32 @@ function MarketCard({ market, onViewDetails }: { market: Market; onViewDetails: 
       {/* Stats */}
       <div className="grid grid-cols-3 gap-4 text-center text-sm">
         <div>
-          <div className="text-gray-400">Volume 24h</div>
-          <div className="text-white font-semibold">
-            ${(market.volume24h / 1000).toFixed(0)}k
-          </div>
-        </div>
-        <div>
           <div className="text-gray-400">Liquidity</div>
           <div className="text-white font-semibold">
-            ${(market.totalLiquidity / 1000).toFixed(0)}k
+            {typeof market.totalLiquidity === 'number'
+              ? market.totalLiquidity > 1000
+                ? `${(market.totalLiquidity / 1000).toFixed(1)}k`
+                : market.totalLiquidity.toFixed(0)
+              : Number(formatEther(market.totalLiquidity as bigint)) > 1000
+                ? `${(Number(formatEther(market.totalLiquidity as bigint)) / 1000).toFixed(1)}k`
+                : Number(formatEther(market.totalLiquidity as bigint)).toFixed(0)
+            } IO
           </div>
         </div>
         <div>
-          <div className="text-gray-400">Traders</div>
-          <div className="text-white font-semibold">
-            {market.participants}
+          <div className="text-gray-400">Creator</div>
+          <div className="text-white font-semibold text-xs">
+            {market.creator.slice(0, 6)}...{market.creator.slice(-4)}
+          </div>
+        </div>
+        <div>
+          <div className="text-gray-400">Status</div>
+          <div className={`font-semibold ${
+            isResolved ? 'text-green-400' : 
+            isEnded ? 'text-yellow-400' : 
+            'text-blue-400'
+          }`}>
+            {isResolved ? 'Resolved' : isEnded ? 'Ended' : 'Active'}
           </div>
         </div>
       </div>
@@ -247,24 +285,99 @@ function MarketCard({ market, onViewDetails }: { market: Market; onViewDetails: 
 function MarketDetailModal({ market, onClose }: { market: Market; onClose: () => void }) {
   const [betAmount, setBetAmount] = useState('');
   const [selectedOutcome, setSelectedOutcome] = useState<'yes' | 'no'>('yes');
-  const [loading, setLoading] = useState(false);
+  const [txStatus, setTxStatus] = useState<'idle' | 'pending' | 'success' | 'error'>('idle');
+  const [error, setError] = useState<string | null>(null);
   const { address, isConnected } = useAccount();
+  const publicClient = usePublicClient();
+  
+  // Convert outcome to enum: Yes = 1, No = 0
+  const outcomeEnum = selectedOutcome === 'yes' ? 1 : 0;
+  const betAmountWei = betAmount ? parseEther(betAmount) : undefined;
+  
+  // Calculate cost before purchase
+  const { data: costData } = useCalculateCost(
+    market.id, 
+    outcomeEnum, 
+    betAmountWei
+  );
+  
+  // Token balance for user
+  const { data: balanceData } = useTokenBalance(address);
+  const balance = balanceData ? Number(formatEther(balanceData as bigint)) : 0;
+  
+  // Approve hook
+  const { writeAsync: approveToken, isLoading: approving } = useApproveToken(
+    CONTRACT_ADDRESSES.PREDICTION_MARKET,
+    costData as bigint
+  );
+  
+  // Buy shares hook
+  const { writeAsync: buyShares, isLoading: buying } = useBuyShares(
+    market.id,
+    outcomeEnum,
+    betAmountWei
+  );
 
   const handleBet = async () => {
-    if (!isConnected || !betAmount) return;
-    
-    setLoading(true);
+    if (!isConnected || !betAmount || !betAmountWei) {
+      setError('Please enter a valid amount');
+      return;
+    }
+
+    if (Number(betAmount) > balance) {
+      setError('Insufficient balance');
+      return;
+    }
+
+    if (!costData || costData === 0n) {
+      setError('Unable to calculate cost. Please try again.');
+      return;
+    }
+
+    setError(null);
+    setTxStatus('pending');
+
     try {
-      // Simulate bet transaction
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      alert(`Bet placed: ${betAmount} IO tokens on ${selectedOutcome.toUpperCase()}`);
+      // Check if approval is needed
+      // For simplicity, we'll try to approve first if needed
+      // In production, check allowance first
+      try {
+        await approveToken?.();
+      } catch (err: any) {
+        // If already approved, continue
+        if (!err.message?.includes('rejected')) {
+          console.warn('Approval skipped or already approved');
+        }
+      }
+
+      // Execute buy shares transaction
+      if (!buyShares) {
+        throw new Error('Buy shares function not available');
+      }
+
+      const hash = await buyShares();
+      
+      if (publicClient && hash) {
+        await waitForTransaction(publicClient, { hash });
+      }
+
+      setTxStatus('success');
       setBetAmount('');
-    } catch (error) {
+      
+      // Close modal after success (optional, or keep open for another bet)
+      setTimeout(() => {
+        setTxStatus('idle');
+        onClose();
+      }, 2000);
+    } catch (error: any) {
       console.error('Bet failed:', error);
-    } finally {
-      setLoading(false);
+      setTxStatus('error');
+      const errorInfo = getActionableError(error);
+      setError(errorInfo.message);
     }
   };
+  
+  const isLoading = approving || buying || txStatus === 'pending';
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/80 backdrop-blur-sm" onClick={onClose}>
@@ -347,19 +460,10 @@ function MarketDetailModal({ market, onClose }: { market: Market; onClose: () =>
                 <div className="flex justify-between">
                   <span className="text-gray-400">Total Liquidity</span>
                   <span className="text-white font-semibold">
-                    ${market.totalLiquidity.toLocaleString()} IO
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-400">24h Volume</span>
-                  <span className="text-white font-semibold">
-                    ${market.volume24h.toLocaleString()} IO
-                  </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-400">Total Traders</span>
-                  <span className="text-white font-semibold">
-                    {market.participants}
+                    {typeof market.totalLiquidity === 'number'
+                      ? market.totalLiquidity.toLocaleString()
+                      : Number(formatEther(market.totalLiquidity as bigint)).toLocaleString()
+                    } IO
                   </span>
                 </div>
                 <div className="flex justify-between">
@@ -380,6 +484,16 @@ function MarketDetailModal({ market, onClose }: { market: Market; onClose: () =>
                     {new Date(market.resolutionTime).toLocaleDateString()}
                   </span>
                 </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-400">Status</span>
+                  <span className={`font-semibold ${
+                    market.resolved ? 'text-green-400' : 
+                    market.state === 0 ? 'text-blue-400' : 
+                    'text-yellow-400'
+                  }`}>
+                    {market.resolved ? 'Resolved' : market.state === 0 ? 'Active' : 'Ended'}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -392,6 +506,15 @@ function MarketDetailModal({ market, onClose }: { market: Market; onClose: () =>
               <div className="text-center py-8">
                 <p className="text-gray-400 mb-4">Connect your wallet to place bets</p>
                 <ConnectWallet />
+              </div>
+            ) : market.resolved || market.state !== 0 ? (
+              <div className="text-center py-8">
+                <p className="text-gray-400">This market is no longer active for trading</p>
+                {market.resolved && address && (
+                  <div className="mt-4">
+                    <ClaimWinningsButton marketId={market.id} />
+                  </div>
+                )}
               </div>
             ) : (
               <div className="space-y-4">
@@ -441,9 +564,9 @@ function MarketDetailModal({ market, onClose }: { market: Market; onClose: () =>
                     step="0.01"
                   />
                   
-                  {betAmount && (
+                  {betAmount && costData && (
                     <div className="mt-2 text-sm text-gray-400">
-                      Potential return: ~{((parseFloat(betAmount) * (selectedOutcome === 'yes' ? market.yesOdds : market.noOdds)) - parseFloat(betAmount)).toFixed(2)} IO tokens
+                      Estimated cost: ~{Number(formatEther(costData as bigint)).toFixed(4)} IO tokens
                     </div>
                   )}
                 </div>
@@ -455,22 +578,48 @@ function MarketDetailModal({ market, onClose }: { market: Market; onClose: () =>
                       key={amount}
                       onClick={() => setBetAmount(amount.toString())}
                       className="px-3 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-sm transition-colors"
+                      disabled={amount > balance}
                     >
                       {amount} IO
                     </button>
                   ))}
                 </div>
 
+                {/* Error Display */}
+                {error && (
+                  <div className="bg-red-500/20 border border-red-500/30 rounded-lg p-3 flex items-center space-x-2">
+                    <ExclamationTriangleIcon className="w-5 h-5 text-red-400" />
+                    <span className="text-red-300 text-sm">{error}</span>
+                  </div>
+                )}
+
+                {/* Success Message */}
+                {txStatus === 'success' && (
+                  <div className="bg-green-500/20 border border-green-500/30 rounded-lg p-3 text-green-300 text-sm">
+                    Transaction successful! Your bet has been placed.
+                  </div>
+                )}
+
                 {/* Place Bet Button */}
                 <Button
                   onClick={handleBet}
-                  loading={loading}
-                  disabled={!betAmount || parseFloat(betAmount) <= 0}
+                  loading={isLoading}
+                  disabled={!betAmount || parseFloat(betAmount) <= 0 || isLoading || market.resolved || market.state !== 0}
                   className="w-full"
                   size="lg"
                 >
-                  Place {selectedOutcome.toUpperCase()} Bet
+                  {isLoading 
+                    ? (approving ? 'Approving...' : buying ? 'Placing Bet...' : 'Processing...')
+                    : `Place ${selectedOutcome.toUpperCase()} Bet`
+                  }
                 </Button>
+                
+                {/* Cost Preview */}
+                {costData && betAmount && (
+                  <div className="text-sm text-gray-400 text-center mt-2">
+                    Cost: ~{Number(formatEther(costData as bigint)).toFixed(4)} IO tokens
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -480,57 +629,33 @@ function MarketDetailModal({ market, onClose }: { market: Market; onClose: () =>
   );
 }
 
-function UserPositions() {
-  return (
-    <div className="space-y-4">
-      {mockUserPositions.map((position, index) => {
-        const market = mockMarkets.find(m => m.id === position.marketId);
-        if (!market) return null;
+function ClaimWinningsButton({ marketId }: { marketId: number }) {
+  const { writeAsync: claimWinnings, isLoading } = useClaimWinnings(marketId);
+  const publicClient = usePublicClient();
+  const [error, setError] = useState<string | null>(null);
 
-        const isProfitable = position.pnl > 0;
-        
-        return (
-          <motion.div
-            key={index}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.1 }}
-            className="card-liquid-glass p-4"
-          >
-            <div className="flex justify-between items-start mb-2">
-              <h3 className="font-semibold text-white text-sm line-clamp-1">
-                {market.question}
-              </h3>
-              <div className={`px-2 py-1 rounded text-xs font-medium ${
-                isProfitable 
-                  ? 'bg-green-500/20 text-green-400' 
-                  : position.pnl < 0 
-                    ? 'bg-red-500/20 text-red-400'
-                    : 'bg-gray-500/20 text-gray-400'
-              }`}>
-                {isProfitable ? '+' : ''}{position.pnl.toFixed(0)} IO
-              </div>
-            </div>
-            
-            <div className="grid grid-cols-3 gap-3 text-xs">
-              <div>
-                <div className="text-gray-400">Position</div>
-                <div className="text-white font-medium">
-                  {position.yesShares > 0 ? `${position.yesShares} YES` : `${position.noShares} NO`}
-                </div>
-              </div>
-              <div>
-                <div className="text-gray-400">Invested</div>
-                <div className="text-white font-medium">{position.totalInvested} IO</div>
-              </div>
-              <div>
-                <div className="text-gray-400">Current Value</div>
-                <div className="text-white font-medium">{position.currentValue} IO</div>
-              </div>
-            </div>
-          </motion.div>
-        );
-      })}
+  const handleClaim = async () => {
+    if (!claimWinnings) return;
+    
+    setError(null);
+    try {
+      const hash = await claimWinnings();
+      if (publicClient && hash) {
+        await waitForTransaction(publicClient, { hash });
+      }
+    } catch (err: any) {
+      setError(err.message || 'Failed to claim winnings');
+    }
+  };
+
+  return (
+    <div>
+      <Button onClick={handleClaim} loading={isLoading} disabled={isLoading}>
+        Claim Winnings
+      </Button>
+      {error && (
+        <p className="text-red-400 text-sm mt-2">{error}</p>
+      )}
     </div>
   );
 }
@@ -539,17 +664,60 @@ export default function PredictPage() {
   const [selectedMarket, setSelectedMarket] = useState<Market | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const [loading, setLoading] = useState(false);
   const { address, isConnected } = useAccount();
+  
+  // Fetch markets from blockchain
+  const { markets: blockchainMarkets, loading: marketsLoading, error: marketsError, refetch: refetchMarkets } = useMarkets();
+  const { data: balanceData } = useTokenBalance(address);
+  const balance = balanceData ? Number(formatEther(balanceData as bigint)) : 0;
 
-  const categories = ['All', 'Crypto', 'Technology', 'Economics', 'Sports', 'Politics'];
+  // Transform blockchain markets to Market interface
+  const markets: Market[] = useMemo(() => {
+    if (!blockchainMarkets) return [];
+    
+    return blockchainMarkets.map((m: MarketData) => ({
+      id: m.id,
+      question: m.question,
+      description: m.description,
+      category: m.category,
+      endTime: m.endTime * 1000, // Convert to milliseconds
+      resolutionTime: m.resolutionTime * 1000,
+      creator: m.creator,
+      totalLiquidity: Number(formatEther(m.totalLiquidity)),
+      yesOdds: m.yesOdds || 0.5,
+      noOdds: m.noOdds || 0.5,
+      resolved: m.resolved || m.state !== 0,
+      state: m.state,
+      // Volume and participants would need additional tracking/events
+      volume24h: 0, // TODO: Track from events
+      participants: 0, // TODO: Track from events
+      trending: false, // TODO: Calculate from recent activity
+    }));
+  }, [blockchainMarkets]);
 
-  const filteredMarkets = mockMarkets.filter(market => {
-    const matchesSearch = market.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         market.description.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesCategory = selectedCategory === 'All' || market.category === selectedCategory;
-    return matchesSearch && matchesCategory;
-  });
+  // Get unique categories from markets
+  const categories = useMemo(() => {
+    const uniqueCategories = new Set(markets.map(m => m.category));
+    return ['All', ...Array.from(uniqueCategories).sort()];
+  }, [markets]);
+
+  const filteredMarkets = useMemo(() => {
+    return markets.filter(market => {
+      const matchesSearch = market.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                           market.description.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesCategory = selectedCategory === 'All' || market.category === selectedCategory;
+      return matchesSearch && matchesCategory;
+    });
+  }, [markets, searchQuery, selectedCategory]);
+  
+  // Calculate total stats
+  const totalLiquidity = useMemo(() => {
+    return markets.reduce((sum, m) => sum + (typeof m.totalLiquidity === 'number' ? m.totalLiquidity : Number(formatEther(m.totalLiquidity as bigint))), 0);
+  }, [markets]);
+  
+  const activeMarketsCount = useMemo(() => {
+    return markets.filter(m => !m.resolved && m.state === 0).length;
+  }, [markets]);
 
   return (
     <div className="min-h-screen bg-dark-950">
@@ -567,9 +735,9 @@ export default function PredictPage() {
             Decentralized prediction markets powered by Incrypt Oracle. 
             Bet on future events with transparent, automated resolution.
           </p>
-          <div className="mt-4 inline-block px-4 py-2 bg-yellow-500/20 border border-yellow-500/30 rounded-lg">
-            <p className="text-sm text-yellow-300">
-              📊 Demo data for now - Real live platform launch TBA
+          <div className="mt-4 inline-block px-4 py-2 bg-green-500/20 border border-green-500/30 rounded-lg">
+            <p className="text-sm text-green-300">
+              ✓ Live blockchain integration - Real markets powered by Incrypt Oracle
             </p>
           </div>
         </motion.div>
@@ -589,24 +757,22 @@ export default function PredictPage() {
                   <div className="space-y-3">
                     <div className="flex justify-between">
                       <span className="text-gray-400">Balance</span>
-                      <span className="text-white font-semibold">1,250 IO</span>
+                      <span className="text-white font-semibold">
+                        {balance.toFixed(2)} IO
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-400">Active Positions</span>
-                      <span className="text-white font-semibold">{mockUserPositions.length}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-400">Total P&L</span>
-                      <span className="text-green-400 font-semibold">
-                        +{mockUserPositions.reduce((sum, pos) => sum + pos.pnl, 0)} IO
+                      <span className="text-white font-semibold">
+                        <UserPositionsCount userAddress={address} markets={markets} />
                       </span>
                     </div>
                   </div>
                   
-                  {mockUserPositions.length > 0 && (
+                  {address && (
                     <div className="mt-6">
                       <h4 className="text-sm font-semibold text-white mb-3">Active Positions</h4>
-                      <UserPositions />
+                      <UserPositions userAddress={address} markets={markets} />
                     </div>
                   )}
                 </div>
@@ -623,18 +789,19 @@ export default function PredictPage() {
                 <div className="space-y-3">
                   <div className="flex justify-between">
                     <span className="text-gray-400">Active Markets</span>
-                    <span className="text-white font-semibold">{mockMarkets.length}</span>
+                    <span className="text-white font-semibold">{activeMarketsCount}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-400">Total Volume</span>
-                    <span className="text-white font-semibold">
-                      ${(mockMarkets.reduce((sum, m) => sum + m.volume24h, 0) / 1000).toFixed(0)}k
-                    </span>
+                    <span className="text-gray-400">Total Markets</span>
+                    <span className="text-white font-semibold">{markets.length}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-400">Total Liquidity</span>
                     <span className="text-white font-semibold">
-                      ${(mockMarkets.reduce((sum, m) => sum + m.totalLiquidity, 0) / 1000).toFixed(0)}k
+                      {totalLiquidity > 1000 
+                        ? `${(totalLiquidity / 1000).toFixed(1)}k IO`
+                        : `${totalLiquidity.toFixed(0)} IO`
+                      }
                     </span>
                   </div>
                 </div>
@@ -682,8 +849,27 @@ export default function PredictPage() {
               </div>
             </div>
 
+            {/* Error Display */}
+            {marketsError && (
+              <div className="card-liquid-glass p-6 bg-red-500/10 border border-red-500/30">
+                <div className="flex items-center space-x-2">
+                  <ExclamationTriangleIcon className="w-5 h-5 text-red-400" />
+                  <div>
+                    <h3 className="text-red-400 font-semibold mb-1">Error Loading Markets</h3>
+                    <p className="text-red-300 text-sm">{marketsError.message || 'Failed to load markets from blockchain'}</p>
+                    <button 
+                      onClick={() => refetchMarkets()} 
+                      className="mt-2 text-sm text-red-300 hover:text-red-200 underline"
+                    >
+                      Retry
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Market Grid */}
-            {loading ? (
+            {marketsLoading ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {[...Array(4)].map((_, i) => (
                   <LoadingCard key={i} />
@@ -710,7 +896,10 @@ export default function PredictPage() {
                 <ChartBarIcon className="w-12 h-12 text-gray-400 mx-auto mb-4" />
                 <h3 className="text-lg font-semibold text-white mb-2">No markets found</h3>
                 <p className="text-gray-400">
-                  Try adjusting your search or filter criteria
+                  {markets.length === 0 
+                    ? 'No markets have been created yet. Be the first to create one!'
+                    : 'Try adjusting your search or filter criteria'
+                  }
                 </p>
               </div>
             )}

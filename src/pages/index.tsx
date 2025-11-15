@@ -98,7 +98,7 @@ export default function HomePage() {
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <Link href="/docs" className="btn-holographic text-center">
-                  Get Started
+                  Learn More
                 </Link>
                 <Link href="/predict" className="btn-holographic text-center">
                   Try IncryptPredict

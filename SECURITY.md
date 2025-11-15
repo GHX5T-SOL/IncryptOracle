@@ -10,7 +10,7 @@
 
 🚨 **Please do not report security vulnerabilities through public GitHub issues.**
 
-Instead, please report them via email to: **security@incryptoracle.com**
+Instead, please report them via email to: **incryptinvestments@protonmail.com*
 
 You should receive a response within 24 hours. If for some reason you do not, please follow up via email to ensure we received your original message.
 

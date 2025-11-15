@@ -44,6 +44,8 @@ contract PredictionMarket is Ownable, ReentrancyGuard, Pausable {
         uint256 creationTime;
         uint256 fee; // Basis points (e.g., 200 = 2%)
         bool resolved;
+        bool isPrivate; // Private markets require approval to participate
+        address[] allowedParticipants; // For private markets
     }
     
     struct Position {
@@ -108,6 +110,17 @@ contract PredictionMarket is Ownable, ReentrancyGuard, Pausable {
         uint256 amount
     );
     
+    event PrivateMarketCreated(
+        uint256 indexed marketId,
+        address indexed creator,
+        address[] allowedParticipants
+    );
+    
+    event ParticipantAdded(
+        uint256 indexed marketId,
+        address indexed participant
+    );
+    
     modifier validMarket(uint256 marketId) {
         require(marketId < marketCounter, "Invalid market ID");
         _;
@@ -116,6 +129,21 @@ contract PredictionMarket is Ownable, ReentrancyGuard, Pausable {
     modifier marketActive(uint256 marketId) {
         require(markets[marketId].state == MarketState.Active, "Market not active");
         require(block.timestamp < markets[marketId].endTime, "Market ended");
+        _;
+    }
+    
+    modifier canParticipate(uint256 marketId) {
+        Market storage market = markets[marketId];
+        if (market.isPrivate) {
+            bool isAllowed = false;
+            for (uint256 i = 0; i < market.allowedParticipants.length; i++) {
+                if (market.allowedParticipants[i] == msg.sender) {
+                    isAllowed = true;
+                    break;
+                }
+            }
+            require(isAllowed || market.creator == msg.sender, "Not authorized to participate");
+        }
         _;
     }
     
@@ -133,6 +161,14 @@ contract PredictionMarket is Ownable, ReentrancyGuard, Pausable {
     
     /**
      * @dev Create a new prediction market
+     * @param question Market question
+     * @param description Market description
+     * @param category Market category
+     * @param duration Market duration
+     * @param oracleDataFeedId Oracle feed ID
+     * @param initialLiquidity Initial liquidity
+     * @param isPrivate Whether market is private
+     * @param allowedParticipants Array of allowed participants (for private markets)
      */
     function createMarket(
         string memory question,
@@ -140,11 +176,19 @@ contract PredictionMarket is Ownable, ReentrancyGuard, Pausable {
         string memory category,
         uint256 duration,
         bytes32 oracleDataFeedId,
-        uint256 initialLiquidity
+        uint256 initialLiquidity,
+        bool isPrivate,
+        address[] memory allowedParticipants
     ) external nonReentrant whenNotPaused returns (uint256) {
         require(initialLiquidity >= MIN_LIQUIDITY, "Insufficient initial liquidity");
         require(duration >= 1 hours && duration <= 365 days, "Invalid duration");
         require(bytes(question).length > 0, "Empty question");
+        
+        // Charge market creation fee
+        uint256 creationFee = isPrivate ? PRIVATE_MARKET_FEE : MARKET_CREATION_FEE;
+        if (creationFee > 0) {
+            ioToken.safeTransferFrom(msg.sender, feeCollector, creationFee);
+        }
         
         // Verify oracle data feed exists
         (, , , , , bool isActive) = oracle.getDataFeed(oracleDataFeedId);
@@ -168,7 +212,9 @@ contract PredictionMarket is Ownable, ReentrancyGuard, Pausable {
             creator: msg.sender,
             creationTime: block.timestamp,
             fee: BASE_FEE,
-            resolved: false
+            resolved: false,
+            isPrivate: isPrivate,
+            allowedParticipants: isPrivate ? allowedParticipants : new address[](0)
         });
         
         userMarkets[msg.sender].push(marketId);
@@ -179,7 +225,34 @@ contract PredictionMarket is Ownable, ReentrancyGuard, Pausable {
         emit MarketCreated(marketId, msg.sender, question, endTime, oracleDataFeedId);
         emit LiquidityAdded(marketId, msg.sender, initialLiquidity);
         
+        if (isPrivate) {
+            emit PrivateMarketCreated(marketId, msg.sender, allowedParticipants);
+        }
+        
         return marketId;
+    }
+    
+    /**
+     * @dev Add participant to private market (creator only)
+     */
+    function addParticipant(uint256 marketId, address participant) external validMarket(marketId) {
+        Market storage market = markets[marketId];
+        require(market.creator == msg.sender, "Only creator can add participants");
+        require(market.isPrivate, "Market is not private");
+        
+        // Check if already added
+        bool alreadyAdded = false;
+        for (uint256 i = 0; i < market.allowedParticipants.length; i++) {
+            if (market.allowedParticipants[i] == participant) {
+                alreadyAdded = true;
+                break;
+            }
+        }
+        
+        require(!alreadyAdded, "Participant already added");
+        
+        market.allowedParticipants.push(participant);
+        emit ParticipantAdded(marketId, participant);
     }
     
     /**
@@ -189,11 +262,12 @@ contract PredictionMarket is Ownable, ReentrancyGuard, Pausable {
         uint256 marketId,
         Outcome outcome,
         uint256 amount
-    ) external validMarket(marketId) marketActive(marketId) nonReentrant returns (uint256 shares) {
+    ) external validMarket(marketId) marketActive(marketId) canParticipate(marketId) nonReentrant returns (uint256 shares) {
         require(amount > 0, "Amount must be greater than 0");
         
         Market storage market = markets[marketId];
         uint256 cost = calculateCost(marketId, outcome, amount);
+        require(cost > 0, "Cost must be greater than 0");
         
         // Transfer payment
         ioToken.safeTransferFrom(msg.sender, address(this), cost);
@@ -201,10 +275,19 @@ contract PredictionMarket is Ownable, ReentrancyGuard, Pausable {
         // Calculate fee
         uint256 fee = (cost * market.fee) / 10000;
         uint256 netCost = cost - fee;
+        require(netCost > 0, "Net cost must be greater than 0");
         
         // Update pools and shares
         uint256 outcomeIndex = uint256(outcome);
+        
+        // Safety check: prevent division by zero
+        require(market.outcomePools[outcomeIndex] > 0, "Pool must have liquidity");
+        
         shares = (netCost * market.outcomeShares[outcomeIndex]) / market.outcomePools[outcomeIndex];
+        require(shares > 0, "Shares must be greater than 0");
+        
+        // Validate slippage protection (basic check)
+        require(shares >= amount, "Slippage too high");
         
         market.outcomePools[outcomeIndex] += netCost;
         market.outcomeShares[outcomeIndex] += shares;
@@ -235,7 +318,7 @@ contract PredictionMarket is Ownable, ReentrancyGuard, Pausable {
         uint256 marketId,
         Outcome outcome,
         uint256 shares
-    ) external validMarket(marketId) marketActive(marketId) nonReentrant returns (uint256 payout) {
+    ) external validMarket(marketId) marketActive(marketId) canParticipate(marketId) nonReentrant returns (uint256 payout) {
         require(shares > 0, "Shares must be greater than 0");
         
         Position storage position = positions[marketId][msg.sender];
@@ -243,11 +326,21 @@ contract PredictionMarket is Ownable, ReentrancyGuard, Pausable {
         require(position.shares[outcomeIndex] >= shares, "Insufficient shares");
         
         Market storage market = markets[marketId];
+        
+        // Safety check: prevent division by zero
+        require(market.outcomeShares[outcomeIndex] > 0, "No shares in pool");
+        
         payout = (shares * market.outcomePools[outcomeIndex]) / market.outcomeShares[outcomeIndex];
+        require(payout > 0, "Payout must be greater than 0");
+        
+        // Safety check: prevent underflow
+        require(market.outcomePools[outcomeIndex] >= payout, "Insufficient pool liquidity");
+        require(market.totalLiquidity >= payout, "Insufficient total liquidity");
         
         // Calculate fee
         uint256 fee = (payout * market.fee) / 10000;
         uint256 netPayout = payout - fee;
+        require(netPayout > 0, "Net payout must be greater than 0");
         
         // Update pools and shares
         market.outcomePools[outcomeIndex] -= payout;
@@ -270,26 +363,76 @@ contract PredictionMarket is Ownable, ReentrancyGuard, Pausable {
     
     /**
      * @dev Resolve market using oracle data
+     * Supports optimistic resolution: can resolve immediately after optimistic oracle resolution
+     * with lower confidence threshold, vs waiting for full consensus
      */
     function resolveMarket(uint256 marketId) external validMarket(marketId) nonReentrant {
         Market storage market = markets[marketId];
         require(market.state == MarketState.Active, "Market not active");
-        require(block.timestamp >= market.resolutionTime, "Resolution time not reached");
+        require(market.totalLiquidity > 0, "Market has no liquidity");
         
         // Get data from oracle
         (, , uint256 value, uint256 timestamp, uint256 confidence, bool isActive) = oracle.getDataFeed(market.oracleDataFeedId);
         require(isActive, "Oracle data feed not active");
-        require(timestamp >= market.endTime, "Oracle data not available yet");
-        require(confidence >= 7000, "Oracle confidence too low"); // Require >70% confidence
+        require(timestamp > 0, "Oracle timestamp invalid");
+        require(value > 0, "Oracle value invalid"); // Ensure value is valid
+        
+        // Check if this is optimistic resolution (allows faster resolution)
+        bool isOptimistic = oracle.optimisticResolutionTime(market.oracleDataFeedId) > 0;
+        bool isDisputeWindowOpen = oracle.isDisputeWindowOpen(market.oracleDataFeedId);
+        
+        if (isOptimistic && isDisputeWindowOpen) {
+            // Optimistic resolution: can resolve immediately but with warning
+            // Disputes can still be raised within 4 hours
+            require(timestamp >= market.endTime, "Oracle data not available yet");
+            require(confidence >= 5000, "Oracle confidence too low for optimistic resolution"); // Lower threshold: 50%
+            require(block.timestamp - timestamp <= 4 hours, "Optimistic resolution too stale");
+        } else {
+            // Full resolution: requires higher confidence and waits for resolution time
+            require(block.timestamp >= market.resolutionTime, "Resolution time not reached");
+            require(timestamp >= market.endTime, "Oracle data not available yet");
+            require(confidence >= 7000, "Oracle confidence too low"); // Require >70% confidence
+            require(block.timestamp - timestamp <= 24 hours, "Oracle data too stale");
+        }
         
         // Determine winning outcome (assuming binary outcome where >0.5 = Yes, <=0.5 = No)
-        Outcome winningOutcome = value > 5000 ? Outcome.Yes : Outcome.No; // Assuming 10000 = 1.0
+        // Value scale: 10000 = 1.0, so >5000 = Yes
+        Outcome winningOutcome = value > 5000 ? Outcome.Yes : Outcome.No;
         
         market.winningOutcome = winningOutcome;
         market.state = MarketState.Resolved;
         market.resolved = true;
         
         emit MarketResolved(marketId, winningOutcome, market.totalLiquidity);
+    }
+    
+    /**
+     * @dev Dispute resolution - can be called if oracle data changes during dispute window
+     * Resolves market again with updated oracle data
+     */
+    function disputeResolution(uint256 marketId) external validMarket(marketId) nonReentrant {
+        Market storage market = markets[marketId];
+        require(market.state == MarketState.Resolved, "Market not resolved");
+        require(market.oracleDataFeedId != bytes32(0), "No oracle feed");
+        
+        // Check if dispute window is open
+        bool isDisputeWindowOpen = oracle.isDisputeWindowOpen(market.oracleDataFeedId);
+        require(isDisputeWindowOpen, "Dispute window closed");
+        
+        // Re-resolve with new oracle data
+        (, , uint256 value, uint256 timestamp, uint256 confidence, bool isActive) = oracle.getDataFeed(market.oracleDataFeedId);
+        require(isActive, "Oracle data feed not active");
+        require(timestamp > 0, "Oracle timestamp invalid");
+        require(confidence >= 7000, "Oracle confidence too low");
+        
+        // Update winning outcome if changed
+        Outcome newWinningOutcome = value > 5000 ? Outcome.Yes : Outcome.No;
+        
+        if (newWinningOutcome != market.winningOutcome) {
+            market.winningOutcome = newWinningOutcome;
+            market.state = MarketState.Disputed;
+            emit MarketResolved(marketId, newWinningOutcome, market.totalLiquidity);
+        }
     }
     
     /**

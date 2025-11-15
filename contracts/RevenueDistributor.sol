@@ -25,6 +25,7 @@ contract RevenueDistributor is Ownable, ReentrancyGuard, Pausable {
         uint256 lastClaimTimestamp;
         uint256 totalClaimed;
         uint256 pendingRewards;
+        uint256 lastProcessedRound; // Track last processed round for gas optimization
     }
     
     struct DistributionRound {
@@ -150,15 +151,27 @@ contract RevenueDistributor is Ownable, ReentrancyGuard, Pausable {
     
     /**
      * @dev Internal function to claim rewards
+     * Optimized: Only processes rounds since last processed round (gas optimization)
      */
     function _claimRewards(address user) internal returns (uint256 rewards) {
         StakingInfo storage userStaking = stakingInfo[user];
         if (userStaking.stakedAmount == 0) return 0;
         
-        // Calculate rewards from all completed distribution rounds since last claim
-        for (uint256 i = 0; i <= currentRound; i++) {
+        // Gas optimization: Only process rounds since last processed round
+        uint256 startRound = userStaking.lastProcessedRound + 1;
+        uint256 endRound = currentRound;
+        
+        // Limit to prevent gas issues (process max 100 rounds per claim)
+        uint256 maxRounds = 100;
+        if (endRound - startRound > maxRounds) {
+            endRound = startRound + maxRounds;
+        }
+        
+        // Calculate rewards from completed distribution rounds since last claim
+        for (uint256 i = startRound; i <= endRound; i++) {
             DistributionRound storage round = distributionRounds[i];
-            if (round.distributed && round.timestamp > userStaking.lastClaimTimestamp) {
+            if (round.distributed) {
+                // Use stake amount at time of distribution if needed, otherwise current
                 uint256 userReward = (userStaking.stakedAmount * round.rewardPerToken) / 1e18;
                 rewards += userReward;
             }
@@ -167,11 +180,44 @@ contract RevenueDistributor is Ownable, ReentrancyGuard, Pausable {
         if (rewards > 0) {
             userStaking.totalClaimed += rewards;
             userStaking.lastClaimTimestamp = block.timestamp;
+            userStaking.lastProcessedRound = endRound;
             
             // Transfer rewards to user
             ioToken.safeTransfer(user, rewards);
             
             emit RewardsClaimed(user, rewards);
+        }
+    }
+    
+    /**
+     * @dev Claim rewards from specific rounds (for users with many unprocessed rounds)
+     * Allows paginated claiming to avoid gas limits
+     */
+    function claimRewardsPaginated(uint256 startRound, uint256 endRound) external nonReentrant returns (uint256 rewards) {
+        StakingInfo storage userStaking = stakingInfo[msg.sender];
+        require(userStaking.stakedAmount > 0, "No staked tokens");
+        require(startRound <= endRound && endRound <= currentRound, "Invalid round range");
+        require(startRound > userStaking.lastProcessedRound, "Rounds already processed");
+        
+        // Limit to prevent gas issues
+        require(endRound - startRound < 100, "Too many rounds");
+        
+        for (uint256 i = startRound; i <= endRound; i++) {
+            DistributionRound storage round = distributionRounds[i];
+            if (round.distributed) {
+                uint256 userReward = (userStaking.stakedAmount * round.rewardPerToken) / 1e18;
+                rewards += userReward;
+            }
+        }
+        
+        if (rewards > 0) {
+            userStaking.totalClaimed += rewards;
+            userStaking.lastProcessedRound = endRound;
+            
+            // Transfer rewards to user
+            ioToken.safeTransfer(msg.sender, rewards);
+            
+            emit RewardsClaimed(msg.sender, rewards);
         }
     }
     
