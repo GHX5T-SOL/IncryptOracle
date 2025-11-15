@@ -90,7 +90,7 @@ export default function WhitepaperPage() {
                 </div>
                 <div>
                   <span className="text-gray-400">Slashing:</span>
-                  <span className="ml-2">10% of stake per poor validation (<50% accuracy)</span>
+                  <span className="ml-2">10% of stake per poor validation (&lt;50% accuracy)</span>
                 </div>
                 <div>
                   <span className="text-gray-400">Maximum Slashes:</span>
@@ -253,7 +253,7 @@ export default function WhitepaperPage() {
                 </li>
                 <li className="flex items-start space-x-2">
                   <span className="text-primary-400 mt-1">•</span>
-                  <span>Stake can be slashed for poor performance (<50% accuracy)</span>
+                  <span>Stake can be slashed for poor performance (&lt;50% accuracy)</span>
                 </li>
                 <li className="flex items-start space-x-2">
                   <span className="text-primary-400 mt-1">•</span>

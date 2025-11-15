@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import { useAccount, usePublicClient, useWatchContractEvent } from 'wagmi';
+import { useAccount, usePublicClient, useContractEvent } from 'wagmi';
 import { useOracle } from './useContract';
 
 /**
@@ -88,13 +88,13 @@ export function useOracleData(feedId?: string) {
   }, [fetchFeedData]);
 
   // Watch for updates in real-time
-  useWatchContractEvent({
+  useContractEvent({
     address: address as `0x${string}`,
     abi: ORACLE_ABI,
     eventName: 'DataFeedUpdated',
-    onLogs: (logs) => {
-      if (feedId) {
-        const relevantLog = logs.find((log: any) => log.args.feedId === feedId);
+    listener: (logs) => {
+      if (feedId && logs && logs.length > 0) {
+        const relevantLog = logs.find((log: any) => log.args?.feedId === feedId);
         if (relevantLog) {
           // Debounce to avoid excessive calls
           setTimeout(() => fetchFeedData(), 500);
@@ -103,13 +103,13 @@ export function useOracleData(feedId?: string) {
     },
   });
 
-  useWatchContractEvent({
+  useContractEvent({
     address: address as `0x${string}`,
     abi: ORACLE_ABI,
     eventName: 'ValidationSubmitted',
-    onLogs: (logs) => {
-      if (feedId) {
-        const relevantLog = logs.find((log: any) => log.args.feedId === feedId);
+    listener: (logs) => {
+      if (feedId && logs && logs.length > 0) {
+        const relevantLog = logs.find((log: any) => log.args?.feedId === feedId);
         if (relevantLog) {
           setTimeout(() => fetchFeedData(), 500);
         }

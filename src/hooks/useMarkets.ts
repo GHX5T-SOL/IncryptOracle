@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import { useAccount, usePublicClient, useWatchContractEvent } from 'wagmi';
+import { useAccount, usePublicClient, useContractEvent } from 'wagmi';
 import { parseEther, formatEther } from 'viem';
 import { usePredictionMarket, useOracle } from './useContract';
 import { CONTRACT_ADDRESSES } from '../utils/wagmi';
@@ -136,11 +136,11 @@ export function useMarketCounter() {
   }, [fetchCounter]);
 
   // Watch for new market creation events
-  useWatchContractEvent({
+  useContractEvent({
     address: address as `0x${string}`,
     abi: PREDICTION_MARKET_ABI,
     eventName: 'MarketCreated',
-    onLogs: () => {
+    listener: () => {
       fetchCounter();
     },
   });
@@ -245,39 +245,39 @@ export function useMarkets() {
   }, [fetchMarkets]);
 
   // Watch for market events to update in real-time
-  useWatchContractEvent({
+  useContractEvent({
     address: address as `0x${string}`,
     abi: PREDICTION_MARKET_ABI,
     eventName: 'MarketCreated',
-    onLogs: () => {
+    listener: () => {
       // Debounce refetch to avoid excessive calls
       setTimeout(() => fetchMarkets(), 1000);
     },
   });
 
-  useWatchContractEvent({
+  useContractEvent({
     address: address as `0x${string}`,
     abi: PREDICTION_MARKET_ABI,
     eventName: 'SharesPurchased',
-    onLogs: () => {
+    listener: () => {
       setTimeout(() => fetchMarkets(), 500);
     },
   });
 
-  useWatchContractEvent({
+  useContractEvent({
     address: address as `0x${string}`,
     abi: PREDICTION_MARKET_ABI,
     eventName: 'SharesSold',
-    onLogs: () => {
+    listener: () => {
       setTimeout(() => fetchMarkets(), 500);
     },
   });
 
-  useWatchContractEvent({
+  useContractEvent({
     address: address as `0x${string}`,
     abi: PREDICTION_MARKET_ABI,
     eventName: 'MarketResolved',
-    onLogs: () => {
+    listener: () => {
       setTimeout(() => fetchMarkets(), 1000);
     },
   });
