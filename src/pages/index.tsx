@@ -97,7 +97,7 @@ export default function HomePage() {
               </h1>
               
               <p className="text-xl text-gray-300 mb-8 max-w-2xl">
-                Decentralized oracle infrastructure powering the next generation of prediction markets 
+                Decentralized hybrid oracle infrastructure powering the next generation of prediction markets 
                 on Binance Smart Chain. Blending AI intelligence with human intuition for faster, more accurate resolutions. 
                 Fast, secure, and community-governed.
               </p>
