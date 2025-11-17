@@ -50,12 +50,18 @@ export const ABI = {
   ORACLE: [
     'function getDataFeed(bytes32) view returns (string, string, uint256, uint256, uint256, bool)',
     'function getActiveFeedIds() view returns (bytes32[])',
-    'function getValidator(address) view returns (uint256, uint256, bool, uint256, uint256)',
+    'function getValidator(address) view returns (uint256, uint256, bool, uint256, uint256, uint8)',
+    'function getValidationSubmission(bytes32, address) view returns (uint256, uint256, bool, string, uint8, string)',
+    'function getAIValidatorCount() view returns (uint256)',
     'function submitValidation(bytes32, uint256, string)',
+    'function submitAIValidation(bytes32, uint256, string, string)',
     'function registerValidator(uint256)',
+    'function registerAIValidator(address, uint256)',
     'event DataFeedCreated(bytes32 indexed, string, string)',
     'event DataFeedUpdated(bytes32 indexed, uint256, uint256)',
-    'event ValidationSubmitted(bytes32 indexed, address indexed, uint256)'
+    'event ValidationSubmitted(bytes32 indexed, address indexed, uint256, uint8)',
+    'event AIValidationSubmitted(bytes32 indexed, address indexed, uint256, string)',
+    'event ValidatorRegistered(address indexed, uint256, uint8)'
   ],
   PREDICTION_MARKET: [
     'function getMarket(uint256) view returns (string, string, string, uint256, uint8, uint256[2], address, uint256)',

@@ -11,8 +11,13 @@ export type {
   ValidatorInfo,
   Subscription,
   SubscriptionCallbacks,
-  NetworkConfig
+  NetworkConfig,
+  AIValidationMetadata,
+  ValidationSubmission
 } from './types';
+
+// Enums
+export { ValidatorType } from './types';
 
 // Constants
 export { NETWORKS, CONTRACT_ADDRESSES, DEFAULT_CONFIG } from './constants';

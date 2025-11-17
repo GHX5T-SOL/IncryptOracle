@@ -72,9 +72,10 @@ describe("Oracle Edge Cases", function () {
       await token.mint(signers[maxValidators + 4].address, mintAmount);
       await token.connect(signers[maxValidators + 4]).approve(oracle.target, stakeAmount);
       
-      // Note: Actual implementation may allow or reject based on contract logic
-      const validatorCount = await oracle.getActiveValidators();
-      expect(validatorCount.length).to.be.lessThanOrEqual(maxValidators);
+      // Check validator count by trying to register one more
+      await expect(
+        oracle.connect(signers[maxValidators + 4]).registerValidator(stakeAmount)
+      ).to.be.revertedWith("Max validators reached");
     });
   });
 
@@ -104,12 +105,16 @@ describe("Oracle Edge Cases", function () {
     it("Should prevent validation after window closes", async function () {
       const validationWindow = 1 * 60 * 60; // 1 hour
       
-      // Submit first validation
+      // Submit first validation (this will set feed timestamp)
       await oracle.connect(validator1).submitValidation(
         feedId,
         50000 * 10000,
         "Source1"
       );
+
+      // Get feed info to check timestamp was set
+      const feedInfo = await oracle.getDataFeed(feedId);
+      expect(feedInfo.timestamp).to.be.greaterThan(0);
 
       // Fast-forward past validation window
       await time.increase(validationWindow + 1);

@@ -10,7 +10,7 @@
   <img src="https://i.ibb.co/TBDNZrwv/favicon.png" alt="Incrypt Oracle Logo" width="120" height="120" />
 </div>
 
-**Incrypt Oracle** is a sophisticated, production-grade decentralized oracle infrastructure built on Binance Smart Chain (BSC) specifically architected for prediction markets. The platform leverages a multi-validator consensus mechanism with reputation-weighted validation, optimistic resolution with rapid dispute windows, and a comprehensive revenue model through subscription services and premium market features. The entire system is powered by the native $IO token, which serves dual purposes as both a governance mechanism and a staking/validation requirement for network participants.
+**Incrypt Oracle** is a sophisticated, production-grade decentralized oracle infrastructure built on Binance Smart Chain (BSC) specifically architected for prediction markets. The platform leverages a hybrid AI-human validator network with automatic API discovery, reputation-weighted consensus, optimistic resolution with rapid dispute windows, and a comprehensive revenue model. The system features revolutionary AI-powered validators that use Hugging Face models to automatically discover data sources and provide intelligent reasoning, working seamlessly with human validators for faster, more accurate resolutions. The entire system is powered by the native $IO token, which serves dual purposes as both a governance mechanism and a staking/validation requirement for network participants.
 
 ## 📑 Table of Contents
 
@@ -57,10 +57,12 @@
 ## ✨ Features
 
 ### 🎯 **Oracle Infrastructure**
-- **Decentralized Validation** - Multiple validator nodes ensure data integrity
+- **Decentralized Validation** - Multiple validator nodes (AI + Human) ensure data integrity
+- **AI-Powered Validators** - Automatic API discovery and intelligent reasoning using Hugging Face models
 - **Real-time Data Feeds** - Sub-second oracle updates with minimal gas fees  
 - **High Confidence Scoring** - Reputation-weighted consensus mechanism
 - **Prediction Market Optimized** - Purpose-built for outcome resolution
+- **Hybrid Consensus** - AI and human validators work together for faster, more accurate resolutions
 
 ### 🎲 **IncryptPredict Demo**
 - **Create Markets** - Launch prediction markets on any event
@@ -197,10 +199,13 @@ graph TB
 The `IncryptOracle` contract implements a sophisticated consensus mechanism that aggregates data from multiple validator nodes using reputation-weighted algorithms. The contract architecture includes:
 
 **Key Components:**
-- **Reputation-Weighted Consensus**: Each validator's submission is weighted by their reputation score, which dynamically adjusts based on validation accuracy
+- **Hybrid Validator Network**: Supports both AI and human validators with `ValidatorType` enum (Human, AI)
+- **AI Validator Support**: AI validators can submit validations with detailed metadata including confidence, sources, reasoning, and model information
+- **Reputation-Weighted Consensus**: Each validator's submission is weighted by their reputation score, which dynamically adjusts based on validation accuracy. AI validators start with 1200 reputation (vs 1000 for humans)
 - **Optimistic Resolution Mechanism**: Implements a 4-hour dispute window (vs UMA's 24-48 hours) allowing feeds to resolve when ≥50% of validators agree, dramatically reducing resolution latency for prediction markets
 - **Dynamic Validator Management**: Supports 3-21 active validators with minimum stake requirements (1,000 IO tokens) and automatic slashing for poor performance
 - **Division-by-Zero Protection**: Comprehensive safety checks prevent consensus calculation failures when all validators have zero reputation or when consensus values are zero
+- **AI Metadata Storage**: Validation submissions from AI validators include JSON metadata stored on-chain for transparency and auditability
 
 **Consensus Algorithm:**
 ```
@@ -354,6 +359,104 @@ The validator fetches data from multiple sources (e.g., Binance and CoinGecko fo
 - Systemd service for Linux servers
 - Cloud platforms: AWS ECS, Google Cloud Run, Railway, Heroku
 
+### AI Validator Node Infrastructure
+
+Incrypt Oracle features a revolutionary AI-powered validator that combines artificial intelligence with automatic API discovery, inspired by Sora Oracle's agentic approach. The AI validator uses Hugging Face inference models to analyze prediction market questions, automatically discover relevant data sources, and provide intelligent reasoning for each validation.
+
+**Architecture:**
+
+```
+AI Validator Node
+├── Configuration Layer
+│   ├── Hugging Face API token and model configuration
+│   ├── API discovery settings (RapidAPI, APIs.guru)
+│   └── Validator wallet and contract addresses
+├── API Discovery Layer (Inspired by Sora Oracle Layer 1)
+│   ├── Automatic API discovery for any prediction market question
+│   ├── RapidAPI marketplace search
+│   ├── APIs.guru directory query
+│   └── Known reliable sources by category
+├── Data Fetching Layer
+│   ├── Multi-source data aggregation
+│   ├── Authentication handling
+│   └── Error recovery and fallbacks
+├── AI Inference Layer
+│   ├── Hugging Face model integration (Meta-Llama-3-8B-Instruct)
+│   ├── Question analysis and data synthesis
+│   ├── Value extraction and reasoning generation
+│   └── Confidence calculation
+├── Validation Layer
+│   ├── Oracle contract interaction (ethers.js v6)
+│   ├── AI metadata JSON generation
+│   ├── Validation submission with reasoning
+│   └── Health check and monitoring
+└── Main Service
+    ├── Graceful shutdown handling
+    ├── Error recovery mechanisms
+    └── Continuous validation cycles
+```
+
+**Key Features:**
+
+1. **Automatic API Discovery**
+   - Analyzes prediction market question to extract search terms
+   - Searches RapidAPI marketplace for relevant endpoints
+   - Queries APIs.guru public API directory
+   - Returns top 10 most relevant APIs with authentication methods
+   - No manual API curation required - automatically expands to new data types
+
+2. **Hugging Face Integration**
+   - Uses state-of-the-art language models for question analysis
+   - Synthesizes data from multiple sources
+   - Provides detailed reasoning for each validation
+   - Calculates confidence scores based on data agreement
+
+3. **Multi-Source Validation**
+   - Fetches data from top 5 discovered APIs
+   - Calculates median values for robustness
+   - Analyzes variance for confidence scoring
+   - Handles authentication, rate limiting, and errors gracefully
+
+4. **AI Metadata**
+   - Each validation includes JSON metadata with:
+     - Confidence score (0-100)
+     - List of data sources used
+     - Detailed reasoning for the validation
+     - Model information and timestamp
+
+5. **Smart Contract Integration**
+   - AI validators registered via `registerAIValidator()` (owner-only)
+   - Submit validations via `submitAIValidation()` with metadata
+   - Higher starting reputation (1200 vs 1000 for human validators)
+   - Full integration with reputation-weighted consensus
+
+**Setup:**
+
+```bash
+cd ai-validator
+npm install
+cp .env.example .env
+# Configure .env with:
+# - AI_VALIDATOR_PRIVATE_KEY
+# - HUGGINGFACE_API_TOKEN
+# - ORACLE_ADDRESS
+# - RAPIDAPI_KEY (optional)
+npm run build
+npm start
+```
+
+**Health Checks:**
+- HTTP endpoints: `/health`, `/ready`, `/metrics`, `/status`
+- Tracks: AI validator status, last validation, Hugging Face API status, API discovery health
+
+**Benefits:**
+- **Faster Resolutions**: AI processes and validates data much faster than manual validators
+- **Automatic Expansion**: No manual API curation - AI discovers new sources automatically
+- **Transparent Reasoning**: Every validation includes detailed reasoning for auditability
+- **24/7 Availability**: Continuous operation without downtime
+- **Cost Efficiency**: Reduces operational costs while maintaining high accuracy
+- **Hybrid Security**: Combines AI speed with human validators for defense-in-depth
+
 ### Frontend Architecture & Blockchain Integration
 
 The Next.js frontend implements a fully integrated blockchain experience with real-time updates, comprehensive error handling, and mobile-optimized responsive design.
@@ -478,7 +581,7 @@ After consensus calculation:
 | Contract | Address (Testnet) | Purpose | Key Features |
 |----------|------------------|---------|--------------|
 | **IOToken** | `0xdc6a5752...` | ERC20 governance token | ERC20Votes extension, delegate voting, fixed supply 1B tokens |
-| **IncryptOracle** | `0x823C0Ead...` | Core oracle with validator network | Reputation-weighted consensus, optimistic resolution, slashing, 3-21 validators |
+| **IncryptOracle** | `0x823C0Ead...` | Core oracle with hybrid AI-human validator network | Reputation-weighted consensus, AI validator support, optimistic resolution, slashing, 3-21 validators |
 | **PredictionMarket** | `0x101B0f8d...` | AMM-based prediction markets | CPMM model, oracle integration, private markets, creation fees |
 | **IncryptDAO** | `0xb7ed1FDA...` | OpenZeppelin Governor | Proposal system, voting, timelock integration |
 | **RevenueDistributor** | `0xe68b3647...` | Automated fee distribution | 50/50 split, staking rewards, gas-optimized rounds |
@@ -825,6 +928,39 @@ const subscription = oracle.subscribe('ETH/USD', {
 
 // Unsubscribe when done
 subscription.unsubscribe();
+```
+
+**AI Validator Integration:**
+```javascript
+import { IncryptOracle, ValidatorType } from 'incrypt-oracle-sdk';
+
+const oracle = new IncryptOracle({
+  network: 'bsc-testnet',
+  signer: wallet
+});
+
+// Get count of AI validators
+const aiCount = await oracle.getAIValidatorCount();
+console.log(`Active AI validators: ${aiCount}`);
+
+// Get validation submission with AI metadata
+const submission = await oracle.getValidationSubmission(feedId, validatorAddress);
+if (submission.validatorType === ValidatorType.AI && submission.aiMetadata) {
+  console.log('AI Confidence:', submission.aiMetadata.confidence);
+  console.log('Sources:', submission.aiMetadata.sources);
+  console.log('Reasoning:', submission.aiMetadata.reasoning);
+}
+
+// Submit AI validation (AI validator only)
+const aiMetadata = {
+  confidence: 92.5,
+  sources: ['Binance API', 'CoinGecko API'],
+  reasoning: 'Based on analysis of multiple sources...',
+  model: 'meta-llama/Meta-Llama-3-8B-Instruct',
+  timestamp: Date.now()
+};
+
+await oracle.submitAIValidation(feedId, value, 'AI Validator', aiMetadata);
 ```
 
 **Validator Operations:**
@@ -1350,6 +1486,23 @@ The `RevenueDistributor` contract implements an automated 50/50 revenue split:
 
 ## 🚀 Advanced Features & Recent Implementations
 
+### AI-Powered Validator Network
+
+Incrypt Oracle introduces a revolutionary AI validator system that combines artificial intelligence with automatic API discovery, inspired by Sora Oracle's agentic approach. This hybrid AI-human validator network enables faster resolutions, automatic expansion to new data types, and transparent reasoning for every validation.
+
+**Key Innovations:**
+- **Automatic API Discovery**: AI automatically discovers 10+ relevant APIs for any prediction market question without pre-registration
+- **Hugging Face Integration**: Uses state-of-the-art language models (Meta-Llama-3-8B-Instruct) for intelligent analysis
+- **Multi-Source Validation**: Fetches and synthesizes data from multiple discovered sources
+- **Transparent Reasoning**: Every AI validation includes detailed reasoning and metadata
+- **Hybrid Consensus**: AI and human validators work together in reputation-weighted consensus
+
+**Technical Implementation:**
+- AI validators start with 1200 reputation (vs 1000 for humans)
+- AI metadata stored on-chain as JSON (confidence, sources, reasoning, model)
+- Automatic API discovery searches RapidAPI, APIs.guru, and known sources
+- Full SDK support for querying AI validator information and metadata
+
 ### Optimistic Resolution Mechanism
 
 Incrypt Oracle implements an innovative optimistic resolution system that dramatically reduces market resolution time compared to industry standards:
@@ -1527,10 +1680,15 @@ if (validators[validator].stake - slashAmount < MIN_STAKE) {
 - [x] Domain-specific oracle templates
 - [x] Revenue features (subscription service, premium markets)
 - [x] Frontend blockchain integration (real-time updates)
+- [x] AI Validator implementation with Hugging Face integration
+- [x] Automatic API discovery (inspired by Sora Oracle)
+- [x] AI validator smart contract support
+- [x] SDK support for AI validators
 - [ ] Final security audit (CertiK/Halborn)
 - [ ] BSC mainnet deployment
 - [ ] $IO token launch
 - [ ] IncryptPredict production launch
+- [ ] AI Validator deployment and registration
 - [ ] Validator onboarding program
 
 ### Phase 3: Growth 📈 PLANNED
@@ -1564,11 +1722,15 @@ if (validators[validator].stake - slashAmount < MIN_STAKE) {
 
 **IncryptOracle Contract Methods:**
 - `createDataFeed(string name, string description, uint256 threshold) → bytes32`
-- `registerValidator(uint256 stakeAmount)`
-- `submitValidation(bytes32 feedId, uint256 value, string dataSource)`
+- `registerValidator(uint256 stakeAmount)` - Register as human validator
+- `registerAIValidator(address validatorAddress, uint256 stakeAmount)` - Owner-only: Register AI validator
+- `submitValidation(bytes32 feedId, uint256 value, string dataSource)` - Human validator submission
+- `submitAIValidation(bytes32 feedId, uint256 value, string dataSource, string aiMetadata)` - AI validator submission with metadata
 - `getDataFeed(bytes32 feedId) → (name, description, value, timestamp, confidence, isActive)`
 - `getActiveFeedIds() → bytes32[]`
-- `getValidator(address) → (stake, reputation, isActive, validationsCount, successfulValidations)`
+- `getValidator(address) → (stake, reputation, isActive, validationsCount, successfulValidations, validatorType)`
+- `getValidationSubmission(bytes32 feedId, address validator) → (value, timestamp, submitted, dataSource, validatorType, aiMetadata)`
+- `getAIValidatorCount() → uint256` - Get count of active AI validators
 - `raiseDispute(bytes32 feedId, uint256 proposedValue)`
 - `isDisputeWindowOpen(bytes32 feedId) → bool`
 

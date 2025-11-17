@@ -22,11 +22,18 @@ contract IncryptOracle is Ownable, ReentrancyGuard, Pausable {
         uint256 validationThreshold;
     }
     
+    enum ValidatorType {
+        Human,
+        AI
+    }
+    
     struct ValidationSubmission {
         uint256 value;
         uint256 timestamp;
         bool submitted;
         string dataSource;
+        ValidatorType validatorType;
+        string aiMetadata; // JSON string with AI confidence, model used, sources discovered
     }
     
     struct Validator {
@@ -36,6 +43,7 @@ contract IncryptOracle is Ownable, ReentrancyGuard, Pausable {
         bool isActive;
         uint256 validationsCount;
         uint256 successfulValidations;
+        ValidatorType validatorType;
     }
     
     mapping(bytes32 => DataFeed) public dataFeeds;
@@ -63,9 +71,10 @@ contract IncryptOracle is Ownable, ReentrancyGuard, Pausable {
     
     event DataFeedCreated(bytes32 indexed feedId, string name, string description);
     event DataFeedUpdated(bytes32 indexed feedId, uint256 value, uint256 confidence);
-    event ValidatorRegistered(address indexed validator, uint256 stake);
+    event ValidatorRegistered(address indexed validator, uint256 stake, ValidatorType validatorType);
     event ValidatorRemoved(address indexed validator);
-    event ValidationSubmitted(bytes32 indexed feedId, address indexed validator, uint256 value);
+    event ValidationSubmitted(bytes32 indexed feedId, address indexed validator, uint256 value, ValidatorType validatorType);
+    event AIValidationSubmitted(bytes32 indexed feedId, address indexed validator, uint256 value, string aiMetadata);
     event DataFeedResolved(bytes32 indexed feedId, uint256 finalValue, uint256 confidence);
     event ValidatorSlashed(address indexed validator, uint256 slashedAmount, string reason);
     event OptimisticResolution(bytes32 indexed feedId, uint256 value, uint256 timestamp);
@@ -117,9 +126,39 @@ contract IncryptOracle is Ownable, ReentrancyGuard, Pausable {
     }
     
     /**
-     * @dev Register as a validator
+     * @dev Register as a validator (human validator)
      */
     function registerValidator(uint256 stakeAmount) external nonReentrant whenNotPaused {
+        _registerValidator(stakeAmount, ValidatorType.Human);
+    }
+    
+    /**
+     * @dev Register as an AI validator (owner only, for security)
+     */
+    function registerAIValidator(address validatorAddress, uint256 stakeAmount) external onlyOwner nonReentrant whenNotPaused {
+        require(stakeAmount >= MIN_STAKE, "Insufficient stake");
+        require(!validators[validatorAddress].isActive, "Already registered");
+        require(activeValidators.length < MAX_VALIDATORS, "Max validators reached");
+        
+        validators[validatorAddress] = Validator({
+            validatorAddress: validatorAddress,
+            stake: stakeAmount,
+            reputation: 1200, // AI validators start with higher reputation
+            isActive: true,
+            validationsCount: 0,
+            successfulValidations: 0,
+            validatorType: ValidatorType.AI
+        });
+        
+        activeValidators.push(validatorAddress);
+        
+        emit ValidatorRegistered(validatorAddress, stakeAmount, ValidatorType.AI);
+    }
+    
+    /**
+     * @dev Internal function to register a validator
+     */
+    function _registerValidator(uint256 stakeAmount, ValidatorType validatorType) internal {
         require(stakeAmount >= MIN_STAKE, "Insufficient stake");
         require(!validators[msg.sender].isActive, "Already registered");
         require(activeValidators.length < MAX_VALIDATORS, "Max validators reached");
@@ -130,39 +169,70 @@ contract IncryptOracle is Ownable, ReentrancyGuard, Pausable {
         validators[msg.sender] = Validator({
             validatorAddress: msg.sender,
             stake: stakeAmount,
-            reputation: 1000, // Starting reputation
+            reputation: validatorType == ValidatorType.AI ? 1200 : 1000, // AI starts higher
             isActive: true,
             validationsCount: 0,
-            successfulValidations: 0
+            successfulValidations: 0,
+            validatorType: validatorType
         });
         
         activeValidators.push(msg.sender);
         
-        emit ValidatorRegistered(msg.sender, stakeAmount);
+        emit ValidatorRegistered(msg.sender, stakeAmount, validatorType);
     }
     
     /**
-     * @dev Submit validation for a data feed
+     * @dev Submit validation for a data feed (human validator)
      */
     function submitValidation(
         bytes32 feedId,
         uint256 value,
         string memory dataSource
     ) external onlyValidator validFeedId(feedId) nonReentrant whenNotPaused {
+        _submitValidation(feedId, value, dataSource, ValidatorType.Human, "");
+    }
+    
+    /**
+     * @dev Submit validation for a data feed (AI validator with metadata)
+     */
+    function submitAIValidation(
+        bytes32 feedId,
+        uint256 value,
+        string memory dataSource,
+        string memory aiMetadata
+    ) external onlyValidator validFeedId(feedId) nonReentrant whenNotPaused {
+        require(validators[msg.sender].validatorType == ValidatorType.AI, "Only AI validators can use this function");
+        _submitValidation(feedId, value, dataSource, ValidatorType.AI, aiMetadata);
+        emit AIValidationSubmitted(feedId, msg.sender, value, aiMetadata);
+    }
+    
+    /**
+     * @dev Internal function to submit validation
+     */
+    function _submitValidation(
+        bytes32 feedId,
+        uint256 value,
+        string memory dataSource,
+        ValidatorType validatorType,
+        string memory aiMetadata
+    ) internal {
         require(!validations[feedId][msg.sender].submitted, "Already submitted");
-        require(block.timestamp <= dataFeeds[feedId].timestamp + VALIDATION_WINDOW, "Validation window closed");
+        // Allow validation if feed timestamp is 0 (new feed) or within validation window
+        DataFeed storage feed = dataFeeds[feedId];
+        require(feed.timestamp == 0 || block.timestamp <= feed.timestamp + VALIDATION_WINDOW, "Validation window closed");
         
         validations[feedId][msg.sender] = ValidationSubmission({
             value: value,
             timestamp: block.timestamp,
             submitted: true,
-            dataSource: dataSource
+            dataSource: dataSource,
+            validatorType: validatorType,
+            aiMetadata: aiMetadata
         });
         
         validators[msg.sender].validationsCount++;
         
         // Gas optimization: Track validators who submitted for this feed
-        DataFeed storage feed = dataFeeds[feedId];
         
         // Check if validator already in feed's validators array
         bool alreadyAdded = false;
@@ -177,7 +247,7 @@ contract IncryptOracle is Ownable, ReentrancyGuard, Pausable {
             feed.validators.push(msg.sender);
         }
         
-        emit ValidationSubmitted(feedId, msg.sender, value);
+        emit ValidationSubmitted(feedId, msg.sender, value, validatorType);
         
         // Check if we have enough validations to resolve
         _tryResolveDataFeed(feedId);
@@ -477,10 +547,46 @@ contract IncryptOracle is Ownable, ReentrancyGuard, Pausable {
         uint256 reputation,
         bool isActive,
         uint256 validationsCount,
-        uint256 successfulValidations
+        uint256 successfulValidations,
+        ValidatorType validatorType
     ) {
         Validator memory validator = validators[validatorAddress];
-        return (validator.stake, validator.reputation, validator.isActive, validator.validationsCount, validator.successfulValidations);
+        return (validator.stake, validator.reputation, validator.isActive, validator.validationsCount, validator.successfulValidations, validator.validatorType);
+    }
+    
+    /**
+     * @dev Get validation submission details including AI metadata
+     */
+    function getValidationSubmission(bytes32 feedId, address validator) external view returns (
+        uint256 value,
+        uint256 timestamp,
+        bool submitted,
+        string memory dataSource,
+        ValidatorType validatorType,
+        string memory aiMetadata
+    ) {
+        ValidationSubmission memory submission = validations[feedId][validator];
+        return (
+            submission.value,
+            submission.timestamp,
+            submission.submitted,
+            submission.dataSource,
+            submission.validatorType,
+            submission.aiMetadata
+        );
+    }
+    
+    /**
+     * @dev Get count of AI validators
+     */
+    function getAIValidatorCount() external view returns (uint256) {
+        uint256 count = 0;
+        for (uint256 i = 0; i < activeValidators.length; i++) {
+            if (validators[activeValidators[i]].validatorType == ValidatorType.AI) {
+                count++;
+            }
+        }
+        return count;
     }
     
     /**

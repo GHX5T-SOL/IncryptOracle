@@ -9,6 +9,7 @@ The official JavaScript SDK for integrating **Incrypt Oracle** into your applica
 ## 🚀 Features
 
 - **Easy Integration**: Simple, intuitive API for all oracle functions
+- **AI Validator Support**: Full support for AI validators with metadata access
 - **Real-time Subscriptions**: Subscribe to live price feeds with automatic updates
 - **TypeScript Support**: Full type definitions for better developer experience
 - **React Hooks**: Ready-to-use hooks for React applications

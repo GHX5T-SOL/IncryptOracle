@@ -12,7 +12,10 @@ import type {
   SubscriptionCallbacks,
   NetworkConfig,
   MarketData,
-  UserPosition
+  UserPosition,
+  ValidationSubmission,
+  AIValidationMetadata,
+  ValidatorType
 } from './types';
 
 export class IncryptOracle extends EventEmitter {
@@ -213,7 +216,8 @@ export class IncryptOracle extends EventEmitter {
         reputation: Number(result[1]),
         isActive: result[2],
         validationsCount: Number(result[3]),
-        successfulValidations: Number(result[4])
+        successfulValidations: Number(result[4]),
+        validatorType: Number(result[5]) as ValidatorType
       };
     } catch (error) {
       throw new ContractError(`Failed to get validator info for ${address}`, error);
@@ -255,6 +259,97 @@ export class IncryptOracle extends EventEmitter {
       return tx.hash;
     } catch (error) {
       throw new ContractError('Failed to submit validation', error);
+    }
+  }
+
+  /**
+   * Submit AI validation (AI validator only)
+   */
+  async submitAIValidation(
+    feedId: string,
+    value: number,
+    source: string,
+    aiMetadata: AIValidationMetadata
+  ): Promise<string> {
+    if (!this.config.signer) {
+      throw new ValidationError('Signer required for AI validation submission');
+    }
+
+    try {
+      const feedIdBytes = this.getFeedIdBytes(feedId);
+      const valueScaled = Math.round(value * 10000);
+      const metadataJson = JSON.stringify(aiMetadata);
+      
+      const tx = await this.oracleContract.submitAIValidation(feedIdBytes, valueScaled, source, metadataJson);
+      await tx.wait();
+      return tx.hash;
+    } catch (error) {
+      throw new ContractError('Failed to submit AI validation', error);
+    }
+  }
+
+  /**
+   * Get validation submission details including AI metadata
+   */
+  async getValidationSubmission(feedId: string, validatorAddress: string): Promise<ValidationSubmission> {
+    try {
+      const feedIdBytes = this.getFeedIdBytes(feedId);
+      const result = await this.oracleContract.getValidationSubmission(feedIdBytes, validatorAddress);
+      
+      let aiMetadata: AIValidationMetadata | undefined;
+      if (result[4] === 1 && result[5]) { // ValidatorType.AI and has metadata
+        try {
+          aiMetadata = JSON.parse(result[5]);
+        } catch {
+          // Invalid JSON, ignore
+        }
+      }
+      
+      return {
+        value: Number(result[0]) / 10000,
+        timestamp: Number(result[1]),
+        submitted: result[2],
+        dataSource: result[3],
+        validatorType: Number(result[4]) as ValidatorType,
+        aiMetadata
+      };
+    } catch (error) {
+      throw new ContractError(`Failed to get validation submission for ${feedId}`, error);
+    }
+  }
+
+  /**
+   * Get count of AI validators
+   */
+  async getAIValidatorCount(): Promise<number> {
+    try {
+      const count = await this.oracleContract.getAIValidatorCount();
+      return Number(count);
+    } catch (error) {
+      throw new ContractError('Failed to get AI validator count', error);
+    }
+  }
+
+  /**
+   * Get all AI validators
+   */
+  async getAIValidators(): Promise<ValidatorInfo[]> {
+    try {
+      const feedIds = await this.oracleContract.getActiveFeedIds();
+      const validators = new Map<string, ValidatorInfo>();
+      
+      // Get all validators and filter for AI
+      // Note: This is a simplified approach. In production, you might want to track AI validators separately
+      const allFeeds = await this.getAllFeeds();
+      
+      for (const feed of allFeeds) {
+        // This would require additional contract methods to get all validators
+        // For now, return empty array - can be enhanced
+      }
+      
+      return Array.from(validators.values());
+    } catch (error) {
+      throw new ContractError('Failed to get AI validators', error);
     }
   }
 

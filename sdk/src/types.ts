@@ -37,6 +37,11 @@ export interface DataFeed {
   lastUpdate?: number;
 }
 
+export enum ValidatorType {
+  Human = 0,
+  AI = 1
+}
+
 export interface ValidatorInfo {
   address: string;
   stake: string;
@@ -44,6 +49,24 @@ export interface ValidatorInfo {
   isActive: boolean;
   validationsCount: number;
   successfulValidations: number;
+  validatorType: ValidatorType;
+}
+
+export interface AIValidationMetadata {
+  confidence: number;
+  sources: string[];
+  reasoning: string;
+  model: string;
+  timestamp: number;
+}
+
+export interface ValidationSubmission {
+  value: number;
+  timestamp: number;
+  submitted: boolean;
+  dataSource: string;
+  validatorType: ValidatorType;
+  aiMetadata?: AIValidationMetadata;
 }
 
 export interface SubscriptionCallbacks {

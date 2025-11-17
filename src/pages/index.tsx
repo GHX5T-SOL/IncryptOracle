@@ -65,6 +65,11 @@ const features = [
     icon: "🛡️",
     title: "Battle Tested",
     description: "Audited smart contracts with proven security track record"
+  },
+  {
+    icon: "🤖",
+    title: "AI-Powered",
+    description: "AI validators with automatic API discovery and intelligent reasoning for faster resolutions"
   }
 ];
 
@@ -93,7 +98,8 @@ export default function HomePage() {
               
               <p className="text-xl text-gray-300 mb-8 max-w-2xl">
                 Decentralized oracle infrastructure powering the next generation of prediction markets 
-                on Binance Smart Chain. Fast, secure, and community-governed.
+                on Binance Smart Chain. Blending AI intelligence with human intuition for faster, more accurate resolutions. 
+                Fast, secure, and community-governed.
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
@@ -137,8 +143,9 @@ export default function HomePage() {
               Why Choose <span className="text-gradient">Incrypt Oracle</span>
             </h2>
             <p className="text-xl text-gray-300 max-w-3xl mx-auto">
-              Built specifically for prediction markets, our oracle provides reliable data feeds 
-              with community governance and transparent validation.
+              Built specifically for prediction markets, our oracle combines AI-powered validators with human validators 
+              for unprecedented speed and accuracy. Automatic API discovery, intelligent reasoning, and reputation-weighted consensus 
+              ensure reliable data feeds with community governance.
             </p>
           </motion.div>
           
@@ -177,24 +184,30 @@ export default function HomePage() {
             </p>
           </motion.div>
           
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {[
               {
                 step: "1",
-                title: "Data Collection",
-                description: "Multiple validator nodes fetch data from trusted sources and APIs",
-                icon: "📡"
+                title: "AI-Powered Data Discovery",
+                description: "AI validators automatically discover relevant APIs and fetch data from multiple sources using intelligent analysis",
+                icon: "🤖"
               },
               {
-                step: "2", 
-                title: "Consensus Validation",
-                description: "Validators submit data and reach consensus through reputation-weighted voting",
+                step: "2",
+                title: "Hybrid Validation",
+                description: "AI and human validators submit data, with AI providing detailed reasoning and metadata for transparency",
                 icon: "🤝"
               },
               {
-                step: "3",
-                title: "Market Resolution", 
-                description: "Validated data resolves prediction markets automatically and transparently",
+                step: "3", 
+                title: "Reputation-Weighted Consensus",
+                description: "Validators reach consensus through reputation-weighted voting, with AI validators starting with higher reputation",
+                icon: "⚖️"
+              },
+              {
+                step: "4",
+                title: "Fast Market Resolution", 
+                description: "Optimistic resolution enables 1-4 hour market settlement vs traditional 24-48 hour delays",
                 icon: "✅"
               }
             ].map((step, index) => (
@@ -311,8 +324,9 @@ export default function HomePage() {
               Ready to Build the Future?
             </h2>
             <p className="text-xl text-gray-300 mb-8">
-              Join the decentralized oracle revolution and help power the next generation 
-              of prediction markets with reliable, transparent data feeds.
+              Join the decentralized oracle revolution powered by AI and human validators. 
+              Experience faster resolutions, automatic API discovery, and intelligent consensus 
+              for the next generation of prediction markets.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/docs" className="btn-holographic">

@@ -122,6 +122,7 @@ const sections = [
   { id: 'introduction', title: 'Introduction', icon: '📖' },
   { id: 'features', title: 'Features', icon: '✨' },
   { id: 'architecture', title: 'Architecture', icon: '🏗️' },
+  { id: 'ai-validator', title: 'AI Validator', icon: '🤖' },
   { id: 'smart-contracts', title: 'Smart Contracts', icon: '📜' },
   { id: 'security', title: 'Security & Audits', icon: '🛡️' },
   { id: 'roadmap', title: 'Roadmap', icon: '🎯' },
@@ -468,6 +469,220 @@ export default function DocsPage() {
                     </div>
                   </div>
               </div>
+              </div>
+            </section>
+
+            {/* AI Validator Section */}
+            <section id="ai-validator" ref={setSectionRef('ai-validator')} className="scroll-mt-24">
+              <div className="card-liquid-glass p-8">
+                <h2 className="text-3xl font-bold text-white mb-6">🤖 AI Validator</h2>
+                
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-xl font-semibold text-white mb-4">Overview</h3>
+                    <p className="text-gray-300 mb-4">
+                      Incrypt Oracle features a revolutionary AI-powered validator that combines artificial intelligence 
+                      with automatic API discovery to provide faster, more accurate oracle resolutions. Inspired by Sora Oracle&apos;s 
+                      agentic approach, our AI validator uses Hugging Face models to analyze prediction market questions, 
+                      automatically discover relevant data sources, and provide intelligent reasoning for each validation.
+                    </p>
+                  </div>
+
+                  <div>
+                    <h3 className="text-xl font-semibold text-white mb-4">Key Features</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                      {[
+                        { 
+                          title: 'Automatic API Discovery', 
+                          desc: 'AI automatically discovers 10+ relevant APIs for any prediction market question without pre-registration. Searches RapidAPI, APIs.guru, and known sources.',
+                          icon: '🔍'
+                        },
+                        { 
+                          title: 'Hugging Face Integration', 
+                          desc: 'Uses state-of-the-art language models (Meta-Llama-3-8B-Instruct) to analyze questions, synthesize data, and provide detailed reasoning.',
+                          icon: '🧠'
+                        },
+                        { 
+                          title: 'Multi-Source Validation', 
+                          desc: 'Fetches data from multiple discovered APIs and calculates consensus using median values and variance analysis for robust results.',
+                          icon: '📊'
+                        },
+                        { 
+                          title: 'Intelligent Reasoning', 
+                          desc: 'Provides detailed reasoning and metadata for each validation, including confidence scores, data sources used, and model information.',
+                          icon: '💡'
+                        },
+                        { 
+                          title: 'Higher Starting Reputation', 
+                          desc: 'AI validators start with 1200 reputation (vs 1000 for human validators) and maintain reputation through accurate validations.',
+                          icon: '⭐'
+                        },
+                        { 
+                          title: 'Hybrid Consensus', 
+                          desc: 'Works seamlessly with human validators in reputation-weighted consensus, combining AI speed with human intuition.',
+                          icon: '🤝'
+                        }
+                      ].map((feature, i) => (
+                        <div key={i} className="bg-dark-900/50 rounded-lg p-4">
+                          <div className="text-2xl mb-2">{feature.icon}</div>
+                          <h4 className="text-primary-400 font-semibold mb-2">{feature.title}</h4>
+                          <p className="text-sm text-gray-300">{feature.desc}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="text-xl font-semibold text-white mb-4">How AI Validator Works</h3>
+                    <div className="space-y-4">
+                      <div className="bg-dark-900/50 rounded-lg p-4">
+                        <h4 className="text-primary-400 font-semibold mb-2">1. Question Analysis</h4>
+                        <p className="text-gray-300 text-sm">
+                          When a prediction market question is created, the AI validator analyzes the question text, 
+                          description, and category to understand what data is needed.
+                        </p>
+                      </div>
+                      <div className="bg-dark-900/50 rounded-lg p-4">
+                        <h4 className="text-primary-400 font-semibold mb-2">2. API Discovery (Inspired by Sora Oracle)</h4>
+                        <p className="text-gray-300 text-sm">
+                          The AI agent automatically searches for relevant APIs:
+                          <ul className="list-disc list-inside mt-2 space-y-1 text-gray-400">
+                            <li>Searches RapidAPI marketplace for relevant endpoints</li>
+                            <li>Queries APIs.guru public API directory</li>
+                            <li>Uses known reliable sources based on category (crypto, sports, elections, weather)</li>
+                            <li>Returns top 10 most relevant APIs with authentication methods</li>
+                          </ul>
+                        </p>
+                      </div>
+                      <div className="bg-dark-900/50 rounded-lg p-4">
+                        <h4 className="text-primary-400 font-semibold mb-2">3. Data Fetching</h4>
+                        <p className="text-gray-300 text-sm">
+                          Fetches data from the top 5 discovered APIs, handling authentication, rate limiting, and errors gracefully.
+                        </p>
+                      </div>
+                      <div className="bg-dark-900/50 rounded-lg p-4">
+                        <h4 className="text-primary-400 font-semibold mb-2">4. AI Synthesis</h4>
+                        <p className="text-gray-300 text-sm">
+                          Uses Hugging Face inference API to:
+                          <ul className="list-disc list-inside mt-2 space-y-1 text-gray-400">
+                            <li>Analyze the question and fetched data</li>
+                            <li>Extract the most likely numeric value</li>
+                            <li>Provide detailed reasoning for the validation</li>
+                            <li>Calculate confidence based on data agreement</li>
+                          </ul>
+                        </p>
+                      </div>
+                      <div className="bg-dark-900/50 rounded-lg p-4">
+                        <h4 className="text-primary-400 font-semibold mb-2">5. Validation Submission</h4>
+                        <p className="text-gray-300 text-sm">
+                          Submits validation to the oracle contract with:
+                          <ul className="list-disc list-inside mt-2 space-y-1 text-gray-400">
+                            <li>Extracted value (scaled to 4 decimal places)</li>
+                            <li>AI metadata JSON containing confidence, sources, reasoning, and model info</li>
+                            <li>Data source identifier</li>
+                          </ul>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="text-xl font-semibold text-white mb-4">Smart Contract Integration</h3>
+                    <p className="text-gray-300 mb-4">
+                      The AI validator is fully integrated into the IncryptOracle smart contract:
+                    </p>
+                    <div className="bg-dark-900/50 rounded-lg p-4 mb-4">
+                      <h4 className="text-primary-400 font-semibold mb-2">ValidatorType Enum</h4>
+                      <pre className="text-sm text-gray-300 overflow-x-auto">
+{`enum ValidatorType {
+    Human,
+    AI
+}`}
+                      </pre>
+                    </div>
+                    <div className="bg-dark-900/50 rounded-lg p-4 mb-4">
+                      <h4 className="text-primary-400 font-semibold mb-2">Key Functions</h4>
+                      <ul className="list-disc list-inside space-y-2 text-gray-300">
+                        <li><code className="text-primary-400">registerAIValidator(address, uint256)</code> - Owner-only function to register AI validators</li>
+                        <li><code className="text-primary-400">submitAIValidation(bytes32, uint256, string, string)</code> - Submit validation with AI metadata</li>
+                        <li><code className="text-primary-400">getValidationSubmission(bytes32, address)</code> - Get validation details including AI metadata</li>
+                        <li><code className="text-primary-400">getAIValidatorCount()</code> - Get count of active AI validators</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="text-xl font-semibold text-white mb-4">AI Validator Node Setup</h3>
+                    <p className="text-gray-300 mb-4">
+                      The AI validator runs as a separate Node.js service. See the <code className="text-primary-400">ai-validator/</code> directory for full implementation.
+                    </p>
+                    <div className="bg-dark-900/50 rounded-lg p-4">
+                      <h4 className="text-primary-400 font-semibold mb-2">Quick Start</h4>
+                      <pre className="text-sm text-gray-300 overflow-x-auto">
+{`cd ai-validator
+npm install
+cp .env.example .env
+# Configure .env with your settings
+npm run build
+npm start`}
+                      </pre>
+                    </div>
+                    <div className="bg-dark-900/50 rounded-lg p-4 mt-4">
+                      <h4 className="text-primary-400 font-semibold mb-2">Required Environment Variables</h4>
+                      <ul className="list-disc list-inside space-y-1 text-gray-300 text-sm">
+                        <li><code className="text-primary-400">AI_VALIDATOR_PRIVATE_KEY</code> - Private key for validator wallet</li>
+                        <li><code className="text-primary-400">HUGGINGFACE_API_TOKEN</code> - Your Hugging Face API token</li>
+                        <li><code className="text-primary-400">ORACLE_ADDRESS</code> - IncryptOracle contract address</li>
+                        <li><code className="text-primary-400">RAPIDAPI_KEY</code> - (Optional) RapidAPI key for enhanced discovery</li>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="text-xl font-semibold text-white mb-4">SDK Integration</h3>
+                    <p className="text-gray-300 mb-4">
+                      The JavaScript SDK includes full support for AI validators:
+                    </p>
+                    <div className="bg-dark-900/50 rounded-lg p-4">
+                      <h4 className="text-primary-400 font-semibold mb-2">Get AI Validator Count</h4>
+                      <pre className="text-sm text-gray-300 overflow-x-auto">
+{`const oracle = new IncryptOracle({ network: 'bsc-testnet' });
+const aiCount = await oracle.getAIValidatorCount();
+console.log(\`Active AI validators: \${aiCount}\`);`}
+                      </pre>
+                    </div>
+                    <div className="bg-dark-900/50 rounded-lg p-4 mt-4">
+                      <h4 className="text-primary-400 font-semibold mb-2">Get Validation Submission with AI Metadata</h4>
+                      <pre className="text-sm text-gray-300 overflow-x-auto">
+{`const submission = await oracle.getValidationSubmission(feedId, validatorAddress);
+if (submission.validatorType === ValidatorType.AI && submission.aiMetadata) {
+  console.log('AI Confidence:', submission.aiMetadata.confidence);
+  console.log('Sources:', submission.aiMetadata.sources);
+  console.log('Reasoning:', submission.aiMetadata.reasoning);
+}`}
+                      </pre>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="text-xl font-semibold text-white mb-4">Benefits of AI Validators</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {[
+                        { title: 'Faster Resolutions', desc: 'AI can process and validate data much faster than manual validators, enabling near-instant resolutions for time-sensitive markets.' },
+                        { title: 'Automatic Expansion', desc: 'No manual API curation needed. AI automatically discovers new data sources as prediction markets expand to new categories.' },
+                        { title: 'Transparent Reasoning', desc: 'Every AI validation includes detailed reasoning, making the decision process transparent and auditable.' },
+                        { title: 'Cost Efficiency', desc: 'AI validators reduce operational costs while maintaining high accuracy through multi-source validation.' },
+                        { title: '24/7 Availability', desc: 'AI validators operate continuously without downtime, ensuring consistent oracle service.' },
+                        { title: 'Hybrid Security', desc: 'Combines AI speed with human validators for defense-in-depth security through diverse validation approaches.' }
+                      ].map((benefit, i) => (
+                        <div key={i} className="bg-dark-900/50 rounded-lg p-4">
+                          <h4 className="text-primary-400 font-semibold mb-2">{benefit.title}</h4>
+                          <p className="text-sm text-gray-300">{benefit.desc}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
               </div>
             </section>
 
@@ -2154,15 +2369,13 @@ async function createPredictionMarket() {
                         <div>totalValidators = activeValidators.length</div>
                         <div>threshold = feed.validationThreshold</div>
                         <div className="mt-4">if submittedCount &gt;= threshold:</div>
-                        <div className="ml-4">// Full consensus: Resolve immediately</div>
                         <div className="ml-4">resolve with full confidence</div>
                         <div className="mt-2">else if submittedCount &gt;= (totalValidators × 50 / 100):</div>
-                        <div className="ml-4">// Optimistic resolution: ≥50% agreement</div>
                         <div className="ml-4">resolve with optimistic flag</div>
                         <div className="ml-4">set optimisticResolutionTime = block.timestamp</div>
                         <div className="ml-4">open 4-hour dispute window</div>
                         <div className="mt-2">else:</div>
-                        <div className="ml-4">// Wait for more validations</div>
+                        <div className="ml-4">wait for more validations</div>
                         <div className="ml-4">continue waiting</div>
                       </div>
                     </div>
@@ -2514,7 +2727,7 @@ npm run deploy:mainnet
                         <li>Make your changes</li>
                         <li>Add tests for new functionality</li>
                         <li>Run the test suite (<code className="text-primary-300">npm test</code>)</li>
-                        <li>Commit your changes (<code className="text-primary-300">git commit -m 'Add amazing feature'</code>)</li>
+                        <li>Commit your changes (<code className="text-primary-300">git commit -m &apos;Add amazing feature&apos;</code>)</li>
                         <li>Push to the branch (<code className="text-primary-300">git push origin feature/amazing-feature</code>)</li>
                         <li>Open a Pull Request</li>
                       </ol>
