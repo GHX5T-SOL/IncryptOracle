@@ -13,7 +13,6 @@ import {
   BanknotesIcon,
   ClockIcon,
   FireIcon,
-  BuildingOfficeIcon,
   GlobeAltIcon,
   AcademicCapIcon,
   ShieldCheckIcon,
@@ -80,13 +79,13 @@ const mockData = {
     totalStaked: 850000
   },
   volumeData: [
-    { date: '2024-01-08', volume: 180000 },
-    { date: '2024-01-09', volume: 220000 },
-    { date: '2024-01-10', volume: 195000 },
-    { date: '2024-01-11', volume: 245000 },
-    { date: '2024-01-12', volume: 310000 },
-    { date: '2024-01-13', volume: 285000 },
-    { date: '2024-01-14', volume: 350000 }
+    { date: '2025-10-26', volume: 125000 },
+    { date: '2025-10-27', volume: 171000 },
+    { date: '2025-10-28', volume: 198500 },
+    { date: '2025-10-29', volume: 223000 },
+    { date: '2025-10-30', volume: 247500 },
+    { date: '2025-10-31', volume: 265000 },
+    { date: '2025-11-01', volume: 289000 }
   ],
   marketCategories: [
     { name: 'Crypto', value: 45, color: '#ffb500' },
@@ -96,10 +95,10 @@ const mockData = {
     { name: 'Technology', value: 5, color: '#f59e0b' }
   ],
   userGrowth: [
-    { month: 'Oct', users: 1200 },
-    { month: 'Nov', users: 2100 },
-    { month: 'Dec', users: 3800 },
-    { month: 'Jan', users: 5247 }
+    { month: 'Oct 2025', users: 1200 },
+    { month: 'Early Nov 2025', users: 2100 },
+    { month: 'Mid Nov 2025', users: 3800 },
+    { month: 'Nov 18, 2025', users: 5247 }
   ],
   oracleMetrics: [
     { time: '00:00', uptime: 100, latency: 1.2 },
@@ -110,11 +109,11 @@ const mockData = {
     { time: '20:00', uptime: 100, latency: 1.3 }
   ],
   topMarkets: [
-    { question: 'Will Bitcoin reach $100k in 2024?', volume: 450000, traders: 1247 },
-    { question: 'US Election Winner 2024?', volume: 320000, traders: 892 },
-    { question: 'ETH price above $5k in 2024?', volume: 280000, traders: 743 },
-    { question: 'Fed rate cut in Q1 2024?', volume: 190000, traders: 567 },
-    { question: 'SpaceX Mars mission success?', volume: 150000, traders: 445 }
+    { question: 'Will Bitcoin close above $90k before November 30, 2025?', volume: 450000, traders: 1247 },
+    { question: 'Will ETH staking deposits reach 32M ETH by November 18, 2025?', volume: 320000, traders: 892 },
+    { question: 'Will BNB Chain gas fees average below 3 gwei during November 2025?', volume: 280000, traders: 743 },
+    { question: 'Will the Fed announce an additional rate cut in November 2025?', volume: 190000, traders: 567 },
+    { question: 'Will Solana daily TPS average stay above 2,500 this November?', volume: 150000, traders: 445 }
   ]
 };
 
@@ -128,7 +127,6 @@ const sections = [
   { id: 'roadmap', title: 'Roadmap', icon: '🎯' },
   { id: 'tokenomics', title: 'Tokenomics & Revenue', icon: '💰' },
   { id: 'analytics', title: 'Analytics', icon: '📊' },
-  { id: 'partners', title: 'Partners', icon: '🤝' },
   { id: 'reports', title: 'Testnet Reports', icon: '📋' },
   { id: 'api-reference', title: 'API Reference', icon: '📡' },
   { id: 'examples', title: 'Examples', icon: '💡' },
@@ -201,6 +199,12 @@ export default function DocsPage() {
             Comprehensive guide to Incrypt Oracle - Everything you need to know about our decentralized oracle infrastructure, 
             prediction markets, smart contracts, and ecosystem.
           </p>
+          <div className="mt-6 inline-block px-4 py-2 bg-yellow-500/20 border border-yellow-500/30 rounded-lg">
+            <p className="text-sm text-yellow-300">
+              🚧 Private beta as of November 18, 2025 — metrics, integrations, and partnerships shown here are testnet simulations
+              and internal targets. No third-party firms have formally audited or endorsed the protocol yet.
+            </p>
+          </div>
         </motion.div>
 
         <div className="flex flex-col lg:flex-row gap-12">
@@ -989,8 +993,8 @@ if (submission.validatorType === ValidatorType.AI && submission.aiMetadata) {
                 <div className="bg-dark-900/50 rounded-lg p-8 mb-8">
                   <div className="flex items-center justify-between mb-6">
                     <h3 className="text-2xl font-bold text-white">Security Audit Report</h3>
-                    <span className="px-4 py-2 bg-green-500/20 text-green-400 text-sm font-semibold rounded-full">
-                      ✅ Passed
+                    <span className="px-4 py-2 bg-yellow-500/20 text-yellow-300 text-sm font-semibold rounded-full">
+                      🟡 Preliminary Review
                     </span>
                   </div>
 
@@ -1000,19 +1004,19 @@ if (submission.validatorType === ValidatorType.AI && submission.aiMetadata) {
                       <div className="space-y-3 text-sm">
                         <div className="flex justify-between">
                           <span className="text-gray-400">Audit Firm:</span>
-                          <span className="text-gray-300 font-medium">CertiK Security</span>
+                          <span className="text-gray-300 font-medium">AI Smart Contract Auditor (Free Audit from beta project)</span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-gray-400">Audit Date:</span>
-                          <span className="text-gray-300">December 2024</span>
+                          <span className="text-gray-300">November 2025</span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-gray-400">Security Score:</span>
-                          <span className="text-green-400 font-bold text-lg">96/100</span>
+                          <span className="text-yellow-400 font-semibold">Pending formal audit</span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-gray-400">Status:</span>
-                          <span className="text-green-400 font-medium">Passed</span>
+                          <span className="text-yellow-400 font-medium">Preliminary automated + manual review</span>
                         </div>
                       </div>
                     </div>
@@ -1022,30 +1026,39 @@ if (submission.validatorType === ValidatorType.AI && submission.aiMetadata) {
                       <div className="space-y-2 text-sm">
                         <div className="flex justify-between">
                           <span className="text-red-400">Critical:</span>
-                          <span className="text-gray-300">0</span>
+                          <span className="text-gray-300">Pending</span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-orange-400">High:</span>
-                          <span className="text-gray-300">0</span>
+                          <span className="text-gray-300">Pending</span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-yellow-400">Medium:</span>
-                          <span className="text-gray-300">0</span>
+                          <span className="text-gray-300">Pending</span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-blue-400">Low:</span>
-                          <span className="text-gray-300">2</span>
+                          <span className="text-gray-300">Pending</span>
                         </div>
                         <div className="flex justify-between">
                           <span className="text-gray-400">Informational:</span>
-                          <span className="text-gray-300">3</span>
+                          <span className="text-gray-300">Pending</span>
                         </div>
                       </div>
                     </div>
                   </div>
 
+                  <div className="bg-dark-800/70 border border-yellow-500/30 rounded-lg p-4 mb-8 text-sm text-gray-300">
+                    <p>
+                      We completed a free beta assessment with AI Smart Contract Auditor and are packaging the
+                      documentation, tests, and contracts to submit for a proper third-party audit from firms such as
+                      CertiK or Halborn as soon as they accept the engagement. We are ready to hand off the codebase,
+                      but Incrypt Oracle has not been audited or endorsed by CertiK, Halborn, or any other external firm yet.
+                    </p>
+                  </div>
+
                   <div>
-                    <h4 className="text-xl font-semibold text-white mb-4">Audit Coverage</h4>
+                    <h4 className="text-xl font-semibold text-white mb-4">Planned Audit Coverage</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       {[
                         'Oracle core logic',
@@ -1770,154 +1783,6 @@ if (submission.validatorType === ValidatorType.AI && submission.aiMetadata) {
               </div>
             </section>
 
-            {/* Partners Section */}
-            <section id="partners" ref={setSectionRef('partners')} className="scroll-mt-24">
-              <div className="card-liquid-glass p-8">
-                <h2 className="text-3xl font-bold text-white mb-6">🤝 Partners</h2>
-                
-                <p className="text-gray-300 mb-8">
-                  Trusted by leading DeFi protocols and blockchain infrastructure providers. 
-                  Join our growing ecosystem of oracle-powered applications.
-                </p>
-
-                <div className="bg-yellow-500/20 border border-yellow-500/30 rounded-lg p-4 mb-8 inline-block">
-                  <p className="text-sm text-yellow-300">
-                    📊 Demo data for now - Real live platform launch TBA
-                  </p>
-                </div>
-
-                {/* Integration Stats */}
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
-                  {[
-                    { metric: '15+', label: 'Active Integrations' },
-                    { metric: '$2.5M+', label: 'Volume Supported' },
-                    { metric: '99.97%', label: 'Uptime SLA' },
-                    { metric: '< 1s', label: 'Response Time' }
-                  ].map((stat, index) => (
-                    <div key={index} className="card-liquid-glass p-6 text-center">
-                      <div className="text-3xl font-bold text-primary-400 mb-2">{stat.metric}</div>
-                      <div className="text-gray-300">{stat.label}</div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Partner Categories */}
-                <div className="space-y-12">
-                  {[
-                    {
-                      category: 'DeFi Protocols',
-                      icon: ChartBarIcon,
-                      description: 'Leading DeFi protocols we utilize',
-                      partners: [
-                        { name: 'PancakeSwap', logo: '/pancakeswap.png', description: 'DEX integration for trading pairs' },
-                        { name: 'Venus Protocol', logo: '/venusprotocol.png', description: 'Lending protocol price feeds' },
-                        { name: 'Alpaca Finance', logo: '/alpaccafinance.png', description: 'Leveraged yield farming oracle' }
-                      ]
-                    },
-                    {
-                      category: 'Infrastructure',
-                      icon: CpuChipIcon,
-                      description: 'Blockchain infrastructure and development tools',
-                      partners: [
-                        { name: 'Binance Smart Chain', logo: '/binancesmartchain.png', description: 'Native blockchain platform' },
-                        { name: 'Chainlink Labs', logo: '/chainlinklabs.png', description: 'Oracle technology collaboration' },
-                        { name: 'The Graph', logo: '/thegraph.png', description: 'Subgraph indexing partnership' }
-                      ]
-                    },
-                    {
-                      category: 'Security & Audits',
-                      icon: ShieldCheckIcon,
-                      description: 'Security firms ensuring platform safety',
-                      partners: [
-                        { name: 'CertiK', logo: '/certik.png', description: 'Smart contract security audits' },
-                        { name: 'Halborn', logo: '/halborn.png', description: 'Penetration testing services' },
-                        { name: 'OpenZeppelin', logo: '/openzepplin.png', description: 'Security framework provider' }
-                      ]
-                    }
-                  ].map((category, categoryIndex) => {
-                    const IconComponent = category.icon;
-                    return (
-                      <div key={categoryIndex} className="space-y-8">
-                        <div className="text-center">
-                          <div className="flex items-center justify-center space-x-3 mb-4">
-                            <div className="p-3 bg-primary-500/20 rounded-lg">
-                              <IconComponent className="w-8 h-8 text-primary-400" />
-                            </div>
-                            <h3 className="text-3xl font-bold text-white">{category.category}</h3>
-                          </div>
-                          <p className="text-gray-300 max-w-2xl mx-auto">{category.description}</p>
-                        </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                          {category.partners.map((partner, index) => (
-                            <div
-                              key={index}
-                              className="card-liquid-glass p-6 text-center hover:scale-105 transition-all duration-300"
-                            >
-                              <div className="w-20 h-20 bg-white/5 rounded-lg mx-auto mb-4 flex items-center justify-center p-3">
-                                <img 
-                                  src={partner.logo} 
-                                  alt={`${partner.name} logo`}
-                                  className="w-full h-full object-contain"
-                                />
-                      </div>
-                              <h4 className="text-xl font-semibold text-white mb-2">{partner.name}</h4>
-                              <p className="text-gray-300 text-sm">{partner.description}</p>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    );
-                  })}
-                    </div>
-
-                {/* Become a Partner CTA */}
-                <div className="mt-16 card-liquid-glass p-12 text-center">
-                  <BuildingOfficeIcon className="w-16 h-16 text-primary-400 mx-auto mb-6" />
-                  <h3 className="text-3xl font-bold text-white mb-4">
-                    Become a Partner
-                  </h3>
-                  <p className="text-gray-300 max-w-2xl mx-auto mb-8">
-                    Join our growing ecosystem and integrate reliable oracle data into your protocol. 
-                    We provide comprehensive support for technical integration and go-to-market strategies.
-                  </p>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    <div>
-                      <h4 className="text-lg font-semibold text-primary-400 mb-2">Technical Support</h4>
-                      <p className="text-sm text-gray-300">
-                        Dedicated developer support, custom integrations, and technical documentation.
-                      </p>
-                    </div>
-                    <div>
-                      <h4 className="text-lg font-semibold text-primary-400 mb-2">Marketing Co-op</h4>
-                      <p className="text-sm text-gray-300">
-                        Joint marketing campaigns, community cross-promotion, and ecosystem growth.
-                      </p>
-                    </div>
-                    <div>
-                      <h4 className="text-lg font-semibold text-primary-400 mb-2">Revenue Sharing</h4>
-                      <p className="text-sm text-gray-300">
-                        Competitive revenue sharing models and long-term partnership benefits.
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                    <a
-                      href="mailto:incryptinvestments@protonmail.com"
-                      className="btn-holographic"
-                    >
-                      Contact Partnerships Team
-                    </a>
-                    <Link href="#api-reference" className="btn-holographic">
-                      Integration Documentation
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </section>
-
             {/* Reports Section */}
             <section id="reports" ref={setSectionRef('reports')} className="scroll-mt-24">
               <div className="card-liquid-glass p-8">
@@ -1944,9 +1809,9 @@ if (submission.validatorType === ValidatorType.AI && submission.aiMetadata) {
                       <div className="text-sm text-primary-400 mt-1">High Coverage</div>
                     </div>
                     <div className="bg-dark-950/50 rounded-lg p-6 text-center">
-                      <div className="text-3xl font-bold text-blue-400 mb-2">96</div>
-                      <div className="text-gray-300">Security Score</div>
-                      <div className="text-sm text-blue-400 mt-1">CertiK Audited</div>
+                      <div className="text-3xl font-bold text-blue-400 mb-2">Beta</div>
+                      <div className="text-gray-300">Security Status</div>
+                      <div className="text-sm text-blue-400 mt-1">AI Smart Contract Auditor review</div>
                       </div>
                     </div>
 
@@ -2309,8 +2174,8 @@ const oracle = new IncryptOracle({
 async function createPredictionMarket() {
   // First, create an oracle data feed
   const feedId = await oracle.createDataFeed(
-    'ELECTION_2024',
-    'US Presidential Election 2024 Winner',
+    'ELECTION_2025',
+    'US Special Election 2025 Winner',
     5 // Validation threshold
   );
   

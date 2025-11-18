@@ -16,7 +16,7 @@ export default function TermsPage() {
             <span className="text-gradient">Terms of Service</span>
           </h1>
           <p className="text-gray-400">
-            Last Updated: January 21, 2025
+            Last Updated: November 18, 2025
           </p>
         </motion.div>
 

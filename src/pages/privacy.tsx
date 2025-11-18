@@ -16,7 +16,7 @@ export default function PrivacyPage() {
             <span className="text-gradient">Privacy Policy</span>
           </h1>
           <p className="text-gray-400">
-            Last Updated: January 21, 2025
+            Last Updated: November 18, 2025
           </p>
         </motion.div>
 
@@ -96,9 +96,9 @@ export default function PrivacyPage() {
             </p>
             <ul className="list-disc list-inside space-y-2 mb-4">
               <li>Encryption of data in transit using HTTPS/SSL</li>
-              <li>Secure smart contract architecture with audited code</li>
+              <li>Secure smart contract architecture reviewed internally and via the AI Smart Contract Auditor beta assessment</li>
               <li>No centralized storage of sensitive user data</li>
-              <li>Regular security audits and penetration testing</li>
+              <li>Regular internal security reviews with external audits and penetration testing planned before public launch</li>
             </ul>
             <p>
               However, please note that blockchain transactions are permanent and publicly visible. Any on-chain activity cannot be deleted or modified.

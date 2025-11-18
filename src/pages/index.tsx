@@ -38,38 +38,38 @@ contract MyContract {
 const features = [
   {
     icon: "⚡",
-    title: "Lightning Fast",
-    description: "Sub-second oracle updates on Binance Smart Chain with minimal gas fees"
+    title: "Low-Latency Design",
+    description: "Engineered for near real-time updates on Binance Smart Chain testnet with minimal gas costs."
   },
   {
     icon: "🔒", 
-    title: "Decentralized Security",
-    description: "Multiple validator nodes ensure data integrity and prevent manipulation"
+    title: "Security-First Architecture",
+    description: "Multiple validator roles, access controls, and slashing logic built on OpenZeppelin libraries."
   },
   {
     icon: "🎯",
     title: "Prediction Markets",
-    description: "Purpose-built for prediction markets with specialized outcome resolution"
+    description: "Purpose-built for prediction markets with specialized outcome resolution."
   },
   {
     icon: "💎",
-    title: "DAO Governed",
-    description: "Community-owned protocol with $IO token holder governance"
+    title: "DAO-Ready Governance",
+    description: "Smart contracts prepared for $IO token voting once the DAO launches publicly."
   },
   {
     icon: "📊",
-    title: "Real-time Data",
-    description: "Live price feeds, sports results, elections, and custom event data"
+    title: "Multi-Domain Feeds",
+    description: "Designed to support crypto, sports, election, and macro data feeds as we expand."
   },
   {
     icon: "🛡️",
-    title: "Battle Tested",
-    description: "Audited smart contracts with proven security track record"
+    title: "Security Review In Progress",
+    description: "Completed AI Smart Contract Auditor beta review and preparing submissions for firms like CertiK or Halborn."
   },
   {
     icon: "🤖",
     title: "AI-Powered",
-    description: "AI validators with automatic API discovery and intelligent reasoning for faster resolutions"
+    description: "AI validator prototypes automatically discover APIs and produce reasoning for faster resolutions."
   }
 ];
 
@@ -101,6 +101,13 @@ export default function HomePage() {
                 on Binance Smart Chain. Blending AI intelligence with human intuition for faster, more accurate resolutions. 
                 Fast, secure, and community-governed.
               </p>
+          <div className="mb-8 inline-flex items-start px-4 py-3 bg-yellow-500/15 border border-yellow-500/30 rounded-lg text-left">
+            <p className="text-sm text-yellow-200">
+              🚧 Pre-launch update (November 18, 2025): Incrypt Oracle is still in private beta. Metrics, partner logos,
+              and integrations showcased across the site are demo/testnet representations. No external firms such as CertiK or
+              Halborn have completed an audit yet.
+            </p>
+          </div>
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <Link href="/docs" className="btn-holographic text-center">

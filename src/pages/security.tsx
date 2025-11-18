@@ -64,17 +64,20 @@ const securityFeatures = [
 ];
 
 const auditInfo = {
-  firm: 'CertiK Security',
-  date: 'December 2024',
-  score: 96,
-  maxScore: 100,
-  status: 'Passed',
+  firm: 'AI Smart Contract Auditor (Free beta review)',
+  date: 'November 2025',
+  scoreLabel: 'Pending formal audit',
+  status: 'Preliminary Review',
+  summary:
+    'We completed a free automated + manual beta assessment and are packaging the deliverables for a formal review.',
+  readiness:
+    'Ready to submit for full audits from CertiK or Halborn — not yet audited by those firms.',
   issues: {
-    critical: 0,
-    high: 0,
-    medium: 0,
-    low: 2,
-    informational: 3
+    critical: 'Pending',
+    high: 'Pending',
+    medium: 'Pending',
+    low: 'Pending',
+    informational: 'Pending'
   },
   coverage: [
     'Oracle core logic',
@@ -181,8 +184,8 @@ export default function SecurityPage() {
         >
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-3xl font-bold text-white">Security Audit Report</h2>
-            <span className="px-4 py-2 bg-green-500/20 text-green-400 text-sm font-semibold rounded-full">
-              ✅ {auditInfo.status}
+            <span className="px-4 py-2 bg-yellow-500/20 text-yellow-300 text-sm font-semibold rounded-full">
+              🟡 {auditInfo.status}
             </span>
           </div>
 
@@ -200,11 +203,11 @@ export default function SecurityPage() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">Security Score:</span>
-                  <span className="text-green-400 font-bold text-lg">{auditInfo.score}/{auditInfo.maxScore}</span>
+                  <span className="text-yellow-400 font-semibold">{auditInfo.scoreLabel}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">Status:</span>
-                  <span className="text-green-400 font-medium">Passed</span>
+                  <span className="text-yellow-400 font-medium">{auditInfo.status}</span>
                 </div>
               </div>
             </div>
@@ -236,6 +239,11 @@ export default function SecurityPage() {
             </div>
           </div>
 
+          <div className="bg-dark-800/70 border border-yellow-500/30 rounded-lg p-4 mb-8 text-sm text-gray-300">
+            <p className="mb-2">{auditInfo.summary}</p>
+            <p>{auditInfo.readiness}</p>
+          </div>
+
           <div>
             <h3 className="text-xl font-semibold text-white mb-4">Audit Coverage</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -249,16 +257,18 @@ export default function SecurityPage() {
           </div>
 
           <div className="mt-8 bg-blue-500/10 border border-blue-500/20 rounded-lg p-6">
-            <h4 className="text-blue-400 font-semibold mb-3">📄 Full Audit Report</h4>
+            <h4 className="text-blue-400 font-semibold mb-3">📄 Audit Status</h4>
             <p className="text-sm text-gray-300 mb-4">
-              The complete security audit report is available for review. All identified issues have been addressed.
+              We will publish the full audit package once an independent firm such as CertiK or Halborn completes its
+              review. Until then, only the beta summary from AI Smart Contract Auditor is available internally.
             </p>
-            <a
-              href="#"
-              className="text-primary-400 hover:text-primary-300 text-sm font-medium"
-            >
-              Download Full Audit Report (PDF) →
-            </a>
+            <p className="text-sm text-gray-400">
+              Need advance notice when the formal audit report is live? Email us at{' '}
+              <a href="mailto:incryptinvestments@protonmail.com" className="text-primary-400 hover:text-primary-300">
+                incryptinvestments@protonmail.com
+              </a>{' '}
+              and we will notify you after submission.
+            </p>
           </div>
         </motion.div>
 

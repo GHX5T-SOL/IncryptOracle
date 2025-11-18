@@ -68,30 +68,32 @@ const testResults = {
   deployment: {
     network: 'BSC Testnet',
     chainId: 97,
-    blockNumber: 34567890,
+    blockNumber: 35234567,
     gasPrice: '5 gwei',
     deployer: '0x1234567890123456789012345678901234567890',
     totalGasUsed: 12567890,
     totalCost: '0.0628 BNB',
-    timestamp: '2024-01-15T10:30:00Z'
+    timestamp: '2025-11-10T10:30:00Z'
   },
   security: {
     audit: {
-      firm: 'CertiK',
-      date: '2024-01-10',
-      score: 96,
+      firm: 'AI Smart Contract Auditor (Free beta review)',
+      date: '2025-11-05',
+      status: 'Preliminary Review',
+      scoreLabel: 'Pending formal audit',
+      readiness: 'Ready to submit to CertiK or Halborn; not yet audited by those firms.',
       issues: {
-        critical: 0,
-        high: 0,
-        medium: 2,
-        low: 5,
-        informational: 8
+        critical: 'Pending',
+        high: 'Pending',
+        medium: 'Pending',
+        low: 'Pending',
+        informational: 'Pending'
       }
     },
     slither: {
-      issues: 3,
-      warnings: 7,
-      optimizations: 12
+      issues: 'Pending',
+      warnings: 'Pending',
+      optimizations: 'Pending'
     }
   }
 };
@@ -208,7 +210,7 @@ export default function ReportsPage() {
             {/* Overview Section */}
             {activeSection === 'overview' && (
               <div className="space-y-8">
-                <div className="card-liquid-glass p-8">
+                    <div className="card-liquid-glass p-8">
                   <h2 className="text-3xl font-bold text-white mb-6">Deployment Overview</h2>
                   
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -223,9 +225,9 @@ export default function ReportsPage() {
                       <div className="text-sm text-primary-400 mt-1">High Coverage</div>
                     </div>
                     <div className="bg-dark-900/50 rounded-lg p-6 text-center">
-                      <div className="text-3xl font-bold text-blue-400 mb-2">96</div>
-                      <div className="text-gray-300">Security Score</div>
-                      <div className="text-sm text-blue-400 mt-1">CertiK Audited</div>
+                      <div className="text-3xl font-bold text-blue-400 mb-2">Beta</div>
+                      <div className="text-gray-300">Security Status</div>
+                      <div className="text-sm text-blue-400 mt-1">AI Smart Contract Auditor review</div>
                     </div>
                   </div>
 
@@ -416,15 +418,15 @@ npm run test:coverage`}</code>
             {activeSection === 'security' && (
               <div className="space-y-8">
                 <div className="card-liquid-glass p-8">
-                  <h2 className="text-3xl font-bold text-white mb-6">Security Audit Report</h2>
+                  <h2 className="text-3xl font-bold text-white mb-6">Security Audit Status</h2>
                   
                   <div className="space-y-6">
                     <div className="bg-dark-900/50 rounded-lg p-6">
                       <div className="flex items-center justify-between mb-4">
-                        <h3 className="text-xl font-semibold text-white">CertiK Security Audit</h3>
+                        <h3 className="text-xl font-semibold text-white">{testResults.security.audit.firm}</h3>
                         <div className="flex items-center space-x-2">
-                          <CheckCircleIcon className="w-6 h-6 text-green-400" />
-                          <span className="text-xl font-bold text-green-400">96/100</span>
+                          <ExclamationTriangleIcon className="w-6 h-6 text-yellow-400" />
+                          <span className="text-xl font-bold text-yellow-400">{testResults.security.audit.scoreLabel}</span>
                         </div>
                       </div>
 
@@ -451,8 +453,15 @@ npm run test:coverage`}</code>
                         </div>
                       </div>
 
+                      <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-4 mb-4 text-sm text-gray-300">
+                        <p className="mb-2">
+                          Status: {testResults.security.audit.status} (completed {testResults.security.audit.date}). This was a free beta review.
+                        </p>
+                        <p>{testResults.security.audit.readiness}</p>
+                      </div>
+
                       <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-4">
-                        <h4 className="text-green-400 font-semibold mb-2">✅ Key Security Features</h4>
+                        <h4 className="text-green-400 font-semibold mb-2">✅ Key Security Features Implemented</h4>
                         <ul className="text-sm text-gray-300 space-y-1">
                           <li>• Comprehensive access controls with OpenZeppelin</li>
                           <li>• Reentrancy protection on all state-changing functions</li>
@@ -482,14 +491,13 @@ npm run test:coverage`}</code>
                       
                       <div className="bg-dark-950 rounded p-4">
                         <pre className="text-gray-300 text-sm overflow-x-auto">
-                          <code>{`# Run Slither analysis
+                          <code>{`# Slither analysis scheduled for formal audit window
+# Command (to be executed prior to submission):
 slither contracts/
 
-# Results summary:
-- No critical or high severity issues found
-- 3 medium severity issues (addressed)
-- 7 warnings (documented and acceptable)
-- 12 optimization suggestions (implemented)`}</code>
+# Status:
+- Pending run while we prepare the official audit package
+- Results will be published with the CertiK/Halborn submission`}</code>
                         </pre>
                       </div>
                     </div>

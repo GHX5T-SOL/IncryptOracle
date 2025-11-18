@@ -23,13 +23,13 @@ const mockData = {
     totalStaked: 850000
   },
   volumeData: [
-    { date: '2024-01-08', volume: 180000 },
-    { date: '2024-01-09', volume: 220000 },
-    { date: '2024-01-10', volume: 195000 },
-    { date: '2024-01-11', volume: 245000 },
-    { date: '2024-01-12', volume: 310000 },
-    { date: '2024-01-13', volume: 285000 },
-    { date: '2024-01-14', volume: 350000 }
+    { date: '2025-10-26', volume: 125000 },
+    { date: '2025-10-27', volume: 171000 },
+    { date: '2025-10-28', volume: 198500 },
+    { date: '2025-10-29', volume: 223000 },
+    { date: '2025-10-30', volume: 247500 },
+    { date: '2025-10-31', volume: 265000 },
+    { date: '2025-11-01', volume: 289000 }
   ],
   marketCategories: [
     { name: 'Crypto', value: 45, color: '#ffb500' },
@@ -39,10 +39,10 @@ const mockData = {
     { name: 'Technology', value: 5, color: '#f59e0b' }
   ],
   userGrowth: [
-    { month: 'Oct', users: 1200 },
-    { month: 'Nov', users: 2100 },
-    { month: 'Dec', users: 3800 },
-    { month: 'Jan', users: 5247 }
+    { month: 'Oct 2025', users: 1200 },
+    { month: 'Early Nov 2025', users: 2100 },
+    { month: 'Mid Nov 2025', users: 3800 },
+    { month: 'Nov 18, 2025', users: 5247 }
   ],
   oracleMetrics: [
     { time: '00:00', uptime: 100, latency: 1.2 },
@@ -53,11 +53,11 @@ const mockData = {
     { time: '20:00', uptime: 100, latency: 1.3 }
   ],
   topMarkets: [
-    { question: 'Will Bitcoin reach $100k in 2024?', volume: 450000, traders: 1247 },
-    { question: 'US Election Winner 2024?', volume: 320000, traders: 892 },
-    { question: 'ETH price above $5k in 2024?', volume: 280000, traders: 743 },
-    { question: 'Fed rate cut in Q1 2024?', volume: 190000, traders: 567 },
-    { question: 'SpaceX Mars mission success?', volume: 150000, traders: 445 }
+    { question: 'Will Bitcoin close above $90k before November 30, 2025?', volume: 450000, traders: 1247 },
+    { question: 'Will ETH staking deposits reach 32M ETH by November 18, 2025?', volume: 320000, traders: 892 },
+    { question: 'Will BNB Chain gas fees average below 3 gwei during November 2025?', volume: 280000, traders: 743 },
+    { question: 'Will the Fed announce an additional rate cut in November 2025?', volume: 190000, traders: 567 },
+    { question: 'Will Solana daily TPS average stay above 2,500 this November?', volume: 150000, traders: 445 }
   ]
 };
 
