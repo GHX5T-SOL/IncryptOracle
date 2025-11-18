@@ -786,15 +786,15 @@ if (submission.validatorType === ValidatorType.AI && submission.aiMetadata) {
                         </div>
                         <div className="mb-4">
                           <div className="text-xs text-gray-400 mb-1">Contract Address (BSC Testnet):</div>
-                          <div className="flex items-center space-x-2">
-                            <code className="text-xs text-primary-300 bg-dark-950 px-2 py-1 rounded font-mono">
+                        <div className="flex flex-wrap items-center gap-2">
+                            <code className="text-xs text-primary-300 bg-dark-950 px-2 py-1 rounded font-mono break-all select-text">
                               {template.address}
                             </code>
                             <a
                               href={`https://testnet.bscscan.com/address/${template.address}`}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="text-blue-400 hover:text-blue-300 text-xs"
+                              className="inline-flex items-center text-blue-400 hover:text-blue-300 text-xs"
                             >
                               View on BSCScan →
                             </a>
@@ -954,8 +954,8 @@ if (submission.validatorType === ValidatorType.AI && submission.aiMetadata) {
                           
                           <div className="mb-3">
                             <div className="text-xs text-gray-400 mb-1">Contract Address (BSC Testnet):</div>
-                            <div className="flex items-center space-x-2">
-                              <code className="text-xs text-primary-300 bg-dark-950 px-2 py-1 rounded font-mono">
+                            <div className="flex flex-wrap items-center gap-2">
+                              <code className="text-xs text-primary-300 bg-dark-950 px-2 py-1 rounded font-mono break-all select-text">
                                 {contract.address}
                               </code>
                               {contract.address !== 'TBD' && (
@@ -963,7 +963,7 @@ if (submission.validatorType === ValidatorType.AI && submission.aiMetadata) {
                                 href={`https://testnet.bscscan.com/address/${contract.address}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="text-blue-400 hover:text-blue-300 text-xs"
+                                className="inline-flex items-center text-blue-400 hover:text-blue-300 text-xs"
                               >
                                   View on BSCScan →
                               </a>
