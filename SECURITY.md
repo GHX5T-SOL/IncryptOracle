@@ -30,7 +30,7 @@ This information will help us triage your report more quickly.
 
 ### Smart Contract Security
 
-- **Audited Contracts**: All smart contracts audited by CertiK
+- **Security Review Status**: Completed a free beta assessment with AI Smart Contract Auditor (November 2025). Preparing submission packages for third-party security firms such as CertiK or Halborn. No independent security firm has published an audit or endorsement yet.
 - **OpenZeppelin**: Using battle-tested OpenZeppelin libraries
 - **Access Controls**: Comprehensive permission system with role-based access
 - **Reentrancy Protection**: Guards against reentrancy attacks
@@ -78,23 +78,22 @@ This information will help us triage your report more quickly.
 
 ## Security Audit Reports
 
-### CertiK Audit (January 2024)
+### Current Security Review Status (November 2025)
 
-- **Overall Score**: 96/100
-- **Critical Issues**: 0
-- **High Issues**: 0
-- **Medium Issues**: 2 (resolved)
-- **Low Issues**: 5 (resolved)
-- **Informational**: 8 (addressed)
+- **Beta Assessment**: Completed a free beta assessment with AI Smart Contract Auditor (Free Audit from beta project)
+- **Assessment Date**: November 2025
+- **Status**: Preparing submission packages for third-party security firms such as CertiK or Halborn
+- **Third-Party Audits**: No independent security firm has published an audit or endorsement yet
 
-**Download**: [CertiK_Incrypt_Oracle_Audit_Report.pdf](#)
+We are ready to submit the codebase for formal third-party audits, but Incrypt Oracle has not been audited or endorsed by CertiK, Halborn, or any other external firm yet.
 
-### Slither Static Analysis
+### Internal Security Measures
 
-- **High Severity**: 0 issues
-- **Medium Severity**: 3 issues (resolved)
-- **Low Severity**: 7 warnings (documented)
-- **Optimizations**: 12 suggestions (implemented)
+- **OpenZeppelin Libraries**: All security-critical functionality uses battle-tested OpenZeppelin libraries
+- **Comprehensive Testing**: 121+ tests with 88%+ code coverage across all contracts
+- **Formal Verification Ready**: Core consensus and AMM functions isolated and verifiable
+- **Fuzzing Ready**: Contracts designed with property-based testing in mind
+- **Gas Optimization**: Efficient code reduces attack surface and deployment costs
 
 ## Bug Bounty Program
 

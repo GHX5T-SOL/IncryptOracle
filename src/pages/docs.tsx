@@ -261,34 +261,58 @@ export default function DocsPage() {
                 </p>
 
                 <h3 className="text-xl font-semibold text-white mt-8 mb-4">What Makes Incrypt Oracle Different?</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="bg-dark-900/50 rounded-lg p-4">
-                    <h4 className="text-lg font-semibold text-primary-400 mb-2">⚡ Optimistic Resolution</h4>
-                    <p className="text-sm text-gray-300">
-                      Resolve markets in 1-4 hours instead of 24-48 hours through optimistic resolution with a 4-hour 
-                      dispute window. Requires ≥50% validator agreement vs 100% for full consensus.
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                  <div className="bg-gradient-to-br from-primary-500/20 to-primary-600/10 border border-primary-500/30 rounded-lg p-4">
+                    <h4 className="text-lg font-semibold text-primary-400 mb-2">⚡ Industry-Leading Resolution Speed</h4>
+                    <p className="text-sm text-gray-300 mb-2">
+                      <strong>4-Hour Optimistic Resolution</strong>: Markets resolve in 1-4 hours with a 4-hour dispute window, 
+                      compared to industry standards of 24-48 hours (UMA) or 12+ hours (Polymarket).
+                    </p>
+                    <p className="text-xs text-primary-300">
+                      Requires only ≥50% validator agreement vs 100% for full consensus. Result: 6-12x faster than traditional oracle systems.
                     </p>
                   </div>
-                  <div className="bg-dark-900/50 rounded-lg p-4">
-                    <h4 className="text-lg font-semibold text-primary-400 mb-2">🎯 Reputation-Weighted Consensus</h4>
-                    <p className="text-sm text-gray-300">
-                      Validators build reputation over time. More accurate validators have higher weight in consensus 
-                      calculations, creating natural incentives for quality.
+                  <div className="bg-gradient-to-br from-purple-500/20 to-purple-600/10 border border-purple-500/30 rounded-lg p-4">
+                    <h4 className="text-lg font-semibold text-purple-400 mb-2">🤖 Revolutionary AI Validator Network</h4>
+                    <p className="text-sm text-gray-300 mb-2">
+                      <strong>Automatic API Discovery</strong>: AI validators automatically discover 10+ relevant APIs for any 
+                      prediction market question without manual curation.
+                    </p>
+                    <p className="text-xs text-purple-300">
+                      Uses Hugging Face models (Meta-Llama-3-8B-Instruct) for intelligent analysis. 24/7 availability with transparent on-chain reasoning.
                     </p>
                   </div>
-                  <div className="bg-dark-900/50 rounded-lg p-4">
-                    <h4 className="text-lg font-semibold text-primary-400 mb-2">💰 Revenue Model</h4>
-                    <p className="text-sm text-gray-300">
-                      Sustainable revenue through trading fees (2%), API subscriptions (tiered pricing), and market 
-                      creation fees. 50/50 split to holders and treasury.
+                  <div className="bg-gradient-to-br from-green-500/20 to-green-600/10 border border-green-500/30 rounded-lg p-4">
+                    <h4 className="text-lg font-semibold text-green-400 mb-2">✅ Production-Ready Deployment</h4>
+                    <p className="text-sm text-gray-300 mb-2">
+                      <strong>BSC Testnet Deployment</strong>: All core contracts deployed and verified on Binance Smart Chain Testnet.
+                    </p>
+                    <p className="text-xs text-green-300">
+                      All smart contracts verified on BSCScan. Active validators, data feeds, and markets running on testnet. Mainnet ready.
                     </p>
                   </div>
-                  <div className="bg-dark-900/50 rounded-lg p-4">
-                    <h4 className="text-lg font-semibold text-primary-400 mb-2">🛡️ Advanced Security</h4>
-                    <p className="text-sm text-gray-300">
-                      Division-by-zero protection, input validation, slashing mechanism, reentrancy guards, and 
-                      comprehensive test coverage (88%+).
+                  <div className="bg-gradient-to-br from-yellow-500/20 to-yellow-600/10 border border-yellow-500/30 rounded-lg p-4">
+                    <h4 className="text-lg font-semibold text-yellow-400 mb-2">💰 Sustainable Revenue Model</h4>
+                    <p className="text-sm text-gray-300 mb-2">
+                      <strong>Multiple Revenue Streams</strong>: Trading fees (2%), API subscriptions (tiered pricing), and market creation fees.
                     </p>
+                    <p className="text-xs text-yellow-300">
+                      50/50 revenue split between token holders (stakers) and treasury for long-term sustainability.
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="bg-dark-900/50 rounded-lg p-4 mt-4">
+                  <h4 className="text-lg font-semibold text-white mb-3">🎯 Additional Key Features</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div className="flex items-start space-x-2">
+                      <span className="text-primary-400 mt-1">•</span>
+                      <span className="text-sm text-gray-300"><strong>Reputation-Weighted Consensus</strong> - Validators build reputation over time, with more accurate validators having higher weight in consensus calculations</span>
+                    </div>
+                    <div className="flex items-start space-x-2">
+                      <span className="text-primary-400 mt-1">•</span>
+                      <span className="text-sm text-gray-300"><strong>Advanced Security</strong> - Division-by-zero protection, input validation, slashing mechanism, reentrancy guards, and comprehensive test coverage (88%+)</span>
+                    </div>
                   </div>
                 </div>
 
