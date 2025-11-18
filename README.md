@@ -10,7 +10,9 @@
   <img src="https://i.ibb.co/TBDNZrwv/favicon.png" alt="Incrypt Oracle Logo" width="120" height="120" />
 </div>
 
-**Incrypt Oracle** is a sophisticated, production-grade decentralized oracle infrastructure built on Binance Smart Chain (BSC) specifically architected for prediction markets. The platform leverages a hybrid AI-human validator network with automatic API discovery, reputation-weighted consensus, optimistic resolution with rapid dispute windows, and a comprehensive revenue model. The system features revolutionary AI-powered validators that use Hugging Face models to automatically discover data sources and provide intelligent reasoning, working seamlessly with human validators for faster, more accurate resolutions. The entire system is powered by the native $IO token, which serves dual purposes as both a governance mechanism and a staking/validation requirement for network participants.
+**Incrypt Oracle** is a pre-launch decentralized oracle infrastructure currently in private beta on Binance Smart Chain (BSC) and purpose-built for prediction markets. The platform leverages a hybrid AI-human validator network with automatic API discovery, reputation-weighted consensus, optimistic resolution with rapid dispute windows, and a comprehensive revenue model. The system features AI-powered validators that use Hugging Face models to automatically discover data sources and provide intelligent reasoning, working alongside human validators for faster, more transparent resolutions. The entire system is powered by the native $IO token, which serves dual purposes as both a governance mechanism and a staking/validation requirement for network participants.
+
+> 🚧 **Private beta notice (November 18, 2025):** Incrypt Oracle is still in private beta on BSC Testnet. Metrics, integrations, partner logos, and revenue figures referenced in this README are internal targets or testnet simulations. The codebase has completed a free beta assessment with AI Smart Contract Auditor, but no third-party firms such as CertiK or Halborn have formally audited or endorsed the project yet.
 
 ## 📑 Table of Contents
 
@@ -1306,8 +1308,11 @@ test/
 - **Formal Verification**: Core consensus and AMM functions isolated and verifiable
 - **Fuzzing Ready**: Contracts designed with property-based testing in mind
 - **Gas Optimization**: Efficient code reduces attack surface and deployment costs
+- **Current Status (Nov 18, 2025)**: Completed a free beta assessment with AI Smart Contract Auditor and preparing submission packages for firms like CertiK or Halborn. No independent security firm has published an audit or endorsement yet.
 
 ### Live Metrics & Performance
+
+> ℹ️ These metrics reflect internal BSC Testnet simulations during the private beta as of November 18, 2025. They are not production or mainnet usage figures.
 
 **Network Performance:**
 - **Oracle Uptime**: 99.97% (monitored via health check endpoints)
@@ -1927,7 +1932,7 @@ This software is provided "as is" without warranty of any kind, express or impli
 - **Outcome Uncertainty**: Prediction markets involve speculation on future events; outcomes are not guaranteed
 - **Liquidity Risk**: Markets may have low liquidity, affecting ability to buy/sell shares
 - **Oracle Risk**: Market resolution depends on oracle data accuracy and availability
-- **Smart Contract Risk**: While audited, smart contracts may contain bugs or vulnerabilities
+- **Smart Contract Risk**: Despite extensive internal testing and the AI Smart Contract Auditor beta review, the contracts have not yet undergone an external third-party audit and may contain bugs or vulnerabilities
 - **Regulatory Risk**: Prediction markets may be regulated or prohibited in some jurisdictions
 
 **Token & Economic Risks:**
