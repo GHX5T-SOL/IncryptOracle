@@ -136,6 +136,20 @@ const sections = [
   { id: 'contributing', title: 'Contributing', icon: '🤝' }
 ];
 
+const DEPLOYED_CONTRACTS = {
+  ioToken: '0x40147E5600b107Dd48001Ec6034A8385aE3747E7',
+  incryptOracle: '0x35f86a92C903873dFB33fE7EF04CA0e4f93Ba0a7',
+  predictionMarket: '0x4448dE2d0Aab5129c92198fCbc55502dAEaA5096',
+  dao: '0xa900e5f7074cf9C002217AbfE97c289dB1526825',
+  revenueDistributor: '0x5e69123b5591C16e236Ec1d508dc338168e80De6',
+  timelock: '0x566Ca3ed6857e25DEff8b9319F0fc8141BD69219',
+  oracleSubscription: '0xfAA6F894ce67c1e6f101341E4330e648b649c676',
+  cryptoPriceOracle: '0x7c7A94F460d13004db170fd11cC11Ec01f14108f',
+  sportsOracle: '0x151c35c569605C752B1F765d9f12fc209c9026a8',
+  weatherOracle: '0x5bE075Cd0EF40B83B6F45caCC5A3fE548F571970',
+  electionOracle: '0x1516901e599F2E5cE03869473272eFa98638c2d0'
+};
+
 export default function DocsPage() {
   const [activeSection, setActiveSection] = useState('introduction');
   const [activeTab, setActiveTab] = useState('javascript');
@@ -711,6 +725,93 @@ if (submission.validatorType === ValidatorType.AI && submission.aiMetadata) {
                     </div>
                   </div>
                 </div>
+
+                <div className="mt-12 space-y-6">
+                  <h3 className="text-2xl font-bold text-white">Specialized Oracle Templates</h3>
+                  <p className="text-gray-300">
+                    Dedicated oracle wrappers for high-value market categories. Each template is deployed, verified on BscScan,
+                    and wired into the core `IncryptOracle` contract to provide category-specific data models, rate limits, and validation heuristics.
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    {[
+                      {
+                        name: 'CryptoPriceOracle.sol',
+                        address: DEPLOYED_CONTRACTS.cryptoPriceOracle,
+                        description: '60-second crypto price feeds with automatic validator rotation and exchange failover.',
+                        features: [
+                          'Tracks BTC/USD, ETH/USD, BNB/USD pairs with 4-hour optimistic resolution',
+                          'Ensures minimum update interval enforcement per feed',
+                          'AI validator metadata embedded for each submission',
+                          'Seamless feed creation APIs for new pairs'
+                        ]
+                      },
+                      {
+                        name: 'SportsOracle.sol',
+                        address: DEPLOYED_CONTRACTS.sportsOracle,
+                        description: 'Sports event oracle optimized for instant post-game resolution.',
+                        features: [
+                          'Supports leagues like NFL, NBA, UEFA with automated question formatting',
+                          'Encodes scores for both teams in a single uint256 for fast settlement',
+                          'Event lifecycle states (Scheduled → Live → Completed)',
+                          'Validator gating to prevent stale submissions'
+                        ]
+                      },
+                      {
+                        name: 'WeatherOracle.sol',
+                        address: DEPLOYED_CONTRACTS.weatherOracle,
+                        description: 'Weather metrics oracle powering insurance and catastrophe prediction markets.',
+                        features: [
+                          'Tracks Temperature, Rainfall, Wind, Humidity, Extreme Events',
+                          'Location-scoped feeds with rate-limited updates',
+                          'Numeric encoding (value * 100) to avoid floating point',
+                          'On-chain helper utilities for string/metric conversions'
+                        ]
+                      },
+                      {
+                        name: 'ElectionOracle.sol',
+                        address: DEPLOYED_CONTRACTS.electionOracle,
+                        description: 'Election results oracle aligned with official election authority announcements.',
+                        features: [
+                          'Supports multi-candidate races with winner index encoding',
+                          'High-threshold validation requirements for sensitive feeds',
+                          'Tracks official result timestamps and audit trail',
+                          'Future-proofed for run-offs and recount workflows'
+                        ]
+                      }
+                    ].map((template) => (
+                      <div key={template.name} className="bg-dark-900/50 rounded-lg p-6">
+                        <div className="mb-4">
+                          <h4 className="text-xl font-semibold text-primary-400">{template.name}</h4>
+                          <p className="text-gray-300 text-sm">{template.description}</p>
+                        </div>
+                        <div className="mb-4">
+                          <div className="text-xs text-gray-400 mb-1">Contract Address (BSC Testnet):</div>
+                          <div className="flex items-center space-x-2">
+                            <code className="text-xs text-primary-300 bg-dark-950 px-2 py-1 rounded font-mono">
+                              {template.address}
+                            </code>
+                            <a
+                              href={`https://testnet.bscscan.com/address/${template.address}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-blue-400 hover:text-blue-300 text-xs"
+                            >
+                              View on BSCScan →
+                            </a>
+                          </div>
+                        </div>
+                        <div className="space-y-2">
+                          {template.features.map((feature) => (
+                            <div key={feature} className="flex items-start space-x-2 text-xs">
+                              <span className="text-primary-400 mt-0.5">•</span>
+                              <span className="text-gray-300">{feature}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             </section>
 
@@ -729,7 +830,7 @@ if (submission.validatorType === ValidatorType.AI && submission.aiMetadata) {
                       {[
                         {
                           name: 'IncryptOracle.sol',
-                      address: '0x5550966c0ECfe8764E2f29EB2C9F87D9CE112cBC',
+                      address: DEPLOYED_CONTRACTS.incryptOracle,
                       description: 'Core oracle contract managing validators and data feeds with reputation-weighted consensus',
                       keyFeatures: [
                         'Reputation-weighted consensus mechanism',
@@ -752,7 +853,7 @@ if (submission.validatorType === ValidatorType.AI && submission.aiMetadata) {
                         },
                         {
                           name: 'PredictionMarket.sol',
-                      address: '0x4B72566EedF3c4b25b6669B33a2F8D3E2F4D2530',
+                      address: DEPLOYED_CONTRACTS.predictionMarket,
                       description: 'AMM-based prediction market with oracle integration and private market support',
                       keyFeatures: [
                         'Constant Product Market Maker (CPMM) model',
@@ -775,7 +876,7 @@ if (submission.validatorType === ValidatorType.AI && submission.aiMetadata) {
                         },
                         {
                           name: 'IOToken.sol',
-                      address: '0x9f2E2E0786E637cc0a11Acb9A3C4203b76089185',
+                      address: DEPLOYED_CONTRACTS.ioToken,
                       description: 'ERC20 governance token with ERC20Votes extension for DAO voting',
                       keyFeatures: [
                         'ERC20Votes extension for delegation',
@@ -791,9 +892,9 @@ if (submission.validatorType === ValidatorType.AI && submission.aiMetadata) {
                       events: ['Transfer', 'Approval', 'DelegateChanged', 'DelegateVotesChanged'],
                       security: 'OpenZeppelin ERC20, ERC20Votes standard implementation'
                     },
-                    {
-                      name: 'RevenueDistributor.sol',
-                      address: '0x0b34455cD2e3A80322d0bb6bA27e68211B86e4b1',
+                        {
+                          name: 'RevenueDistributor.sol',
+                      address: DEPLOYED_CONTRACTS.revenueDistributor,
                       description: 'Automated fee distribution with 50/50 split to stakers and treasury',
                       keyFeatures: [
                         '50/50 revenue split (holders/treasury)',
@@ -812,7 +913,7 @@ if (submission.validatorType === ValidatorType.AI && submission.aiMetadata) {
                         },
                         {
                           name: 'IncryptDAO.sol',
-                      address: '0xa254D432E9B1e4907980f52b42Ba2Dd754Ca78dd',
+                      address: DEPLOYED_CONTRACTS.dao,
                       description: 'OpenZeppelin Governor for community governance with timelock integration',
                       keyFeatures: [
                         'Proposal submission and voting',
@@ -827,9 +928,9 @@ if (submission.validatorType === ValidatorType.AI && submission.aiMetadata) {
                       events: ['ProposalCreated', 'VoteCast', 'ProposalExecuted'],
                       security: 'OpenZeppelin Governor, TimelockController integration'
                     },
-                    {
-                      name: 'OracleSubscription.sol',
-                      address: '0x43299C4C889442d50914f4D133522565feC8e51f',
+                        {
+                          name: 'OracleSubscription.sol',
+                      address: DEPLOYED_CONTRACTS.oracleSubscription,
                       description: 'Tiered subscription service for oracle API access with rate limiting',
                       keyFeatures: [
                         'Three subscription tiers (Free, Basic, Premium)',
@@ -1844,12 +1945,16 @@ if (submission.validatorType === ValidatorType.AI && submission.aiMetadata) {
                     <h4 className="text-xl font-semibold text-white mb-4">Deployed Contracts (BSC Testnet)</h4>
                     <div className="space-y-3">
                       {[
-                        { contract: 'IOToken', address: '0x9f2E2E0786E637cc0a11Acb9A3C4203b76089185' },
-                        { contract: 'IncryptOracle', address: '0x5550966c0ECfe8764E2f29EB2C9F87D9CE112cBC' },
-                        { contract: 'PredictionMarket', address: '0x4B72566EedF3c4b25b6669B33a2F8D3E2F4D2530' },
-                        { contract: 'IncryptDAO', address: '0xa254D432E9B1e4907980f52b42Ba2Dd754Ca78dd' },
-                        { contract: 'RevenueDistributor', address: '0x0b34455cD2e3A80322d0bb6bA27e68211B86e4b1' },
-                        { contract: 'OracleSubscription', address: '0x43299C4C889442d50914f4D133522565feC8e51f' }
+                        { contract: 'IOToken', address: DEPLOYED_CONTRACTS.ioToken },
+                        { contract: 'IncryptOracle', address: DEPLOYED_CONTRACTS.incryptOracle },
+                        { contract: 'PredictionMarket', address: DEPLOYED_CONTRACTS.predictionMarket },
+                        { contract: 'IncryptDAO', address: DEPLOYED_CONTRACTS.dao },
+                        { contract: 'RevenueDistributor', address: DEPLOYED_CONTRACTS.revenueDistributor },
+                        { contract: 'OracleSubscription', address: DEPLOYED_CONTRACTS.oracleSubscription },
+                        { contract: 'CryptoPriceOracle', address: DEPLOYED_CONTRACTS.cryptoPriceOracle },
+                        { contract: 'SportsOracle', address: DEPLOYED_CONTRACTS.sportsOracle },
+                        { contract: 'WeatherOracle', address: DEPLOYED_CONTRACTS.weatherOracle },
+                        { contract: 'ElectionOracle', address: DEPLOYED_CONTRACTS.electionOracle }
                       ].map((item, index) => (
                         <div key={index} className="flex flex-col sm:flex-row sm:justify-between sm:items-center bg-dark-950/50 rounded-lg p-4 gap-2 transition-all duration-200 hover:bg-dark-950/70">
                           <span className="text-white font-medium">{item.contract}</span>
@@ -2524,12 +2629,17 @@ async function createPredictionMarket() {
                       <h4 className="text-lg font-semibold text-white mb-4">Contract Addresses</h4>
                       <div className="space-y-3">
                         {[
-                          { name: 'IO Token', address: '0x9f2E2E0786E637cc0a11Acb9A3C4203b76089185' },
-                          { name: 'Incrypt Oracle', address: '0x5550966c0ECfe8764E2f29EB2C9F87D9CE112cBC' },
-                          { name: 'Prediction Market', address: '0x4B72566EedF3c4b25b6669B33a2F8D3E2F4D2530' },
-                          { name: 'Incrypt DAO', address: '0xa254D432E9B1e4907980f52b42Ba2Dd754Ca78dd' },
-                          { name: 'Revenue Distributor', address: '0x0b34455cD2e3A80322d0bb6bA27e68211B86e4b1' },
-                          { name: 'Oracle Subscription', address: '0x43299C4C889442d50914f4D133522565feC8e51f' }
+                          { name: 'IO Token', address: DEPLOYED_CONTRACTS.ioToken },
+                          { name: 'Incrypt Oracle', address: DEPLOYED_CONTRACTS.incryptOracle },
+                          { name: 'Prediction Market', address: DEPLOYED_CONTRACTS.predictionMarket },
+                          { name: 'Incrypt DAO', address: DEPLOYED_CONTRACTS.dao },
+                          { name: 'Timelock Controller', address: DEPLOYED_CONTRACTS.timelock },
+                          { name: 'Revenue Distributor', address: DEPLOYED_CONTRACTS.revenueDistributor },
+                          { name: 'Oracle Subscription', address: DEPLOYED_CONTRACTS.oracleSubscription },
+                          { name: 'CryptoPriceOracle', address: DEPLOYED_CONTRACTS.cryptoPriceOracle },
+                          { name: 'SportsOracle', address: DEPLOYED_CONTRACTS.sportsOracle },
+                          { name: 'WeatherOracle', address: DEPLOYED_CONTRACTS.weatherOracle },
+                          { name: 'ElectionOracle', address: DEPLOYED_CONTRACTS.electionOracle }
                         ].map((item, index) => (
                           <div key={index} className="flex flex-col sm:flex-row sm:justify-between sm:items-center bg-dark-950/50 rounded p-3">
                             <span className="text-white font-medium text-sm mb-1 sm:mb-0">{item.name}</span>

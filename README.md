@@ -611,12 +611,17 @@ After consensus calculation:
 
 | Contract | Address (Testnet) | Purpose | Key Features |
 |----------|------------------|---------|--------------|
-| **IOToken** | `0x9f2E2E07...` | ERC20 governance token | ERC20Votes extension, delegate voting, fixed supply 1B tokens |
-| **IncryptOracle** | `0x5550966c...` | Core oracle with hybrid AI-human validator network | Reputation-weighted consensus, AI validator support, optimistic resolution, slashing, 3-21 validators |
-| **PredictionMarket** | `0x4B72566E...` | AMM-based prediction markets | CPMM model, oracle integration, private markets, creation fees |
-| **IncryptDAO** | `0xa254D432...` | OpenZeppelin Governor | Proposal system, voting, timelock integration |
-| **RevenueDistributor** | `0x0b34455c...` | Automated fee distribution | 50/50 split, staking rewards, gas-optimized rounds |
-| **OracleSubscription** | `0x43299C4C...` | API subscription service | Tiered access (Free/Basic/Premium), rate limiting, revenue generation |
+| **IOToken** | `0x40147E56...` | ERC20 governance token | ERC20Votes extension, delegate voting, fixed supply 1B tokens |
+| **IncryptOracle** | `0x35f86a92...` | Core oracle with hybrid AI-human validator network | Reputation-weighted consensus, AI validator support, 4-hour optimistic resolution, slashing, 3-21 validators |
+| **PredictionMarket** | `0x4448dE2d...` | AMM-based prediction markets | CPMM model, oracle integration, private markets, creation fees |
+| **IncryptDAO** | `0xa900e5f7...` | OpenZeppelin Governor | Proposal system, voting, timelock integration |
+| **TimelockController** | `0x566Ca3ed...` | Governance timelock | 24h delay, proposer/executor roles, adminless handoff |
+| **RevenueDistributor** | `0x5e69123b...` | Automated fee distribution | 50/50 split, staking rewards, gas-optimized rounds |
+| **OracleSubscription** | `0xfAA6F894...` | API subscription service | Tiered access (Free/Basic/Premium), rate limiting, revenue generation |
+| **CryptoPriceOracle** | `0x7c7A94F4...` | Crypto price feeds | 60s updates, validator gating, AI metadata |
+| **SportsOracle** | `0x151c35c5...` | Sports event feeds | Event lifecycle, score encoding, instant post-game resolution |
+| **WeatherOracle** | `0x5bE075Cd...` | Weather data feeds | Multiple metrics (temp, precipitation, wind, humidity, extreme events) |
+| **ElectionOracle** | `0x1516901e...` | Election result feeds | Candidate arrays, official result tracking, high-threshold validation |
 | **TimelockController** | `0x03CB8deD...` | DAO timelock | Delayed execution, multi-signature support |
 
 ## 💻 Development Workflow
@@ -819,12 +824,16 @@ NEXT_PUBLIC_RPC_URL=https://data-seed-prebsc-1-s1.binance.org:8545/
 NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=your_walletconnect_project_id
 
 # Contract Addresses (BSC Testnet - update after deployment)
-NEXT_PUBLIC_IO_TOKEN_ADDRESS=0x9f2E2E0786E637cc0a11Acb9A3C4203b76089185
-NEXT_PUBLIC_ORACLE_ADDRESS=0x5550966c0ECfe8764E2f29EB2C9F87D9CE112cBC
-NEXT_PUBLIC_PREDICTION_MARKET_ADDRESS=0x4B72566EedF3c4b25b6669B33a2F8D3E2F4D2530
-NEXT_PUBLIC_DAO_ADDRESS=0xa254D432E9B1e4907980f52b42Ba2Dd754Ca78dd
-NEXT_PUBLIC_REVENUE_DISTRIBUTOR_ADDRESS=0x0b34455cD2e3A80322d0bb6bA27e68211B86e4b1
-NEXT_PUBLIC_ORACLE_SUBSCRIPTION_ADDRESS=0x43299C4C889442d50914f4D133522565feC8e51f
+NEXT_PUBLIC_IO_TOKEN_ADDRESS=0x40147E5600b107Dd48001Ec6034A8385aE3747E7
+NEXT_PUBLIC_ORACLE_ADDRESS=0x35f86a92C903873dFB33fE7EF04CA0e4f93Ba0a7
+NEXT_PUBLIC_PREDICTION_MARKET_ADDRESS=0x4448dE2d0Aab5129c92198fCbc55502dAEaA5096
+NEXT_PUBLIC_DAO_ADDRESS=0xa900e5f7074cf9C002217AbfE97c289dB1526825
+NEXT_PUBLIC_REVENUE_DISTRIBUTOR_ADDRESS=0x5e69123b5591C16e236Ec1d508dc338168e80De6
+NEXT_PUBLIC_ORACLE_SUBSCRIPTION_ADDRESS=0xfAA6F894ce67c1e6f101341E4330e648b649c676
+NEXT_PUBLIC_CRYPTO_PRICE_ORACLE_ADDRESS=0x7c7A94F460d13004db170fd11cC11Ec01f14108f
+NEXT_PUBLIC_SPORTS_ORACLE_ADDRESS=0x151c35c569605C752B1F765d9f12fc209c9026a8
+NEXT_PUBLIC_WEATHER_ORACLE_ADDRESS=0x5bE075Cd0EF40B83B6F45caCC5A3fE548F571970
+NEXT_PUBLIC_ELECTION_ORACLE_ADDRESS=0x1516901e599F2E5cE03869473272eFa98638c2d0
 ```
 
 **Optional Variables:**
@@ -850,8 +859,8 @@ RPC_URL=https://data-seed-prebsc-1-s1.binance.org:8545/
 CHAIN_ID=97
 
 # Contract Addresses
-ORACLE_ADDRESS=0x5550966c0ECfe8764E2f29EB2C9F87D9CE112cBC
-IO_TOKEN_ADDRESS=0x9f2E2E0786E637cc0a11Acb9A3C4203b76089185
+ORACLE_ADDRESS=0x35f86a92C903873dFB33fE7EF04CA0e4f93Ba0a7
+IO_TOKEN_ADDRESS=0x40147E5600b107Dd48001Ec6034A8385aE3747E7
 
 # Validator Configuration
 STAKE_AMOUNT=1000  # Minimum 1,000 IO tokens
@@ -921,7 +930,7 @@ import { IncryptOracle } from 'incrypt-oracle-sdk';
 const oracle = new IncryptOracle({
   network: 'bsc-mainnet',  // or 'bsc-testnet', 'localhost'
   rpcUrl: 'https://bsc-dataseed1.binance.org/',  // Optional: custom RPC
-  contractAddress: '0x5550966c0ECfe8764E2f29EB2C9F87D9CE112cBC',  // Optional: custom contract
+  contractAddress: '0x35f86a92C903873dFB33fE7EF04CA0e4f93Ba0a7',  // Optional: custom contract
   pollingInterval: 5000,  // 5 seconds default
   timeout: 30000  // 30 seconds default
 });
@@ -1370,13 +1379,17 @@ test/
 
 | Contract | Address | BSCScan |
 |----------|---------|---------|
-| **IO Token** | `0x9f2E2E0786E637cc0a11Acb9A3C4203b76089185` | [View](https://testnet.bscscan.com/address/0x9f2E2E0786E637cc0a11Acb9A3C4203b76089185) |
-| **Incrypt Oracle** | `0x5550966c0ECfe8764E2f29EB2C9F87D9CE112cBC` | [View](https://testnet.bscscan.com/address/0x5550966c0ECfe8764E2f29EB2C9F87D9CE112cBC) |
-| **Prediction Market** | `0x4B72566EedF3c4b25b6669B33a2F8D3E2F4D2530` | [View](https://testnet.bscscan.com/address/0x4B72566EedF3c4b25b6669B33a2F8D3E2F4D2530) |
-| **Incrypt DAO** | `0xa254D432E9B1e4907980f52b42Ba2Dd754Ca78dd` | [View](https://testnet.bscscan.com/address/0xa254D432E9B1e4907980f52b42Ba2Dd754Ca78dd) |
-| **Revenue Distributor** | `0x0b34455cD2e3A80322d0bb6bA27e68211B86e4b1` | [View](https://testnet.bscscan.com/address/0x0b34455cD2e3A80322d0bb6bA27e68211B86e4b1) |
-| **Timelock Controller** | `0x03CB8deD255371Fd9971b7D9f3AB9f9208b2Fac9` | [View](https://testnet.bscscan.com/address/0x03CB8deD255371Fd9971b7D9f3AB9f9208b2Fac9) |
-| **Oracle Subscription** | `0x43299C4C889442d50914f4D133522565feC8e51f` | [View](https://testnet.bscscan.com/address/0x43299C4C889442d50914f4D133522565feC8e51f) |
+| **IO Token** | `0x40147E5600b107Dd48001Ec6034A8385aE3747E7` | [View](https://testnet.bscscan.com/address/0x40147E5600b107Dd48001Ec6034A8385aE3747E7) |
+| **Incrypt Oracle** | `0x35f86a92C903873dFB33fE7EF04CA0e4f93Ba0a7` | [View](https://testnet.bscscan.com/address/0x35f86a92C903873dFB33fE7EF04CA0e4f93Ba0a7) |
+| **Prediction Market** | `0x4448dE2d0Aab5129c92198fCbc55502dAEaA5096` | [View](https://testnet.bscscan.com/address/0x4448dE2d0Aab5129c92198fCbc55502dAEaA5096) |
+| **Incrypt DAO** | `0xa900e5f7074cf9C002217AbfE97c289dB1526825` | [View](https://testnet.bscscan.com/address/0xa900e5f7074cf9C002217AbfE97c289dB1526825) |
+| **Timelock Controller** | `0x566Ca3ed6857e25DEff8b9319F0fc8141BD69219` | [View](https://testnet.bscscan.com/address/0x566Ca3ed6857e25DEff8b9319F0fc8141BD69219) |
+| **Revenue Distributor** | `0x5e69123b5591C16e236Ec1d508dc338168e80De6` | [View](https://testnet.bscscan.com/address/0x5e69123b5591C16e236Ec1d508dc338168e80De6) |
+| **Oracle Subscription** | `0xfAA6F894ce67c1e6f101341E4330e648b649c676` | [View](https://testnet.bscscan.com/address/0xfAA6F894ce67c1e6f101341E4330e648b649c676) |
+| **CryptoPriceOracle** | `0x7c7A94F460d13004db170fd11cC11Ec01f14108f` | [View](https://testnet.bscscan.com/address/0x7c7A94F460d13004db170fd11cC11Ec01f14108f) |
+| **SportsOracle** | `0x151c35c569605C752B1F765d9f12fc209c9026a8` | [View](https://testnet.bscscan.com/address/0x151c35c569605C752B1F765d9f12fc209c9026a8) |
+| **WeatherOracle** | `0x5bE075Cd0EF40B83B6F45caCC5A3fE548F571970` | [View](https://testnet.bscscan.com/address/0x5bE075Cd0EF40B83B6F45caCC5A3fE548F571970) |
+| **ElectionOracle** | `0x1516901e599F2E5cE03869473272eFa98638c2d0` | [View](https://testnet.bscscan.com/address/0x1516901e599F2E5cE03869473272eFa98638c2d0) |
 
 **Deploy from source:**
 ```bash

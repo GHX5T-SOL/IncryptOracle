@@ -2,10 +2,24 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 
+const DEPLOYED_ADDRESSES = {
+  ioToken: '0x40147E5600b107Dd48001Ec6034A8385aE3747E7',
+  incryptOracle: '0x35f86a92C903873dFB33fE7EF04CA0e4f93Ba0a7',
+  predictionMarket: '0x4448dE2d0Aab5129c92198fCbc55502dAEaA5096',
+  revenueDistributor: '0x5e69123b5591C16e236Ec1d508dc338168e80De6',
+  oracleSubscription: '0xfAA6F894ce67c1e6f101341E4330e648b649c676',
+  dao: '0xa900e5f7074cf9C002217AbfE97c289dB1526825',
+  timelock: '0x566Ca3ed6857e25DEff8b9319F0fc8141BD69219',
+  cryptoPriceOracle: '0x7c7A94F460d13004db170fd11cC11Ec01f14108f',
+  sportsOracle: '0x151c35c569605C752B1F765d9f12fc209c9026a8',
+  weatherOracle: '0x5bE075Cd0EF40B83B6F45caCC5A3fE548F571970',
+  electionOracle: '0x1516901e599F2E5cE03869473272eFa98638c2d0'
+};
+
 const contracts = [
   {
     name: 'IncryptOracle.sol',
-    address: '0x5550966c0ECfe8764E2f29EB2C9F87D9CE112cBC',
+    address: DEPLOYED_ADDRESSES.incryptOracle,
     description: 'Core oracle contract managing validators and data feeds with reputation-weighted consensus',
     keyFeatures: [
       'Reputation-weighted consensus mechanism',
@@ -29,7 +43,7 @@ const contracts = [
   },
   {
     name: 'PredictionMarket.sol',
-    address: '0x4B72566EedF3c4b25b6669B33a2F8D3E2F4D2530',
+    address: DEPLOYED_ADDRESSES.predictionMarket,
     description: 'AMM-based prediction market with oracle integration and private market support',
     keyFeatures: [
       'Constant Product Market Maker (CPMM) model',
@@ -55,7 +69,7 @@ const contracts = [
   },
   {
     name: 'IOToken.sol',
-    address: '0x9f2E2E0786E637cc0a11Acb9A3C4203b76089185',
+    address: DEPLOYED_ADDRESSES.ioToken,
     description: 'ERC20 governance token with ERC20Votes extension for DAO voting',
     keyFeatures: [
       'ERC20Votes extension for delegation',
@@ -74,7 +88,7 @@ const contracts = [
   },
   {
     name: 'RevenueDistributor.sol',
-    address: '0x0b34455cD2e3A80322d0bb6bA27e68211B86e4b1',
+    address: DEPLOYED_ADDRESSES.revenueDistributor,
     description: 'Automated fee distribution with 50/50 split to stakers and treasury',
     keyFeatures: [
       '50/50 revenue split (holders/treasury)',
@@ -97,7 +111,7 @@ const contracts = [
   },
   {
     name: 'OracleSubscription.sol',
-    address: '0x43299C4C889442d50914f4D133522565feC8e51f',
+    address: DEPLOYED_ADDRESSES.oracleSubscription,
     description: 'Tiered subscription service for oracle API access with rate limiting',
     keyFeatures: [
       'Three subscription tiers (Free, Basic, Premium)',
@@ -118,7 +132,7 @@ const contracts = [
   },
   {
     name: 'IncryptDAO.sol',
-    address: '0xa254D432E9B1e4907980f52b42Ba2Dd754Ca78dd',
+    address: DEPLOYED_ADDRESSES.dao,
     description: 'OpenZeppelin Governor for community governance with timelock integration',
     keyFeatures: [
       'Proposal submission and voting',
@@ -141,21 +155,25 @@ const contracts = [
 const domainSpecificOracles = [
   {
     name: 'CryptoPriceOracle.sol',
+    address: DEPLOYED_ADDRESSES.cryptoPriceOracle,
     description: 'Specialized oracle for cryptocurrency prices with 60-second update intervals',
     features: ['Binance + CoinGecko aggregation', 'Median price calculation', 'Rate limiting', 'High-frequency updates']
   },
   {
     name: 'SportsOracle.sol',
+    address: DEPLOYED_ADDRESSES.sportsOracle,
     description: 'Sports event oracle with immediate post-game resolution',
     features: ['Event lifecycle tracking', 'Score encoding (16 bits each)', 'League metadata', 'Post-game resolution']
   },
   {
     name: 'ElectionOracle.sol',
+    address: DEPLOYED_ADDRESSES.electionOracle,
     description: 'Election results oracle with official authority integration',
     features: ['Candidate array management', 'Winner index encoding', 'High validation thresholds', 'Integrity-focused']
   },
   {
     name: 'WeatherOracle.sol',
+    address: DEPLOYED_ADDRESSES.weatherOracle,
     description: 'Weather data oracle with multiple metric support',
     features: ['Temperature, Precipitation, WindSpeed, Humidity', 'Location-based feeds', 'Metric-specific encoding', 'Configurable intervals']
   }
@@ -288,6 +306,22 @@ export default function SmartContractsPage() {
               >
                 <h3 className="text-xl font-bold text-primary-400 mb-3">{oracle.name}</h3>
                 <p className="text-gray-300 text-sm mb-4">{oracle.description}</p>
+                <div className="mb-4">
+                  <div className="text-xs text-gray-400 mb-1">Contract Address (BSC Testnet):</div>
+                  <div className="flex items-center space-x-2">
+                    <code className="text-xs text-primary-300 bg-dark-950 px-2 py-1 rounded font-mono">
+                      {oracle.address}
+                    </code>
+                    <a
+                      href={`https://testnet.bscscan.com/address/${oracle.address}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-400 hover:text-blue-300 text-xs"
+                    >
+                      View on BSCScan →
+                    </a>
+                  </div>
+                </div>
                 <div className="space-y-2">
                   {oracle.features.map((feature, i) => (
                     <div key={i} className="flex items-start space-x-2 text-sm">
