@@ -729,7 +729,7 @@ if (submission.validatorType === ValidatorType.AI && submission.aiMetadata) {
                       {[
                         {
                           name: 'IncryptOracle.sol',
-                      address: '0x823C0Ead984707A4B73173274E0e075492866593',
+                      address: '0x5550966c0ECfe8764E2f29EB2C9F87D9CE112cBC',
                       description: 'Core oracle contract managing validators and data feeds with reputation-weighted consensus',
                       keyFeatures: [
                         'Reputation-weighted consensus mechanism',
@@ -752,7 +752,7 @@ if (submission.validatorType === ValidatorType.AI && submission.aiMetadata) {
                         },
                         {
                           name: 'PredictionMarket.sol',
-                      address: '0x101B0f8d4B87669fdDd9d61386288Cc16003D0e5',
+                      address: '0x4B72566EedF3c4b25b6669B33a2F8D3E2F4D2530',
                       description: 'AMM-based prediction market with oracle integration and private market support',
                       keyFeatures: [
                         'Constant Product Market Maker (CPMM) model',
@@ -775,7 +775,7 @@ if (submission.validatorType === ValidatorType.AI && submission.aiMetadata) {
                         },
                         {
                           name: 'IOToken.sol',
-                      address: '0xdc6a5752d457aAdF3f1C65E3a158f44277717183',
+                      address: '0x9f2E2E0786E637cc0a11Acb9A3C4203b76089185',
                       description: 'ERC20 governance token with ERC20Votes extension for DAO voting',
                       keyFeatures: [
                         'ERC20Votes extension for delegation',
@@ -793,7 +793,7 @@ if (submission.validatorType === ValidatorType.AI && submission.aiMetadata) {
                     },
                     {
                       name: 'RevenueDistributor.sol',
-                      address: '0xe68b3647c436B0De90D59600093F0DF13Af21596',
+                      address: '0x0b34455cD2e3A80322d0bb6bA27e68211B86e4b1',
                       description: 'Automated fee distribution with 50/50 split to stakers and treasury',
                       keyFeatures: [
                         '50/50 revenue split (holders/treasury)',
@@ -812,7 +812,7 @@ if (submission.validatorType === ValidatorType.AI && submission.aiMetadata) {
                         },
                         {
                           name: 'IncryptDAO.sol',
-                      address: '0xb7ed1FDA4DAb1e0000D2e64bB9dD2D6b492bc1b0',
+                      address: '0xa254D432E9B1e4907980f52b42Ba2Dd754Ca78dd',
                       description: 'OpenZeppelin Governor for community governance with timelock integration',
                       keyFeatures: [
                         'Proposal submission and voting',
