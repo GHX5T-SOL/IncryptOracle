@@ -101,14 +101,7 @@ export default function HomePage() {
                 on Binance Smart Chain. Blending AI intelligence with human intuition for faster, more accurate resolutions. 
                 Fast, secure, and community-governed.
               </p>
-          <div className="mb-8 inline-flex items-start px-4 py-3 bg-yellow-500/15 border border-yellow-500/30 rounded-lg text-left">
-            <p className="text-sm text-yellow-200">
-              🚧 Pre-launch update (November 18, 2025): Incrypt Oracle is still in private beta. Metrics, partner logos,
-              and integrations showcased across the site are demo/testnet representations. No external firms such as CertiK or
-              Halborn have completed an audit yet.
-            </p>
-          </div>
-              
+          
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <Link href="/docs" className="btn-holographic text-center">
                   Learn More
